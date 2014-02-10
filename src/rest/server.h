@@ -1,6 +1,16 @@
 #ifndef REST_CPP_SERVER_H
 #define REST_CPP_SERVER_H
 
+#include <string>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+#include "exceptions.h"
+
 namespace REST {
 
 /**
@@ -11,6 +21,20 @@ namespace REST {
  */
 class Server {
 
+  public:
+    static const int BACKLOG_SIZE = 1000;
+
+    Server(std::string address, int port);
+    ~Server();
+
+    void run();
+
+  private:
+    bool is_running = true;
+
+    struct addrinfo host_info;
+    struct addrinfo *host_info_list;
+    int handle;
 };
 
 }
