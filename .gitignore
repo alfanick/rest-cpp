@@ -3,6 +3,8 @@
 *.lo
 *.o
 
+example/todo_server/todo_server
+
 # Compiled Dynamic libraries
 *.so
 *.dylib

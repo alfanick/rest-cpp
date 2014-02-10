@@ -4,6 +4,8 @@ namespace REST {
 
 
 Server::Server(std::string address, int port) {
+  dispatcher = new RoundRobinDispatcher(std::thread::hardware_concurrency());
+  std::cout << std::thread::hardware_concurrency() << std::endl;
   int status;
 
   memset(&host_info, 0, sizeof(host_info));
@@ -27,6 +29,8 @@ Server::Server(std::string address, int port) {
 }
 
 Server::~Server() {
+  delete dispatcher;
+
   freeaddrinfo(host_info_list);
   close(handle);
 }
@@ -43,11 +47,16 @@ void Server::run() {
     socklen_t addr_size = sizeof(client_addr);
     int client = accept(handle, (struct sockaddr *)&client_addr, &addr_size);
 
-    // receive header
-    // build request from header
-    //
-    // dispatcher->next(client, request);
-    // ready for next client
+    try {
+
+      if (client == -1)
+        throw new ServerError();
+
+      dispatcher->next(client, client_addr);
+    // ready for next client, dispatcher MUST release client_addr
+    } catch (Exception e) {
+      std::cerr << "!!! " << e.what() << std::endl;
+    }
   }
 }
 

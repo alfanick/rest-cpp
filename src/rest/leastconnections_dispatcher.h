@@ -1,7 +1,7 @@
 #ifndef REST_CPP_DISPATCHER_LEASTCONNECTIONS_H
 #define REST_CPP_DISPATCHER_LEASTCONNECTIONS_H
 
-#include "../dispatcher.h"
+#include "dispatcher.h"
 
 namespace REST {
 

@@ -1,6 +1,6 @@
 #ifndef REST_CPP_EXCEPTIONS_H
 #define REST_CPP_EXCEPTIONS_H
-#define CREATE(NAME, PARENT, MESSAGE) class NAME : PARENT { virtual const char* what() const throw() { return (MESSAGE); } };
+#define CREATE(NAME, PARENT, MESSAGE) class NAME : PARENT { public: virtual const char* what() const throw() { return (MESSAGE); } };
 
 #include <exception>
 

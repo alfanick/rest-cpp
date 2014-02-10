@@ -8,8 +8,10 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <iostream>
 
 #include "exceptions.h"
+#include "roundrobin_dispatcher.h"
 
 namespace REST {
 
@@ -30,6 +32,8 @@ class Server {
     void run();
 
   private:
+    Dispatcher* dispatcher;
+
     bool is_running = true;
 
     struct addrinfo host_info;

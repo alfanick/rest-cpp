@@ -11,6 +11,8 @@ namespace REST {
  */
 class Worker {
 
+  public:
+    Worker();
 };
 
 }
