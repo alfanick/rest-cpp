@@ -3,6 +3,13 @@
 
 namespace REST {
 
+/**
+ * Router resolves URL to Request::parameters and
+ * finds Service corresponding to the URL.
+ *
+ * @see Request
+ * @see Service
+ */
 class Router {
 
 };

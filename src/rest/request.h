@@ -3,6 +3,12 @@
 
 namespace REST {
 
+/**
+ * Basic REST request.
+ *
+ * Request defines request method, parameters
+ * and headers.
+ */
 class Request {
 
 };

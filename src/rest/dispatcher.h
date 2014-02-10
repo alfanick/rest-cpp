@@ -3,6 +3,13 @@
 
 namespace REST {
 
+/**
+ * Dispatcher maintains Worker pool. It distributes
+ * requests to specific Workers.
+ *
+ * @see Worker
+ * @see Router
+ */
 class Dispatcher {
 
 };

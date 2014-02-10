@@ -3,6 +3,12 @@
 
 namespace REST {
 
+/**
+ * Server creates socket and listens for incoming
+ * connections. Connections are maintained by Dispatcher.
+ *
+ * @see Dispatcher
+ */
 class Server {
 
 };

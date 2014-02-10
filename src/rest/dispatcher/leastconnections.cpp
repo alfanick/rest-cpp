@@ -5,6 +5,9 @@
 
 namespace REST {
 
+/**
+ * Selects next Worker with least connections in its queue.
+ */
 class LeastConnectionsDispatcher : public Dispatcher {
 
 };

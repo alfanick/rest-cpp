@@ -3,6 +3,12 @@
 
 namespace REST {
 
+/**
+ * Worker is single operating thread. Worker can process only
+ * one request at a time.
+ *
+ * @see Dispatcher
+ */
 class Worker {
 
 };

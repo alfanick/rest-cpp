@@ -3,6 +3,10 @@
 
 namespace REST {
 
+/**
+ * Response holds response data such as JSON data
+ * and status code.
+ */
 class Response {
 
 };
