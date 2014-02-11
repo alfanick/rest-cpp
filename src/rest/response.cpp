@@ -43,7 +43,7 @@ size_t Response::send() {
 
 size_t Response::content_length() {
   // TODO: implement json
-  return status_message.size();
+  return raw.size();
 }
 
 Response::~Response() {
