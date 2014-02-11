@@ -50,15 +50,6 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
   for (auto param : parameters) {
     std::cout << "Name: '"<<param.first<<"' Value: '"<<param.second<<"'\n";
   }
-
-  char *msg = "HTTP/1.0 404 Not Found\r\nContent-Type: text/html\r\nContent-Length: 4\r\n\r\nlolo\r\n";
-  int len;
-  ssize_t bytes_sent;
-  len = strlen(msg);
-  bytes_sent = send(handle, msg, len, MSG_DONTWAIT);
-
-  std::cout << "koncze "<< handle<<"\n";
-  close(handle);
 }
 
 void Request::parse_header(std::string line) {

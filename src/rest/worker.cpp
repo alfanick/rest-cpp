@@ -41,6 +41,14 @@ void Worker::run() {
       //
       std::cout << request->handle << " is my handle\n";
       std::cout << id << ": got request\n";
+
+      char *msg = "HTTP/1.0 404 Not Found\r\nContent-Type: text/html\r\nContent-Length: 4\r\n\r\nlolo\r\n";
+      int len;
+      ssize_t bytes_sent;
+      len = strlen(msg);
+      bytes_sent = send(request->handle, msg, len, MSG_DONTWAIT);
+
+      close(request->handle);
     }
 
     std::cout << "stopped worker" << id << std::endl;
