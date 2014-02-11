@@ -14,3 +14,7 @@ example/todo_server/todo_server
 *.lai
 *.la
 *.a
+
+# Vim
+*.swo
+*.swp
