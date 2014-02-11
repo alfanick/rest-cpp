@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <algorithm>
 #include "request.h"
 #include "response.h"
 
@@ -20,9 +21,8 @@ class Service {
     void update();
     void destroy();
     void read();
-    Response* response;
-    Request* request;
-    
+    std::weak_ptr<Response> response;
+    std::weak_ptr<Request> request;
 };
 
 template <typename T>
@@ -41,7 +41,8 @@ class ServiceFactory {
 
 template <typename T>
 struct ServiceRegister : ServiceFactory {
-  ServiceRegister(std::string const& name) {
+  ServiceRegister(std::string name) {
+    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     Map()->insert(std::make_pair(name, &createService<T>));
   }
 };

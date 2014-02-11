@@ -2,6 +2,7 @@
 #include "service.h"
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 namespace REST {
 
@@ -15,6 +16,7 @@ namespace REST {
 
   Service* Router::getResource(std::string const& path) {
     std::string name = path.substr(1);
+    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     if(name.find("/") != std::string::npos)
       name = name.substr(name.find("/"));
     std::cout << "name: " << name << std::endl;

@@ -42,13 +42,17 @@ void Worker::run() {
         // exec
         // send response
         // close
+        std::shared_ptr<Response> response(new Response(request));
         std::cout << "path: " << request-> path << std::endl;
         Service* service = Router::getResource(request->path);
 
         if(service == NULL)
           throw HTTP::NotFound();
 
+        service->request = request;
+        service->response = response;
         service->read();
+        response->send();
 
       } catch (HTTP::Error &e) {
         std::unique_ptr<Response> response(new Response(request, e));

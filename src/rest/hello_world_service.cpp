@@ -3,7 +3,9 @@
 
 class HelloWorldService : public REST::Service {
   public:
-    void read() { }
+    void read() {
+      response->raw = "{ message: \"Hello World!\" }";
+    }
   private:
     static REST::ServiceRegister<HelloWorldService> reg;
 };
