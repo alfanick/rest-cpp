@@ -59,7 +59,7 @@ void Worker::run() {
 }
 
 void Worker::make_action(std::shared_ptr<Request> request, std::shared_ptr<Response> response) {
-  Service* service = Router::getResource(request->path, id);
+  std::shared_ptr<Service> service = Router::getResource(request->path, id);
 
   if (service == NULL)
     throw HTTP::NotFound();

@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include <map>
+#include <functional>
 #include "service.h"
 
 namespace REST {
-typedef std::map<std::string, Service *> names_services_map;
-typedef std::map<int, names_services_map *> workers_services_map;
+typedef std::map<std::string, std::shared_ptr<Service> > names_services_map;
+typedef std::map<int, std::shared_ptr<names_services_map> > workers_services_map;
 
 /**
  * Router resolves URL to Request::parameters and
@@ -19,12 +20,13 @@ typedef std::map<int, names_services_map *> workers_services_map;
 class Router {
   public:
     static Router* Instance();
-    static Service* getResource(std::string const &, int);
+    static std::shared_ptr<Service> getResource(std::string const &, int);
+    // static void registerPath(std::string const &, std::function<void(void)> *);
   private:
     Router() {};
     Router(Router const&) {};
     static Router* pInstance;
-    static workers_services_map* workers_services;
+    static std::shared_ptr<workers_services_map> workers_services;
 
 };
 

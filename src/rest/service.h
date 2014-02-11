@@ -29,14 +29,14 @@ class Service {
 };
 
 template <typename T>
-Service * createService() {
-  return new T;
+std::shared_ptr<Service> createService() {
+  return std::make_shared<T>();
 };
 
-typedef std::map<std::string, Service*(*)()> services_map;
+typedef std::map<std::string, std::shared_ptr<Service>(*)()> services_map;
 class ServiceFactory {
   public:
-    static Service * createInstance(std::string const&);
+    static std::shared_ptr<Service> createInstance(std::string const&);
     static services_map* Map();
   private:
     static services_map* services;
