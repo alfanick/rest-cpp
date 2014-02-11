@@ -6,7 +6,7 @@
 #include <string>
 #include <map>
 #include <sstream>
-
+#include "json/json.h"
 
 namespace REST {
 class Worker;
@@ -34,7 +34,8 @@ class Request {
     std::multimap< std::string, std::string > headers;
     std::map< std::string, std::string > parameters;
 
-    // TODO
+    std::shared_ptr<Json::Value> data = nullptr;
+
     static std::string uri_decode(const std::string& src);
 
   private:

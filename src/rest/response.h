@@ -3,6 +3,7 @@
 
 #include "exceptions.h"
 #include "request.h"
+#include "json/json.h"
 
 #include <string>
 #include <map>
@@ -24,17 +25,20 @@ class Response {
 
     size_t send();
 
-    int status;
-    std::string status_message;
+    int status = 200;
+    std::string status_message = "OK";
     std::string raw;
     std::map< std::string, std::string > headers;
 
-    size_t content_length();
+    void use_json();
 
-    // JSON::Content json;
+    Json::Value data;
+
+    static Json::FastWriter json_writer;
 
   private:
     int handle;
+    bool is_json = false;
 };
 
 }

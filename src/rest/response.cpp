@@ -2,11 +2,11 @@
 
 namespace REST {
 
+Json::FastWriter Response::json_writer;
+
 Response::Response(std::shared_ptr<Request> request) {
   handle = request->handle;
   headers["Content-Type"] = "text/plain";
-  status = 200;
-  status_message = "OK";
 }
 
 Response::Response(std::shared_ptr<Request> request, HTTP::Error &error) : Response(request) {
@@ -15,13 +15,23 @@ Response::Response(std::shared_ptr<Request> request, HTTP::Error &error) : Respo
   raw = error.what();
 }
 
+void Response::use_json() {
+  headers["Content-Type"] = "application/json";
+  is_json = true;
+}
+
 size_t Response::send() {
   size_t bytes_sent = 0;
 
-  headers["Content-Length"] = std::to_string(content_length());
+  std::string payload = is_json ? json_writer.write(data) : raw;
 
   // start http
   std::string content = "HTTP/1.0 " + std::to_string(status) + " " + status_message + "\r\n";
+
+  std::cout << payload << "\n";
+
+  // content size
+  headers["Content-Length"] = std::to_string(payload.size());
 
   // add headers
   for (auto header : headers)
@@ -29,8 +39,7 @@ size_t Response::send() {
 
   content += "\r\n";
 
-  // TODO: implement json
-  content += raw;
+  content += payload;
 
   // send every byte
   while ((bytes_sent += ::send(handle, content.c_str(), content.size(), 0)) != content.size());
@@ -39,11 +48,6 @@ size_t Response::send() {
   close(handle);
 
   return bytes_sent;
-}
-
-size_t Response::content_length() {
-  // TODO: implement json
-  return raw.size();
 }
 
 Response::~Response() {

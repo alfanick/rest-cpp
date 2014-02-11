@@ -3,6 +3,12 @@
 
 class HelloWorldService : public REST::Service {
   public:
+    void create() {
+      response->use_json();
+
+      response->data["foo"] = "bar";
+    }
+
     void read() {
       response->raw = "{ message: \"Hello "+request->parameters["name"]+"!\" }";
     }
