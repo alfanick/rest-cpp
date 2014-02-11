@@ -40,7 +40,7 @@ size_t Response::send() {
   content += payload;
 
   // send every byte
-  while ((bytes_sent += ::send(handle, content.c_str(), content.size(), 0)) != content.size());
+  bytes_sent = ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT);
 
   // close connection with client
   close(handle);

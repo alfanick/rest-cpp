@@ -25,8 +25,10 @@ void Worker::run() {
       requests_lock->lock();
 
       // maybe empty even after unlocking, wait some more
-      if (requests_queue->empty())
+      if (requests_queue->empty()) {
+        requests_lock->unlock();
         continue;
+      }
 
       // get request
       std::shared_ptr<Request> request = requests_queue->front();
