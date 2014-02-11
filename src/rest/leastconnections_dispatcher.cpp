@@ -10,6 +10,9 @@ int LeastConnectionsDispatcher::next_worker_id() {
     if (requests[i].size() < best_worker_queue_size) {
       best_worker_queue_size = requests[i].size();
       best_worker_id = i;
+
+      if (best_worker_queue_size == 0)
+        break;
     }
   }
 
