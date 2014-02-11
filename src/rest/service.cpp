@@ -20,5 +20,8 @@ namespace REST {
 
   Service::Service() {}
   void Service::read() {}
+  void Service::create() {}
+  void Service::update() {}
+  void Service::destroy() {}
 
 }

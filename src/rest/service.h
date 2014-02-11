@@ -17,10 +17,10 @@ namespace REST {
 class Service {
   public:
     Service();
-    void create();
-    void update();
-    void destroy();
-    void read();
+    virtual void create();
+    virtual void update();
+    virtual void destroy();
+    virtual void read();
     std::shared_ptr<Response> response;
     std::shared_ptr<Request> request;
 };
