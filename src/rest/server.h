@@ -26,7 +26,7 @@ class Server {
   public:
     static const int BACKLOG_SIZE = 1000;
 
-    Server(std::string address, int port);
+    Server(std::string address, int port, int threads);
     ~Server();
 
     void run();

@@ -3,8 +3,8 @@
 namespace REST {
 
 
-Server::Server(std::string address, int port) {
-  dispatcher = new RoundRobinDispatcher(4);//std::thread::hardware_concurrency());
+Server::Server(std::string address, int port, int threads) {
+  dispatcher = new RoundRobinDispatcher(threads);//std::thread::hardware_concurrency());
   int status;
 
   memset(&host_info, 0, sizeof(host_info));
