@@ -1,5 +1,4 @@
 #include "request.h"
-#include <iostream>
 
 namespace REST {
 
@@ -40,22 +39,11 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
       }
     }
   }
-
-  std::cout << "Headers\n";
-  for (auto header : headers) {
-    std::cout << "Name: '"<< header.first <<"' Value: '"<< header.second <<"'\n";
-  }
-
-  std::cout << "Parameters\n";
-  for (auto param : parameters) {
-    std::cout << "Name: '"<<param.first<<"' Value: '"<<param.second<<"'\n";
-  }
 }
 
 void Request::parse_header(std::string line) {
   if (line.find("GET") == 0) {
     method = Method::GET;
-    std::cout<<"mam geta\n";
   } else
   if (line.find("HEAD") == 0) {
     method = Method::HEAD;
