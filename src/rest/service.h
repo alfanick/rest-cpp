@@ -35,10 +35,10 @@ class ServiceFactory {
     static services_map* services;
 };
 
-template <typename C>
+template <typename T>
 struct ServiceRegister : ServiceFactory {
   ServiceRegister(string const& name) {
-    Map()->insert(make_pair(name, &createService<C>));
+    Map()->insert(make_pair(name, &createService<T>));
   }
 };
 
