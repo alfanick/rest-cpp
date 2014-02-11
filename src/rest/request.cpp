@@ -33,12 +33,22 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
       headers.insert(std::make_pair(name, value));
       continue;
     } else {
-
+      auto ct = headers.find("Content-Type");
+      if (ct != headers.end()) {
+        if (ct->second == "application/x-www-form-urlencoded")
+          parse_query_string(line);
+      }
     }
   }
 
+  std::cout << "Headers\n";
   for (auto header : headers) {
     std::cout << "Name: '"<< header.first <<"' Value: '"<< header.second <<"'\n";
+  }
+
+  std::cout << "Parameters\n";
+  for (auto param : parameters) {
+    std::cout << "Name: '"<<param.first<<"' Value: '"<<param.second<<"'\n";
   }
 
   char *msg = "HTTP/1.0 404 Not Found\r\nContent-Type: text/html\r\nContent-Length: 4\r\n\r\nlolo\r\n";
@@ -84,10 +94,39 @@ void Request::parse_header(std::string line) {
 
   path = line.substr(path_start, path_end - path_start);
 
+  size_t path_query = path.find("?");
+
+  if (path_query != std::string::npos) {
+    std::string query = path.substr(path_query+1, path.size() - path_query);
+
+    parse_query_string(query);
+
+    path.erase(path_query, query.size()+1);
+  }
+
   std::cout << "sciezka to '"<< path <<"'\n";
 }
 
+void Request::parse_query_string(std::string query) {
+  std::istringstream query_stream(query);
+  std::string pair;
+  while (std::getline(query_stream, pair, '&')) {
+    std::string name, value;
+    size_t value_position = pair.find("=");
+
+    name = pair.substr(0, value_position);
+    if (value_position != std::string::npos)
+      value = pair.substr(value_position+1, pair.size() - value_position-1);
+
+    parameters[uri_decode(name)] = uri_decode(value);
+  }
+}
+
 Request::~Request() {
+}
+
+std::string Request::uri_decode(const std::string & src) {
+  return src;
 }
 
 }

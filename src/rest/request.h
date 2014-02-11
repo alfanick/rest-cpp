@@ -29,8 +29,12 @@ class Request {
     std::multimap< std::string, std::string > headers;
     std::map< std::string, std::string > parameters;
 
+    // TODO
+    static std::string uri_decode(const std::string& src);
+
   private:
     void parse_header(std::string line);
+    void parse_query_string(std::string query);
 
     char buffer[BUFFER_SIZE];
     size_t length;
