@@ -10,6 +10,7 @@
 
 namespace REST {
 class Worker;
+class Response;
 /**
  * Basic REST request.
  *
@@ -18,6 +19,7 @@ class Worker;
  */
 class Request {
   friend class Worker;
+  friend class Response;
 
   public:
     enum class Method { GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, UNDEFINED };
