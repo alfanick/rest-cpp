@@ -16,7 +16,7 @@ namespace REST {
 class Router {
   public:
     static Router* Instance();
-    static Service* getResource(string const &);
+    static Service* getResource(std::string const &);
   private:
     Router() {};
     Router(Router const&) {};

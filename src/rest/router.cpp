@@ -13,11 +13,11 @@ namespace REST {
     return pInstance;
   }
 
-  Service* Router::getResource(string const& path) {
-    string name = path.substr(1);
+  Service* Router::getResource(std::string const& path) {
+    std::string name = path.substr(1);
     if(name.find("/") != std::string::npos)
       name = name.substr(name.find("/"));
-    cout << "name: " << name << std::endl;
+    std::cout << "name: " << name << std::endl;
     return ServiceFactory::createInstance(name);
   }
 
