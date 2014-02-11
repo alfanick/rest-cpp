@@ -46,7 +46,7 @@ void Worker::run() {
         std::cout << "path: " << request-> path << std::endl;
         Service* service = Router::getResource(request->path);
 
-        if(service == NULL)
+        if (service == NULL)
           throw HTTP::NotFound();
 
         service->request = request;

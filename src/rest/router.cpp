@@ -15,6 +15,9 @@ namespace REST {
   }
 
   Service* Router::getResource(std::string const& path) {
+    if (path.size() == 0)
+      return NULL;
+
     std::string name = path.substr(1);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     if(name.find("/") != std::string::npos)
