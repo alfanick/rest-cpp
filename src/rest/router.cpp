@@ -19,6 +19,7 @@ namespace REST {
     if (path.size() == 0)
       return NULL;
 
+    //TODO: dzialajacy routing
     std::string name = path.substr(1);
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     if(name.find("/") != std::string::npos)
