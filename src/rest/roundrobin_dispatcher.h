@@ -1,6 +1,7 @@
 #ifndef REST_CPP_DISPATCHER_ROUNDROBIN_H
 #define REST_CPP_DISPATCHER_ROUNDROBIN_H
 
+#include <mutex>
 #include "dispatcher.h"
 
 namespace REST {
@@ -17,6 +18,7 @@ class RoundRobinDispatcher : public Dispatcher {
 
   private:
     int last_worker_id = -1;
+    std::mutex last_worker_id_lock;
 };
 
 }
