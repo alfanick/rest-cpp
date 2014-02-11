@@ -38,20 +38,11 @@ void Worker::run() {
 
 
       try {
-        // route
-        // exec
-        // send response
-        // close
         std::shared_ptr<Response> response(new Response(request));
         std::cout << "path: " << request-> path << std::endl;
-        Service* service = Router::getResource(request->path);
 
-        if (service == NULL)
-          throw HTTP::NotFound();
+        make_action(request, response);
 
-        service->request = request;
-        service->response = response;
-        service->read();
         response->send();
 
       } catch (HTTP::Error &e) {
@@ -65,6 +56,37 @@ void Worker::run() {
 
     std::cout << "stopped worker" << id << std::endl;
   });
+}
+
+void Worker::make_action(std::shared_ptr<Request> request, std::shared_ptr<Response> response) {
+  Service* service = Router::getResource(request->path);
+
+  if (service == NULL)
+    throw HTTP::NotFound();
+
+  service->request = request;
+  service->response = response;
+
+  service->before();
+
+  switch (request->method) {
+    case Request::Method::GET:
+      service->read();
+      break;
+    case Request::Method::POST:
+      service->create();
+      break;
+    case Request::Method::DELETE:
+      service->destroy();
+      break;
+    case Request::Method::PUT:
+      service->update();
+      break;
+    default:
+      throw HTTP::MethodNotAllowed();
+  }
+
+  service->after();
 }
 
 void Worker::stop() {

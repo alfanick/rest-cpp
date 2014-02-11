@@ -18,6 +18,7 @@ namespace REST {
     CREATE(Error, Exception, "Unknown HTTP protocol error");
 
     ERROR(NotFound, 404, "Not Found");
+    ERROR(MethodNotAllowed, 405, "Method Not Allowed");
   }
 }
 

@@ -19,9 +19,20 @@ namespace REST {
 
 
   Service::Service() {}
-  void Service::read() {}
-  void Service::create() {}
-  void Service::update() {}
-  void Service::destroy() {}
+
+  void Service::before() {}
+  void Service::after() {}
+  void Service::read() {
+    throw HTTP::MethodNotAllowed();
+  }
+  void Service::create() {
+    throw HTTP::MethodNotAllowed();
+  }
+  void Service::update() {
+    throw HTTP::MethodNotAllowed();
+  }
+  void Service::destroy() {
+    throw HTTP::MethodNotAllowed();
+  }
 
 }

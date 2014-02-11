@@ -23,6 +23,8 @@ class Worker {
   public:
     Worker(int id, std::queue< std::shared_ptr<Request> > *requests_queue, std::mutex *requests_empty, std::mutex *requests_lock);
 
+    void make_action(std::shared_ptr<Request> request, std::shared_ptr<Response> response);
+
     void stop();
 
   private:

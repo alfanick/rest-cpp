@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "request.h"
 #include "response.h"
+#include "exceptions.h"
 
 namespace REST {
 
@@ -17,6 +18,8 @@ namespace REST {
 class Service {
   public:
     Service();
+    virtual void before();
+    virtual void after();
     virtual void create();
     virtual void update();
     virtual void destroy();
