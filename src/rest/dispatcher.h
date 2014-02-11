@@ -27,6 +27,7 @@ class Dispatcher {
     Dispatcher(int workers_count);
     virtual ~Dispatcher();
 
+    void dispatch(int worker_id, std::shared_ptr<Request> request);
     void next(int client, struct sockaddr_storage client_addr);
 
   protected:

@@ -9,4 +9,8 @@ Worker::Worker(std::queue< std::shared_ptr<Request> > *rq, std::mutex *re, std::
   std::cout<<"new worker"<<std::endl;
 }
 
+void Worker::stop() {
+  std::cout << "stopping worker" << std::endl;
+}
+
 }

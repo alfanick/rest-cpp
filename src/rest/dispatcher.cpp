@@ -10,17 +10,26 @@ Dispatcher::Dispatcher(int wc) : workers_count(wc) {
 
   for (int i = 0; i < workers_count; i++) {
     workers[i] = std::make_shared<Worker>(&requests[i], &requests_empty[i], &requests_lock[i]);
+    requests_empty[i].lock(); // empty by default
   }
 }
 
 
 Dispatcher::~Dispatcher() {
+  for (int i = 0; i < workers_count; i++)
+    workers[i]->stop();
+
   delete[] requests_empty;
   delete[] requests_lock;
+}
 
-  for (int i = 0; i < workers_count; i++) {
-    // workers[i].stop();
-  }
+void Dispatcher::dispatch(int worker_id, std::shared_ptr<Request> request) {
+  requests_lock[worker_id].lock();
+
+  requests[worker_id].push(request);
+  requests_empty[worker_id].unlock();
+
+  requests_lock[worker_id].unlock();
 }
 
 void Dispatcher::next(int client, struct sockaddr_storage client_addr) {
@@ -30,6 +39,8 @@ void Dispatcher::next(int client, struct sockaddr_storage client_addr) {
 
   std::cout << "Klient handler: " << client << std::endl;
   std::cout << "Watek: " << worker_id << std::endl;
+
+  //dispatch(worker_id, request);
 
   close(client);
 }

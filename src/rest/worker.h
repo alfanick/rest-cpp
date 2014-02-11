@@ -19,6 +19,8 @@ class Worker {
   public:
     Worker(std::queue< std::shared_ptr<Request> > *requests_queue, std::mutex *requests_empty, std::mutex *requests_lock);
 
+    void stop();
+
   protected:
     std::queue< std::shared_ptr<Request> > *requests_queue;
     std::mutex *requests_empty;
