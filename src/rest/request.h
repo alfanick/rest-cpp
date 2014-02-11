@@ -14,14 +14,14 @@ namespace REST {
  */
 class Request {
   public:
-    static const int BUFFER_SIZE = 16384;
+    static const size_t BUFFER_SIZE = 16384;
 
     Request(int client, struct sockaddr_storage client_addr);
     ~Request();
 
   private:
     char buffer[BUFFER_SIZE];
-    int length;
+    size_t length;
 
     int handle;
     struct sockaddr_storage addr;
