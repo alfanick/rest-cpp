@@ -2,6 +2,7 @@
 #define REST_CPP_ROUTER_H
 
 #include <iostream>
+#include "service.h"
 
 namespace REST {
 
@@ -15,6 +16,7 @@ namespace REST {
 class Router {
   public:
     static Router* Instance();
+    static Service* getResource(string const &);
   private:
     Router() {};
     Router(Router const&) {};

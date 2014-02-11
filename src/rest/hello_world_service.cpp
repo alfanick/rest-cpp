@@ -3,9 +3,7 @@
 
 class HelloWorldService : public REST::Service {
   public:
-    void read() {
-      cout << "Hello world!" << endl;
-    }
+    void read() { }
   private:
     static REST::ServiceRegister<HelloWorldService> reg;
 };

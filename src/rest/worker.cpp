@@ -1,4 +1,6 @@
 #include "worker.h"
+#include "service.h"
+#include "router.h"
 
 #include <iostream>
 
@@ -34,14 +36,20 @@ void Worker::run() {
       requests_lock->unlock();
 
 
-      // route
-      // exec
-      // send response
-      // close
-      //
 
       try {
-        throw HTTP::NotFound();
+        // route
+        // exec
+        // send response
+        // close
+        std::cout << "path: " << request-> path << std::endl;
+        Service* service = Router::getResource(request->path);
+
+        if(service == NULL)
+          throw HTTP::NotFound();
+
+        service->read();
+
       } catch (HTTP::Error &e) {
         // new Response(request, e)->send()
         std::string msg = "HTTP/1.0 " + std::to_string(e.code()) + " " + e.what() + "\r\nContent-Type: text/plain\r\nContent-Length: " + std::to_string(strlen(e.what())+2) + "\r\n\r\n" + e.what() + "\r\n";
