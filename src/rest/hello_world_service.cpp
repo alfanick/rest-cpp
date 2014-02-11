@@ -3,14 +3,16 @@
 
 class HelloWorldService : public REST::Service {
   public:
-    void create() {
+    void before() {
       response->use_json();
+    }
 
+    void create() {
       response->data["foo"] = "bar";
     }
 
     void read() {
-      response->raw = "{ message: \"Hello "+request->parameters["name"]+"!\" }";
+      response->data["message"] = "Hello " + (request->parameters["name"].empty() ? "someone" : request->parameters["name"]) + "!";
     }
   private:
     static REST::ServiceRegister<HelloWorldService> reg;

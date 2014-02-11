@@ -28,8 +28,6 @@ size_t Response::send() {
   // start http
   std::string content = "HTTP/1.0 " + std::to_string(status) + " " + status_message + "\r\n";
 
-  std::cout << payload << "\n";
-
   // content size
   headers["Content-Length"] = std::to_string(payload.size());
 
