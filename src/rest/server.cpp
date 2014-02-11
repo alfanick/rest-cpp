@@ -28,6 +28,8 @@ Server::Server(std::string address, int port, int threads) {
 }
 
 Server::~Server() {
+  is_running = false;
+
   delete dispatcher;
 
   freeaddrinfo(host_info_list);
@@ -51,8 +53,9 @@ void Server::run() {
         throw ServerError();
 
       dispatcher->next(client, client_addr);
-    } catch (Exception e) {
-      std::cerr << "!!! " << e.what() << std::endl;
+    } catch (Exception &e) {
+      if (is_running)
+        std::cerr << "!!! " << e.what() << std::endl;
       close(client);
     }
   }

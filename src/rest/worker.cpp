@@ -42,11 +42,11 @@ void Worker::run() {
 
       try {
         throw HTTP::NotFound();
-      } catch (HTTP::NotFound e) {
+      } catch (HTTP::Error &e) {
         std::string msg = "HTTP/1.0 " + std::to_string(e.code()) + " " + e.what() + "\r\nContent-Type: text/plain\r\nContent-Length: " + std::to_string(strlen(e.what())+2) + "\r\n\r\n" + e.what() + "\r\n";
         int len = msg.size();
         ssize_t bytes_sent;
-        bytes_sent = send(request->handle, msg.c_str(), len, MSG_DONTWAIT);
+        bytes_sent = send(request->handle, msg.c_str(), len, 0);
       }
 
       std::cout << request->handle << " is my handle\n";
