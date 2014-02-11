@@ -13,9 +13,13 @@ namespace REST {
  * Classes must inherit REST::Service to be open to public.
  */
 class Service {
-
+  public:
+    Service();
+    void create();
+    void update();
+    void destroy();
+    void read();
 };
-
 
 template <typename T>
 Service * createService() {
