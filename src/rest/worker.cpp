@@ -38,6 +38,8 @@ void Worker::run() {
       // exec
       // send response
       // close
+      //
+      std::cout << request->handle << " is my handle\n";
       std::cout << id << ": got request\n";
     }
 

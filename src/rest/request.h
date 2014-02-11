@@ -7,8 +7,9 @@
 #include <map>
 #include <sstream>
 
-namespace REST {
 
+namespace REST {
+class Worker;
 /**
  * Basic REST request.
  *
@@ -16,6 +17,8 @@ namespace REST {
  * and headers.
  */
 class Request {
+  friend class Worker;
+
   public:
     enum class Method { GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, UNDEFINED };
 

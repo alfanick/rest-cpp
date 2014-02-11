@@ -61,7 +61,6 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
   close(handle);
 }
 
-
 void Request::parse_header(std::string line) {
   if (line.find("GET") == 0) {
     method = Method::GET;
