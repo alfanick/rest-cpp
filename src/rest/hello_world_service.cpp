@@ -4,7 +4,7 @@
 class HelloWorldService : public REST::Service {
   public:
     void read() {
-      response->raw = "{ message: \"Hello World!\" }";
+      response->raw = "{ message: \"Hello "+request->parameters["name"]+"!\" }";
     }
     void create() {}
     void update() {}
