@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <map>
+#include "request.h"
+#include "response.h"
 
 namespace REST {
 
@@ -18,6 +20,9 @@ class Service {
     void update();
     void destroy();
     void read();
+    Response* response;
+    Request* request;
+    
 };
 
 template <typename T>
