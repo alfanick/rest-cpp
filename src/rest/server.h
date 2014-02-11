@@ -12,6 +12,7 @@
 
 #include "exceptions.h"
 #include "roundrobin_dispatcher.h"
+#include "leastconnections_dispatcher.h"
 #include "router.h"
 
 namespace REST {
