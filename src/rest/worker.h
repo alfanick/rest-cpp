@@ -3,6 +3,8 @@
 
 #include <queue>
 #include <mutex>
+#include <thread>
+#include <atomic>
 
 #include "request.h"
 
@@ -21,11 +23,18 @@ class Worker {
 
     void stop();
 
+  private:
+    void run();
+
   protected:
     int id;
+    std::atomic_bool should_run;
+
     std::queue< std::shared_ptr<Request> > *requests_queue;
     std::mutex *requests_empty;
     std::mutex *requests_lock;
+
+    std::thread thread;
 };
 
 }
