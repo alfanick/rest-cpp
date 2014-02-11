@@ -17,11 +17,12 @@ namespace REST {
 class Worker {
 
   public:
-    Worker(std::queue< std::shared_ptr<Request> > *requests_queue, std::mutex *requests_empty, std::mutex *requests_lock);
+    Worker(int id, std::queue< std::shared_ptr<Request> > *requests_queue, std::mutex *requests_empty, std::mutex *requests_lock);
 
     void stop();
 
   protected:
+    int id;
     std::queue< std::shared_ptr<Request> > *requests_queue;
     std::mutex *requests_empty;
     std::mutex *requests_lock;

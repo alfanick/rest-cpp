@@ -9,7 +9,7 @@ Dispatcher::Dispatcher(int wc) : workers_count(wc) {
   requests.resize(workers_count);
 
   for (int i = 0; i < workers_count; i++) {
-    workers[i] = std::make_shared<Worker>(&requests[i], &requests_empty[i], &requests_lock[i]);
+    workers[i] = std::make_shared<Worker>(i, &requests[i], &requests_empty[i], &requests_lock[i]);
     requests_empty[i].lock(); // empty by default
   }
 }
