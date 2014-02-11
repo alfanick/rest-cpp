@@ -1,6 +1,11 @@
 #ifndef REST_CPP_WORKER_H
 #define REST_CPP_WOKRER_H
 
+#include <queue>
+#include <mutex>
+
+#include "request.h"
+
 namespace REST {
 
 /**
@@ -12,7 +17,12 @@ namespace REST {
 class Worker {
 
   public:
-    Worker();
+    Worker(std::queue< std::shared_ptr<Request> > *requests_queue, std::mutex *requests_empty, std::mutex *requests_lock);
+
+  protected:
+    std::queue< std::shared_ptr<Request> > *requests_queue;
+    std::mutex *requests_empty;
+    std::mutex *requests_lock;
 };
 
 }

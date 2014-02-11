@@ -6,6 +6,7 @@
 #include <queue>
 #include <iostream>
 #include <thread>
+#include <mutex>
 #include <unistd.h>
 
 #include "worker.h"
@@ -34,7 +35,8 @@ class Dispatcher {
     int workers_count;
     std::vector< std::shared_ptr<Worker> > workers;
     std::vector< std::queue< std::shared_ptr<Request> > > requests;
-
+    std::mutex *requests_empty;
+    std::mutex *requests_lock;
 };
 
 }

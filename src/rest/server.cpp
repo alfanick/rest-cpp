@@ -47,14 +47,13 @@ void Server::run() {
     int client = accept(handle, (struct sockaddr *)&client_addr, &addr_size);
 
     try {
-
       if (client == -1)
         throw new ServerError();
 
       dispatcher->next(client, client_addr);
-    // ready for next client, dispatcher MUST release client_addr
     } catch (Exception e) {
       std::cerr << "!!! " << e.what() << std::endl;
+      close(client);
     }
   }
 }
