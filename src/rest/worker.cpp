@@ -34,7 +34,10 @@ void Worker::run() {
       requests_lock->unlock();
 
 
-      // do sth with request
+      // route
+      // exec
+      // send response
+      // close
       std::cout << id << ": got request\n";
     }
 
