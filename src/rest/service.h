@@ -24,7 +24,7 @@ class Service {
 template <typename T>
 Service * createService() {
   return new T;
-}
+};
 
 typedef map<string, Service*(*)()> services_map;
 class ServiceFactory {
@@ -38,9 +38,9 @@ class ServiceFactory {
 template <typename C>
 struct ServiceRegister : ServiceFactory {
   ServiceRegister(string const& name) {
-    Map()->insert(make_pair(name, &createService<C>);
+    Map()->insert(make_pair(name, &createService<C>));
   }
-}
+};
 
 }
 
