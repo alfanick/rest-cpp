@@ -7,6 +7,7 @@
 #include <atomic>
 
 #include "exceptions.h"
+#include "response.h"
 #include "request.h"
 
 namespace REST {

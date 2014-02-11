@@ -43,17 +43,12 @@ void Worker::run() {
       try {
         throw HTTP::NotFound();
       } catch (HTTP::Error &e) {
-        // new Response(request, e)->send()
-        std::string msg = "HTTP/1.0 " + std::to_string(e.code()) + " " + e.what() + "\r\nContent-Type: text/plain\r\nContent-Length: " + std::to_string(strlen(e.what())+2) + "\r\n\r\n" + e.what() + "\r\n";
-        int len = msg.size();
-        ssize_t bytes_sent;
-        bytes_sent = send(request->handle, msg.c_str(), len, 0);
+        std::unique_ptr<Response> response(new Response(request, e));
+        response->send();
       }
 
       std::cout << request->handle << " is my handle\n";
       std::cout << id << ": got request\n";
-
-      close(request->handle);
     }
 
     std::cout << "stopped worker" << id << std::endl;
