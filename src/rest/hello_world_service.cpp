@@ -3,6 +3,10 @@
 
 class HelloWorldService : public REST::Service {
   public:
+    HelloWorldService() {
+      std::cout << "nowy service\n";
+    }
+
     void before() {
       response->use_json();
     }

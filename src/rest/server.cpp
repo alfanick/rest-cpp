@@ -4,6 +4,8 @@ namespace REST {
 
 
 Server::Server(std::string address, int port, int threads) {
+  Router::WORKERS = threads;
+  Router::Instance();
   dispatcher = new RoundRobinDispatcher(threads);//std::thread::hardware_concurrency());
   int status;
 

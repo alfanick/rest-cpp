@@ -6,12 +6,22 @@
 
 namespace REST {
 
-  std::shared_ptr<workers_services_map> Router::workers_services = std::make_shared<workers_services_map>();
+  workers_services_vector Router::workers_services;
   Router* Router::pInstance = NULL;
+  int Router::WORKERS = 256;
+
+
+  Router::Router() {
+    workers_services.resize(WORKERS);
+
+    for (int i = 0; i < WORKERS; i++)
+      workers_services[i] = std::make_shared<names_services_map>();
+  }
 
   Router* Router::Instance() {
-    if(pInstance == NULL)
-      pInstance = new Router;
+    if(pInstance == NULL){
+      pInstance = new Router();
+    }
     return pInstance;
   }
 
@@ -26,14 +36,7 @@ namespace REST {
       name = name.substr(name.find("/"));
     std::cout << "name: " << name << std::endl;
 
-    workers_services_map::iterator witer = workers_services->find(worker_id);
-    std::shared_ptr<names_services_map> names_services;
-    if(witer == workers_services->end()) {
-      names_services = std::make_shared<names_services_map>();
-      workers_services->insert(std::make_pair(worker_id,names_services));
-    } else {
-      names_services = witer->second;
-    }
+    std::shared_ptr<names_services_map> names_services = workers_services[worker_id];
 
     std::shared_ptr<Service> service;
     names_services_map::iterator niter = names_services->find(name);

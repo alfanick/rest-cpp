@@ -4,11 +4,12 @@
 #include <iostream>
 #include <map>
 #include <functional>
+#include <vector>
 #include "service.h"
 
 namespace REST {
 typedef std::map<std::string, std::shared_ptr<Service> > names_services_map;
-typedef std::map<int, std::shared_ptr<names_services_map> > workers_services_map;
+typedef std::vector< std::shared_ptr<names_services_map> > workers_services_vector;
 
 /**
  * Router resolves URL to Request::parameters and
@@ -19,14 +20,15 @@ typedef std::map<int, std::shared_ptr<names_services_map> > workers_services_map
  */
 class Router {
   public:
+    static int WORKERS;
     static Router* Instance();
+
     static std::shared_ptr<Service> getResource(std::string const &, int);
     // static void registerPath(std::string const &, std::function<void(void)> *);
   private:
-    Router() {};
-    Router(Router const&) {};
+    Router();
     static Router* pInstance;
-    static std::shared_ptr<workers_services_map> workers_services;
+    static workers_services_vector workers_services;
 
 };
 
