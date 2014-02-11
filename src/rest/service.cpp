@@ -17,6 +17,8 @@ namespace REST {
     return services;
   }
 
+
   Service::Service() {}
+  void Service::read() {}
 
 }
