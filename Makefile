@@ -1,5 +1,5 @@
 CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2 -g
-INCLUDES=
+INCLUDES=-I./src/rest
 LIBRARY=
 
 .PHONY: clean
