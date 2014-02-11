@@ -14,17 +14,17 @@ Server::Server(std::string address, int port, int threads) {
 
   status = getaddrinfo(address.c_str(), std::to_string(port).c_str(), &host_info, &host_info_list);
   if (status != 0)
-    throw new AddressResolvingError();
+    throw AddressResolvingError();
 
   handle = socket(host_info_list->ai_family, host_info_list->ai_socktype, host_info_list->ai_protocol);
   if (handle == -1)
-    throw new SocketCreationError();
+    throw SocketCreationError();
 
   int yes = 1;
   status = setsockopt(handle, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
   status = bind(handle, host_info_list->ai_addr, host_info_list->ai_addrlen);
   if (status == -1)
-    throw new PortInUseError();
+    throw PortInUseError();
 }
 
 Server::~Server() {
@@ -39,7 +39,7 @@ void Server::run() {
 
   status = listen(handle, BACKLOG_SIZE);
   if (status == -1)
-    throw new ServerError();
+    throw ServerError();
 
   while (is_running) {
     struct sockaddr_storage client_addr;
@@ -48,7 +48,7 @@ void Server::run() {
 
     try {
       if (client == -1)
-        throw new ServerError();
+        throw ServerError();
 
       dispatcher->next(client, client_addr);
     } catch (Exception e) {

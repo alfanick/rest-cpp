@@ -1,6 +1,7 @@
 #ifndef REST_CPP_EXCEPTIONS_H
 #define REST_CPP_EXCEPTIONS_H
-#define CREATE(NAME, PARENT, MESSAGE) class NAME : PARENT { public: virtual const char* what() const throw() { return (MESSAGE); } };
+#define CREATE(NAME, PARENT, MESSAGE) class NAME : PARENT { public: virtual const char* what() const throw() { return (MESSAGE); } virtual int code() {return 401; }};
+#define ERROR(NAME, CODE, MESSAGE) class NAME : Error { public: virtual const char* what() const throw() { return (MESSAGE); } virtual int code() { return (CODE); } };
 
 #include <exception>
 
@@ -12,8 +13,15 @@ namespace REST {
   CREATE(AddressResolvingError, ServerError, "Cannot resolve address");
   CREATE(SocketCreationError, ServerError, "Cannot create socket");
   CREATE(PortInUseError, ServerError, "Port is already in use");
+
+  namespace HTTP {
+    CREATE(Error, Exception, "Unknown HTTP protocol error");
+
+    ERROR(NotFound, 404, "Not Found");
+  }
 }
 
 #undef CREATE
+#undef ERROR
 
 #endif

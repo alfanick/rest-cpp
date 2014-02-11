@@ -39,14 +39,18 @@ void Worker::run() {
       // send response
       // close
       //
+
+      try {
+        throw HTTP::NotFound();
+      } catch (HTTP::NotFound e) {
+        std::string msg = "HTTP/1.0 " + std::to_string(e.code()) + " " + e.what() + "\r\nContent-Type: text/plain\r\nContent-Length: " + std::to_string(strlen(e.what())+2) + "\r\n\r\n" + e.what() + "\r\n";
+        int len = msg.size();
+        ssize_t bytes_sent;
+        bytes_sent = send(request->handle, msg.c_str(), len, MSG_DONTWAIT);
+      }
+
       std::cout << request->handle << " is my handle\n";
       std::cout << id << ": got request\n";
-
-      char *msg = "HTTP/1.0 404 Not Found\r\nContent-Type: text/html\r\nContent-Length: 4\r\n\r\nlolo\r\n";
-      int len;
-      ssize_t bytes_sent;
-      len = strlen(msg);
-      bytes_sent = send(request->handle, msg, len, MSG_DONTWAIT);
 
       close(request->handle);
     }

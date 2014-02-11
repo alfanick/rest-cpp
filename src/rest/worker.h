@@ -6,6 +6,7 @@
 #include <thread>
 #include <atomic>
 
+#include "exceptions.h"
 #include "request.h"
 
 namespace REST {
