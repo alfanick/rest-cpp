@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <map>
-using namespace std;
 
 namespace REST {
 
@@ -26,10 +25,10 @@ Service * createService() {
   return new T;
 };
 
-typedef map<string, Service*(*)()> services_map;
+typedef std::map<std::string, Service*(*)()> services_map;
 class ServiceFactory {
   public:
-    static Service * createInstance(string const&);
+    static Service * createInstance(std::string const&);
     static services_map* Map();
   private:
     static services_map* services;
@@ -37,8 +36,8 @@ class ServiceFactory {
 
 template <typename T>
 struct ServiceRegister : ServiceFactory {
-  ServiceRegister(string const& name) {
-    Map()->insert(make_pair(name, &createService<T>));
+  ServiceRegister(std::string const& name) {
+    Map()->insert(std::make_pair(name, &createService<T>));
   }
 };
 

@@ -4,7 +4,7 @@ namespace REST {
 
   services_map* ServiceFactory::services = NULL;
 
-  Service* ServiceFactory::createInstance(string const &name) {
+  Service* ServiceFactory::createInstance(std::string const &name) {
     services_map::iterator iter= Map()->find(name);
     if(iter == Map()->end())
       return NULL;
