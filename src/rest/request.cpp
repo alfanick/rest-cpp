@@ -81,8 +81,6 @@ void Request::parse_header(std::string line) {
 
     path.erase(path_query, query.size()+1);
   }
-
-  std::cout << "sciezka to '"<< path <<"'\n";
 }
 
 void Request::parse_query_string(std::string query) {
