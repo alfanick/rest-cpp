@@ -21,8 +21,8 @@ class Service {
     void update();
     void destroy();
     void read();
-    std::weak_ptr<Response> response;
-    std::weak_ptr<Request> request;
+    std::shared_ptr<Response> response;
+    std::shared_ptr<Request> request;
 };
 
 template <typename T>
