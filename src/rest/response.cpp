@@ -6,7 +6,7 @@ Json::FastWriter Response::json_writer;
 
 Response::Response(std::shared_ptr<Request> request) {
   handle = request->handle;
-  headers["Content-Type"] = "text/plain";
+  headers["Content-Type"] = "text/plain; charset=utf-8";
 }
 
 Response::Response(std::shared_ptr<Request> request, HTTP::Error &error) : Response(request) {
@@ -16,7 +16,7 @@ Response::Response(std::shared_ptr<Request> request, HTTP::Error &error) : Respo
 }
 
 void Response::use_json() {
-  headers["Content-Type"] = "application/json";
+  headers["Content-Type"] = "application/json; charset=utf-8";
   is_json = true;
 }
 
@@ -27,8 +27,6 @@ size_t Response::send() {
 
   // start http
   std::string content = "HTTP/1.0 " + std::to_string(status) + " " + status_message + "\r\n";
-
-  std::cout << payload << "\n";
 
   // content size
   headers["Content-Length"] = std::to_string(payload.size());
