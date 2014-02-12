@@ -2,6 +2,9 @@
 
 namespace REST {
 
+Router* Server::router() {
+  return Router::Instance();
+}
 
 Server::Server(std::string address, int port, int threads) {
   Router::WORKERS = threads;

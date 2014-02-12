@@ -32,6 +32,7 @@ class Server {
     ~Server();
 
     void run();
+    Router* router();
 
   private:
     Dispatcher* dispatcher;

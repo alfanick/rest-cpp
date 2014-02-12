@@ -25,6 +25,8 @@ namespace REST {
     return pInstance;
   }
 
+  void Router::registerPath(std::string const& path, service_lambda) {}
+
   std::shared_ptr<Service> Router::getResource(std::shared_ptr<Request> request, int worker_id) {
     std::string path = request->path;
     path_tuple* pair = extractParams(path);
@@ -76,7 +78,7 @@ namespace REST {
       while(slash != std::string::npos) {
         params_part = params_part.substr(slash+1);
         slash = params_part.find("/");
-        params->insert(std::make_pair(std::to_string(number++),params_part.substr(0, slash)));
+        params->insert(std::make_pair(std::to_string(number++),Request::uri_decode(params_part.substr(0, slash))));
       }
     } else {
     
