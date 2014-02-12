@@ -37,8 +37,6 @@ void Worker::run() {
       // ready
       requests_lock->unlock();
 
-
-
       try {
         std::shared_ptr<Response> response(new Response(request));
         std::cout << "path: " << request-> path << std::endl;
