@@ -42,4 +42,25 @@ namespace REST {
     throw HTTP::MethodNotAllowed();
   }
 
+  void Service::make_action() {
+    before(); 
+    switch (request->method) {
+      case Request::Method::GET:
+        read();
+        break;
+      case Request::Method::POST:
+        create();
+        break;
+      case Request::Method::DELETE:
+        destroy();
+        break;
+      case Request::Method::PUT:
+        update();
+        break;
+      default:
+        throw HTTP::MethodNotAllowed();
+    }
+    after();
+  }
+
 }

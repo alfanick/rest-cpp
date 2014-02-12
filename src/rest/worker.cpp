@@ -69,27 +69,9 @@ void Worker::make_action(std::shared_ptr<Request> request, std::shared_ptr<Respo
   service->request = request;
   service->response = response;
 
-  service->before();
+  service->make_action();
 
-  switch (request->method) {
-    case Request::Method::GET:
-      service->read();
-      break;
-    case Request::Method::POST:
-      service->create();
-      break;
-    case Request::Method::DELETE:
-      service->destroy();
-      break;
-    case Request::Method::PUT:
-      service->update();
-      break;
-    default:
-      throw HTTP::MethodNotAllowed();
-  }
-
-  service->after();
-}
+ }
 
 void Worker::stop() {
   should_run.store(false);

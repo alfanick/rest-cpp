@@ -26,6 +26,7 @@ class Service {
     virtual void update();
     virtual void destroy();
     virtual void read();
+    virtual void make_action();
     void setParams(std::shared_ptr<params_map>);
     std::shared_ptr<Response> response;
     std::shared_ptr<Request> request;
