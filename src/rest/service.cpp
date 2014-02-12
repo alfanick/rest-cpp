@@ -17,6 +17,13 @@ namespace REST {
     return services;
   }
 
+  bool ServiceFactory::exist(std::string const& name) {
+    services_map::iterator iter = Map()->find(name);
+    if(iter == Map()->end())
+      return false;
+    return true;
+  }
+
 
   Service::Service() {}
 

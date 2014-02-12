@@ -37,6 +37,7 @@ typedef std::map<std::string, std::shared_ptr<Service>(*)()> services_map;
 class ServiceFactory {
   public:
     static std::shared_ptr<Service> createInstance(std::string const&);
+    static bool exist(std::string const&);
     static services_map* Map();
   private:
     static services_map* services;
