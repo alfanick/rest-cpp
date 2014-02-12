@@ -4,7 +4,7 @@
 class HelloWorldService : public REST::Service {
   public:
     HelloWorldService() {
-      std::cout << "nowy service\n";
+      std::cout << "nowy HelloWorldService\n";
     }
 
     void before() {
@@ -16,11 +16,11 @@ class HelloWorldService : public REST::Service {
     }
 
     void read() {
-      response->data["message"] = "Hello " + (request->parameters["name"].empty() ? "someone" : request->parameters["name"]) + "!";
+      response->data["message"] = "Hello " + (request->parameters["0"].empty() ? "someone" : request->parameters["0"]) + "!";
     }
   private:
     static REST::ServiceRegister<HelloWorldService> reg;
 };
 
-REST::ServiceRegister<HelloWorldService> HelloWorldService::reg("HelloWorldService");
+REST::ServiceRegister<HelloWorldService> HelloWorldService::reg("przywitanie");
 

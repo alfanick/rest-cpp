@@ -25,7 +25,8 @@ namespace REST {
     return pInstance;
   }
 
-  std::shared_ptr<Service> Router::getResource(std::string const& path, int worker_id) {
+  std::shared_ptr<Service> Router::getResource(std::shared_ptr<Request> request, int worker_id) {
+    std::string path = request->path;
     path_tuple* pair = extractParams(path);
     if(pair == NULL)
       return NULL;
@@ -50,6 +51,7 @@ namespace REST {
     } else {
       service = niter->second;
     }
+    request->parameters.insert(params->begin(), params->end());
     return service;
   }
 

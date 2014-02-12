@@ -25,7 +25,7 @@ class Router {
     static int WORKERS;
     static Router* Instance();
 
-    static std::shared_ptr<Service> getResource(std::string const &, int);
+    static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
     // static void registerPath(std::string const &, std::function<void(void)> *);
   private:
     Router();

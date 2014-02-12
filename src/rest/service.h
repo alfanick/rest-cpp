@@ -10,6 +10,8 @@
 
 namespace REST {
 
+typedef std::map<std::string, std::string> params_map;
+
 /**
  * Service provice RESTful stuff to other classes.
  *
@@ -24,8 +26,10 @@ class Service {
     virtual void update();
     virtual void destroy();
     virtual void read();
+    void setParams(std::shared_ptr<params_map>);
     std::shared_ptr<Response> response;
     std::shared_ptr<Request> request;
+    std::shared_ptr<params_map> params;
 };
 
 template <typename T>
