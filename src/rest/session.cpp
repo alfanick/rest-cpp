@@ -8,7 +8,7 @@ namespace REST {
   const int Session::LIFETIME = 86400;
   int Session::last_cleaning = time(0);
   
-  Session::Session(std::shared_ptr<Request> request) {
+  Session::Session() {
     data = new std::map<std::string, std::string>(); 
     created_at = modified_at = time(0);
   }
@@ -27,7 +27,7 @@ namespace REST {
     auto iter = Sessions()->find(id);
 
     if(iter == Sessions()->end())
-      return NULL;
+      return nullptr;
 
     iter->second->modified_at = time(0);
     return iter->second;
@@ -35,14 +35,14 @@ namespace REST {
 
   std::string Session::generateId() {
     srand(time(NULL) + rand());
-    std::stringstream ss;
+    std::string result = "";
     for(int i=0; i<64; i++) {
       int j = rand() % 127;
       while(i < 32)
         j = rand() % 127;
-      ss << char(j);
+      result += char(j);
     }
-    return ss.str();
+    return result;
   }
 
   void Session::killSessions() {

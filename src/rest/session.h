@@ -4,7 +4,6 @@
 #include <map>
 #include <iostream>
 #include <ctime>
-#include "request.h"
 
 namespace REST {
 
@@ -17,10 +16,10 @@ typedef std::map<std::string, std::shared_ptr<Session> > sessions_map;
  */
 class Session {
   public:
-    Session(std::shared_ptr<Request> request);
+    Session();
     ~Session();
     static sessions_map* Sessions();
-    std::shared_ptr<Session> getSession(std::string);
+    static std::shared_ptr<Session> getSession(std::string);
   private:
     std::string generateId();
     static void killSessions();

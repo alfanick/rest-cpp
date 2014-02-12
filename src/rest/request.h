@@ -7,6 +7,7 @@
 #include <map>
 #include <sstream>
 #include "json/json.h"
+#include "session.h"
 
 namespace REST {
 class Worker;
@@ -35,6 +36,7 @@ class Request {
     std::map< std::string, std::string > parameters;
 
     std::shared_ptr<Json::Value> data = nullptr;
+    std::shared_ptr<Session> session = nullptr;
 
     static std::string uri_decode(const std::string& src);
 
