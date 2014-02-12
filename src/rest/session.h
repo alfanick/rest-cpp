@@ -21,7 +21,6 @@ class Session {
     ~Session();
     static sessions_map* Sessions();
     std::shared_ptr<Session> getSession(std::string);
-    void modify();
   private:
     std::string generateId();
     static void killSessions();
