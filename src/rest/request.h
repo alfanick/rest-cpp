@@ -10,6 +10,16 @@
 #include "session.h"
 
 namespace REST {
+
+template <typename RETURN_TYPE, typename STRING_TYPE>
+RETURN_TYPE parse_string(const STRING_TYPE& str) {
+  std::stringstream buf;
+  buf << str;
+  RETURN_TYPE val;
+  buf >> val;
+  return val;
+}
+
 class Worker;
 class Response;
 /**
@@ -34,6 +44,14 @@ class Request {
     std::string path;
     std::multimap< std::string, std::string > headers;
     std::map< std::string, std::string > parameters;
+
+    template <class T>
+    const T parameter(std::string const& key, const T& default_value) {
+      if (parameters[key].empty())
+        return default_value;
+      else
+        return parse_string<T>(parameters[key]);
+    }
 
     std::shared_ptr<Json::Value> data = nullptr;
     std::shared_ptr<Session> session = nullptr;
