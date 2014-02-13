@@ -25,6 +25,8 @@
 #include "exceptions.h"
 #include "server.h"
 
+using namespace REST::HTTP;
+
 void routes(REST::Router*);
 
 namespace REST {

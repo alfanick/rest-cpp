@@ -9,9 +9,14 @@ create_json_service(adder) {
   service->response->data["result"] = a+b;
 }
 
+create_service(hole) {
+  throw MethodNotAllowed();
+}
+
 void routes(REST::Router* r) {
   r->resource<HelloWorldService>("przywitanie");
 
+  r->path("lol", hole);
   r->path("sum/:a/:b", adder);
 
   r->path("fibonacci/:fib", [](REST::Service* service) {
