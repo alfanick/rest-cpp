@@ -2,16 +2,17 @@
 
 #include "resources/hello_world_service.cpp"
 
+create_json_service(adder) {
+  int a = service->request->parameter("a", 0);
+  int b = service->request->parameter("b", 0);
+
+  service->response->data["result"] = a+b;
+}
+
 void routes(REST::Router* r) {
   r->resource<HelloWorldService>("przywitanie");
 
-  r->registerPath("sum/:num1/:num2", [](REST::Service* service) {
-    int num1 = service->request->parameter("num1", 0);
-    int num2 = service->request->parameter("num2", 0);
-    int res = num1+num2;
-    service->response->use_json();
-    service->response->data["result"] = res;
-  });
+  r->registerPath("sum/:a/:b", adder);
 
   r->registerPath("fibonacci/:fib", [](REST::Service* service) {
     int num = service->request->parameter("fib", 0);

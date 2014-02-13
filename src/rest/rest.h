@@ -16,9 +16,13 @@
 #define SERVER_WORKERS 4
 #endif
 
+#define create_service(NAME) void NAME(REST::Service* service)
+#define create_json_service(NAME) inline void NAME##_wrapped(REST::Service*); void NAME(REST::Service* service) { service->response->use_json(); NAME##_wrapped(service); } inline void NAME##_wrapped(REST::Service* service)
+
 #include <iostream>
 #include <signal.h>
 
+#include "exceptions.h"
 #include "server.h"
 
 void routes(REST::Router*);
