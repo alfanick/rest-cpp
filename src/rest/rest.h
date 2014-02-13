@@ -21,7 +21,7 @@
 
 #include "server.h"
 
-void prepare(REST::Server*, REST::Router*);
+void routes(REST::Router*);
 
 namespace REST {
 
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 
   server_instance = new REST::Server(STR(SERVER_BIND), SERVER_PORT, SERVER_WORKERS);
 
-  ::prepare(server_instance, server_instance->router());
+  ::routes(server_instance->router());
 
   server_instance->run();
 

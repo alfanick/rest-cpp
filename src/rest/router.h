@@ -33,6 +33,11 @@ class Router {
 
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
     static void registerPath(std::string const &, service_lambda);
+
+    template <class R>
+    void resource(std::string const& path) {
+      ServiceRegister<R> reg(path);
+    }
   private:
     Router();
     static Router* pInstance;

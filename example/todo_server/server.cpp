@@ -2,8 +2,8 @@
 
 #include "hello_world_service.cpp"
 
-void prepare(REST::Server* s, REST::Router* r) {
-  s->resource<HelloWorldService>("przywitanie");
+void routes(REST::Router* r) {
+  r->resource<HelloWorldService>("przywitanie");
 
   r->registerPath("sum/:num1/:num2", [](REST::Service* service) {
     int num1 = (!service->request->parameters["num1"].empty()) ? std::stoi(service->request->parameters["num1"]) : 0;

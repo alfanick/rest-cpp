@@ -34,11 +34,6 @@ class Server {
     void run();
     Router* router();
 
-    template <class R>
-    void resource(std::string const& path) {
-      ServiceRegister<R> reg(path);
-    };
-
   private:
     Dispatcher* dispatcher;
 
