@@ -1,4 +1,4 @@
-#include "service.h"
+#include <rest/service.h>
 #include <iostream>
 
 class HelloWorldService : public REST::Service {

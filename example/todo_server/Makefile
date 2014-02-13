@@ -5,4 +5,4 @@ LIBRARY=-L../../lib -lrest
 .PHONY: server
 
 server:
-	$(CXX) $(INCLUDES) server.cpp -o todo_server $(LIBRARY)
+	$(CXX) $(INCLUDES) *.cpp -o todo_server $(LIBRARY)
