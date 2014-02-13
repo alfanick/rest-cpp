@@ -1,6 +1,7 @@
 #ifndef REST_CPP_SESSION_H
 #define REST_CPP_SESSION_H
 
+#include <mutex>
 #include <map>
 #include <iostream>
 #include <ctime>
@@ -28,8 +29,11 @@ class Session {
     static void killSessions();
 
   private:
+    static const int SESSION_CHECK;
+    static std::mutex sessions_lock;
     static const int LIFETIME;
     static int last_cleaning;
+    static size_t sessions_added;
     std::string id;
     int created_at;
     int modified_at;
