@@ -1,6 +1,6 @@
 #include <rest/rest.h>
 
-#include "hello_world_service.cpp"
+#include "resources/hello_world_service.cpp"
 
 void routes(REST::Router* r) {
   r->resource<HelloWorldService>("przywitanie");
