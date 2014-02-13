@@ -7,6 +7,7 @@ Router* Server::router() {
 }
 
 Server::Server(std::string address, int port, int threads) {
+  srand(time(0));
   Router::WORKERS = threads;
   Router::Instance();
   //dispatcher = new RoundRobinDispatcher(threads);

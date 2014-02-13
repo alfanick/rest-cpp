@@ -24,10 +24,10 @@ class Session {
     static std::shared_ptr<Session> getSession(std::string);
 
     std::map<std::string, std::string> *data;
-  private:
-    std::string generateId();
+    static std::string generateId();
     static void killSessions();
 
+  private:
     static const int LIFETIME;
     static int last_cleaning;
     std::string id;

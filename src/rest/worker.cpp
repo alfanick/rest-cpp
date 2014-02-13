@@ -65,6 +65,7 @@ void Worker::make_action(std::shared_ptr<Request> request, std::shared_ptr<Respo
     throw HTTP::NotFound();
 
 
+  service->session = nullptr;
   auto session_header = request->headers.find("Session");
   if (session_header != request->headers.end()) {
     std::cout << "Session ID to: " << session_header->second << std::endl;

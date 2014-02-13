@@ -43,7 +43,7 @@ namespace REST {
   }
 
   void Service::make_action() {
-    before(); 
+    before();
     switch (request->method) {
       case Request::Method::GET:
         read();
@@ -61,6 +61,12 @@ namespace REST {
         throw HTTP::MethodNotAllowed();
     }
     after();
+  }
+
+  void Service::ensure_session() {
+    if (session == nullptr) {
+      session = Session::getSession(Session::generateId());
+    }
   }
 
 }

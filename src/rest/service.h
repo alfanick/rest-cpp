@@ -38,6 +38,8 @@ class Service {
 
   protected:
     std::shared_ptr<Session> session = nullptr;
+
+    void ensure_session();
 };
 
 template <typename T>

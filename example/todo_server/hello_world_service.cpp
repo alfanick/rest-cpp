@@ -8,6 +8,7 @@ class HelloWorldService : public REST::Service {
     }
 
     void before() {
+      ensure_session();
       response->use_json();
     }
 

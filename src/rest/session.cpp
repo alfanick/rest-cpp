@@ -39,13 +39,9 @@ namespace REST {
   }
 
   std::string Session::generateId() {
-    srand(time(NULL) + rand());
     std::string result = "";
     for(int i=0; i<64; i++) {
-      int j = rand() % 127;
-      while(i < 32)
-        j = rand() % 127;
-      result += char(j);
+      result += char((rand() % 26) + 97);
     }
     return result;
   }
