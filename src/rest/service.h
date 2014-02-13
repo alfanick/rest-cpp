@@ -12,12 +12,16 @@ namespace REST {
 
 typedef std::map<std::string, std::string> params_map;
 
+class Worker;
+
 /**
  * Service provice RESTful stuff to other classes.
  *
  * Classes must inherit REST::Service to be open to public.
  */
 class Service {
+  friend class Worker;
+
   public:
     Service();
     virtual void before();
@@ -32,7 +36,8 @@ class Service {
     std::shared_ptr<Request> request;
     std::shared_ptr<params_map> params;
 
-    /// TODO session?
+  protected:
+    std::shared_ptr<Session> session = nullptr;
 };
 
 template <typename T>

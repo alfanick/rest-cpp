@@ -7,9 +7,9 @@ namespace REST {
   // 24 hours
   const int Session::LIFETIME = 86400;
   int Session::last_cleaning = time(0);
-  
-  Session::Session() {
-    data = new std::map<std::string, std::string>(); 
+
+  Session::Session(std::string i) : id(i) {
+    data = new std::map<std::string, std::string>();
     created_at = modified_at = time(0);
   }
 
@@ -26,9 +26,14 @@ namespace REST {
   std::shared_ptr<Session> Session::getSession(std::string id) {
     auto iter = Sessions()->find(id);
 
-    if(iter == Sessions()->end())
-      return nullptr;
+    if(iter == Sessions()->end()) {
+      std::shared_ptr<Session> s = std::make_shared<Session>(id);
+      Sessions()->insert(std::make_pair(id, s));
+      std::cout << "nowa sesja dla '"<< id <<"'\n";
+      return s;
+    }
 
+    std::cout << "mam sesje dla '"<<id<<"'\n";
     iter->second->modified_at = time(0);
     return iter->second;
   }
