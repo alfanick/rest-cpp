@@ -31,6 +31,8 @@ class Service {
     std::shared_ptr<Response> response;
     std::shared_ptr<Request> request;
     std::shared_ptr<params_map> params;
+
+    /// TODO session?
 };
 
 template <typename T>

@@ -8,7 +8,7 @@
 namespace REST {
 
 class Session;
-  
+
 typedef std::map<std::string, std::shared_ptr<Session> > sessions_map;
 
 /**
@@ -26,6 +26,7 @@ class Session {
 
     static const int LIFETIME;
     static int last_cleaning;
+    // TODO: why private?
     std::map<std::string, std::string> *data;
     std::string id;
     int created_at;
