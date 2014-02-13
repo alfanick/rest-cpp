@@ -4,6 +4,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string>
+#include <memory>
 #include <map>
 #include <sstream>
 #include "json/json.h"

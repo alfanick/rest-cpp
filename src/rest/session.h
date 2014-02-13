@@ -1,6 +1,7 @@
 #ifndef REST_CPP_SESSION_H
 #define REST_CPP_SESSION_H
 
+#include <memory>
 #include <mutex>
 #include <map>
 #include <iostream>

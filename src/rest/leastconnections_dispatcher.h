@@ -17,7 +17,7 @@ class LeastConnectionsDispatcher : public Dispatcher {
 
   private:
     int best_worker_id = 0;
-    int best_worker_queue_size = 10000;
+    unsigned int best_worker_queue_size = 10000;
 
     std::mutex best_worker_lock;
 };
