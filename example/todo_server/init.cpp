@@ -12,9 +12,9 @@ create_json_service(adder) {
 void routes(REST::Router* r) {
   r->resource<HelloWorldService>("przywitanie");
 
-  r->registerPath("sum/:a/:b", adder);
+  r->path("sum/:a/:b", adder);
 
-  r->registerPath("fibonacci/:fib", [](REST::Service* service) {
+  r->path("fibonacci/:fib", [](REST::Service* service) {
     int num = service->request->parameter("fib", 0);
     int fib1=1, fib2=1, res=0;
     if(num ==0 || num == 1 || num == 2)

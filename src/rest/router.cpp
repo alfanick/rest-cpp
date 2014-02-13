@@ -35,7 +35,7 @@ namespace REST {
 
     std::string name = pair->first;
     std::shared_ptr<params_map> params = pair->second;
-    
+
     // std::cout << "name: " << name << "\nparams:\n";
     // for(params_map::iterator iter = params->begin(); iter != params->end(); ++iter) {
     //   std::cout << "\t" << iter->first << ": " << iter->second << "\n";
@@ -51,7 +51,7 @@ namespace REST {
       service = (std::shared_ptr<Service>) ServiceFactory::createInstance(name);
       if(service == NULL) {
         auto liter = patterns->find(name);
-        if(liter != patterns->end()) 
+        if(liter != patterns->end())
           service = liter->second.second;
       }
       names_services->insert(std::make_pair(name, service));
@@ -108,7 +108,7 @@ namespace REST {
     return new path_tuple(res_name, params);
   }
 
-  void Router::registerPath(std::string const& path, service_lambda lambda) {
+  void Router::path(std::string const& path, service_lambda lambda) {
     if(path.size() == 0)
       return;
     std::string name = path.substr(0,path.find("/"));

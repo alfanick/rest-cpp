@@ -32,7 +32,7 @@ class Router {
     static Router* Instance();
 
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
-    static void registerPath(std::string const &, service_lambda);
+    static void path(std::string const &, service_lambda);
 
     template <class R>
     void resource(std::string const& path) {
