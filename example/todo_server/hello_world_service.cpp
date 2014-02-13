@@ -18,6 +18,9 @@ class HelloWorldService : public REST::Service {
 
     void read() {
       response->data["message"] = "Hello " + (request->parameters["0"].empty() ? "someone" : request->parameters["0"]) + "!";
+      response->data["name"] = "Name z sesji to " + session->data["name"];
+      if (session->data["name"].empty())
+        session->data["name"] = request->parameters["0"];
     }
   private:
     static REST::ServiceRegister<HelloWorldService> reg;

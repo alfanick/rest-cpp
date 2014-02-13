@@ -9,12 +9,10 @@ namespace REST {
   int Session::last_cleaning = time(0);
 
   Session::Session(std::string i) : id(i) {
-    data = new std::map<std::string, std::string>();
     created_at = modified_at = time(0);
   }
 
   Session::~Session() {
-    delete data;
   }
 
   sessions_map* Session::Sessions() {
