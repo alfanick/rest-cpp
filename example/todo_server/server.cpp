@@ -1,21 +1,11 @@
-#include <rest/server.h>
+#include <rest/rest.h>
 
-#include <iostream>
-#include <signal.h>
-#include <cstdlib>
+#include "hello_world_service.cpp"
 
-REST::Server *server;
+void prepare(REST::Server* s, REST::Router* r) {
+  s->resource<HelloWorldService>("przywitanie");
 
-void stop_server(int a = 0) {
-  delete server;
-}
-
-int main(int argc, char **argv) {
-  signal(SIGINT, stop_server);
-
-  server = new REST::Server("0.0.0.0", 8080, (argc > 1) ? atoi(argv[1]) : 4);
-
-  server->router()->registerPath("sum/:num1/:num2", [](REST::Service* service) {
+  r->registerPath("sum/:num1/:num2", [](REST::Service* service) {
     int num1 = (!service->request->parameters["num1"].empty()) ? std::stoi(service->request->parameters["num1"]) : 0;
     int num2 = (!service->request->parameters["num2"].empty()) ? std::stoi(service->request->parameters["num2"]) : 0;
     int res = num1+num2;
@@ -23,7 +13,7 @@ int main(int argc, char **argv) {
     service->response->data["result"] = res;
   });
 
-  server->router()->registerPath("fibonacci/:fib", [](REST::Service* service) {
+  r->registerPath("fibonacci/:fib", [](REST::Service* service) {
     int num = std::stoi(service->request->parameters["fib"]);
     int fib1=1, fib2=1, res=0;
     if(num ==0 || num == 1 || num == 2)
@@ -39,8 +29,4 @@ int main(int argc, char **argv) {
     service->response->use_json();
     service->response->data["result"] = res;
   });
-
-  server->run();
-
-  return 0;
 }
