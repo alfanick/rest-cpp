@@ -2,16 +2,18 @@
 
 namespace REST {
 
-Request::Request(int client, struct sockaddr_storage client_addr) : handle(client), addr(client_addr) {
-  length = recv(client, buffer, BUFFER_SIZE, 0);
+size_t Request::BUFFER_SIZE = getpagesize();
 
+Request::Request(int client, struct sockaddr_storage client_addr) : handle(client), addr(client_addr) {
   static Json::Reader json_reader;
 
-  std::istringstream request_stream(buffer);
   std::string line;
-  std::string content;
-
   bool is_header = true;
+  char* buffer = new char[BUFFER_SIZE];
+
+  recv(client, buffer, BUFFER_SIZE, 0);
+  std::istringstream request_stream(buffer);
+
   while (std::getline(request_stream, line)) {
     if (method == Method::UNDEFINED) {
       parse_header(line);
@@ -22,32 +24,48 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
 
     if (line.size() == 0) {
       is_header = false;
-      continue;
+      break;
     }
 
-    if (is_header) {
-      size_t colon;
-      std::string name = line.substr(0, colon = line.find(":"));
-      std::string value = line.substr(colon+1, line.size() - colon);
-      value.erase(0, value.find_first_not_of(" \n\r\t"));
+    size_t colon;
+    std::string name = line.substr(0, colon = line.find(":"));
+    std::string value = line.substr(colon+1, line.size() - colon);
+    value.erase(0, value.find_first_not_of(" \n\r\t"));
 
-
-      headers.insert(std::make_pair(name, value));
-      continue;
-    } else {
-      content += line;
-    }
+    headers.insert(std::make_pair(name, value));
   }
 
-  if (!content.empty()) {
+  if (!is_header) {
+    size_t content_length = header("Content-Length", 0);
+    raw.reserve(content_length);
+
+    if (content_length > 0) {
+      // read whats left in header
+      length = std::min(content_length, (size_t)(BUFFER_SIZE - request_stream.tellg()));
+      raw = std::string(buffer, BUFFER_SIZE).substr(request_stream.tellg(), length);
+
+      // receive some more
+      while (length < content_length) {
+        memset(buffer, 0, BUFFER_SIZE);
+        size_t buffer_length = recv(client, buffer, BUFFER_SIZE, 0);
+        raw += std::string(buffer, buffer_length);
+        length += buffer_length;
+      }
+    }
+    std::cout << "content o "<<content_length<<" == "<<length<<" == " <<raw.size()<<"\n";
+  }
+
+  delete buffer;
+
+  if (!raw.empty()) {
     auto ct = headers.find("Content-Type");
     if (ct != headers.end()) {
       if (ct->second == "application/x-www-form-urlencoded") {
-        parse_query_string(line);
+        parse_query_string(raw);
       } else
       if (ct->second == "application/json" || ct->second == "text/json") {
         data = std::make_shared<Json::Value>();
-        json_reader.parse(content, *data.get(), false);
+        json_reader.parse(raw, *data.get(), false);
       }
     }
   }
@@ -100,6 +118,7 @@ void Request::parse_header(std::string line) {
 }
 
 void Request::parse_query_string(std::string query) {
+  query.erase(query.find_last_not_of(" \n\r\t")+1);
   std::istringstream query_stream(query);
   std::string pair;
   while (std::getline(query_stream, pair, '&')) {

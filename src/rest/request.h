@@ -36,7 +36,7 @@ class Request {
   public:
     enum class Method { GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, UNDEFINED };
 
-    static const size_t BUFFER_SIZE = 16384;
+    static size_t BUFFER_SIZE;
 
     Request(int client, struct sockaddr_storage client_addr);
     ~Request();
@@ -45,6 +45,18 @@ class Request {
     std::string path;
     std::multimap< std::string, std::string > headers;
     std::map< std::string, std::string > parameters;
+
+    std::string raw;
+    size_t length = 0;
+
+    template <class T>
+    const T header(std::string const& key, const T& default_value) {
+      auto h = headers.find(key);
+      if (h == headers.end())
+        return default_value;
+      else
+        return parse_string<T>(h->second);
+    }
 
     template <class T>
     const T parameter(std::string const& key, const T& default_value) {
@@ -62,9 +74,6 @@ class Request {
   private:
     void parse_header(std::string line);
     void parse_query_string(std::string query);
-
-    char buffer[BUFFER_SIZE];
-    size_t length;
 
     int handle;
     struct sockaddr_storage addr;
