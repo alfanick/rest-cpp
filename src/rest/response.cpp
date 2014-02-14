@@ -8,6 +8,7 @@ Response::Response(std::shared_ptr<Request> request) {
   handle = request->handle;
   start_time = request->time;
   headers["Content-Type"] = "text/plain; charset=utf-8";
+  headers["Connection"] = "close";
 }
 
 Response::Response(std::shared_ptr<Request> request, HTTP::Error &error) : Response(request) {
