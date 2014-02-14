@@ -14,10 +14,9 @@ create_service(hole) {
 }
 
 create_service(secret) {
-  if (service->request->authorization.first != "root" ||
-      service->request->authorization.second != "spam") {
-    service->response->authorization("Some secret");
-  }
+  service->ensure_authorization("Some secret", [](std::string username, std::string password) -> bool {
+    return username == "root" && password == "spam";
+  });
 
   service->response->raw = "You are awesome!";
 }

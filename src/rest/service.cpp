@@ -69,4 +69,8 @@ namespace REST {
     }
   }
 
+  void Service::ensure_authorization(std::string const& realm, std::function<bool(std::string, std::string)> handler) {
+    if (request->authorization.first.empty() || !handler(request->authorization.first, request->authorization.second))
+      response->authorization(realm);
+  }
 }

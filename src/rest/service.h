@@ -1,6 +1,7 @@
 #ifndef REST_CPP_SERVICE_H
 #define REST_CPP_SERVICE_H
 
+#include <functional>
 #include <iostream>
 #include <map>
 #include <algorithm>
@@ -36,10 +37,11 @@ class Service {
     std::shared_ptr<Request> request;
     std::shared_ptr<params_map> params;
 
+    void ensure_session();
+    void ensure_authorization(std::string const& realm, std::function<bool(std::string, std::string)> handler);
+
   protected:
     std::shared_ptr<Session> session = nullptr;
-
-    void ensure_session();
 };
 
 template <typename T>
