@@ -9,6 +9,7 @@ namespace REST {
 Worker::Worker(int i, std::queue< std::shared_ptr<Request> > *rq, std::mutex *re, std::mutex *rl) :
  id(i), requests_queue(rq), requests_empty(re), requests_lock(rl) {
   run();
+  server_header = "rest-cpp, worker " + std::to_string(id);
 }
 
 void Worker::run() {
@@ -38,6 +39,7 @@ void Worker::run() {
       requests_lock->unlock();
 
       std::shared_ptr<Response> response(new Response(request));
+      response->headers["Server"] = server_header;
 
       try {
         std::cout << "path: " << request-> path << std::endl;

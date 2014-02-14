@@ -6,6 +6,7 @@ Json::FastWriter Response::json_writer;
 
 Response::Response(std::shared_ptr<Request> request) {
   handle = request->handle;
+  start_time = request->time;
   headers["Content-Type"] = "text/plain; charset=utf-8";
 }
 
@@ -35,6 +36,7 @@ size_t Response::send() {
 
   // content size
   headers["Content-Length"] = std::to_string(payload.size());
+  headers["Server"] += ", took " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count() / 1000.0f) + "ms";
 
   // add headers
   for (auto header : headers)

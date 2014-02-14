@@ -5,6 +5,7 @@
 #include "request.h"
 #include "json/json.h"
 
+#include <chrono>
 #include <string>
 #include <map>
 #include <unistd.h>
@@ -34,6 +35,7 @@ class Response {
     void authorization(std::string realm);
 
     Json::Value data;
+    std::chrono::high_resolution_clock::time_point start_time;
 
     static Json::FastWriter json_writer;
 

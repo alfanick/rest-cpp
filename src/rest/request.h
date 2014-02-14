@@ -1,6 +1,7 @@
 #ifndef REST_CPP_REQUEST_H
 #define REST_CPP_REQUEST_H
 
+#include <chrono>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string>
@@ -47,6 +48,7 @@ class Request {
     std::multimap< std::string, std::string > headers;
     std::map< std::string, std::string > parameters;
     std::pair< std::string, std::string > authorization;
+    std::chrono::high_resolution_clock::time_point time;
 
     std::string raw;
     size_t length = 0;

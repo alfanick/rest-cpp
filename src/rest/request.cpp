@@ -67,6 +67,8 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
 
   delete buffer;
 
+  time = std::chrono::high_resolution_clock::now();
+
   auto auth_header = headers.find("Authorization");
   if (auth_header != headers.end()) {
     if (auth_header->second.find("Basic") == 0) {

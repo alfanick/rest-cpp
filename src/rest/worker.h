@@ -30,6 +30,7 @@ class Worker {
 
   private:
     void run();
+    std::string server_header;
 
   protected:
     int id;
