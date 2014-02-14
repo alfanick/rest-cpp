@@ -20,6 +20,11 @@ void Response::use_json() {
   is_json = true;
 }
 
+void Response::authorization(std::string realm) {
+  headers["WWW-Authenticate"] = "Basic realm=\""+realm+"\"";
+  throw HTTP::NotAuthorized();
+}
+
 size_t Response::send() {
   size_t bytes_sent = 0;
 

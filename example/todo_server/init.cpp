@@ -13,11 +13,21 @@ create_service(hole) {
   throw MethodNotAllowed();
 }
 
+create_service(secret) {
+  if (service->request->authorization.first != "root" ||
+      service->request->authorization.second != "spam") {
+    service->response->authorization("Some secret");
+  }
+
+  service->response->raw = "You are awesome!";
+}
+
 void routes(REST::Router* r) {
   r->resource<HelloWorldService>("przywitanie");
 
   r->path("lol", hole);
   r->path("sum/:a/:b", adder);
+  r->path("secret", secret);
 
   r->path("fibonacci/:fib", [](REST::Service* service) {
     int num = service->request->parameter("fib", 0);

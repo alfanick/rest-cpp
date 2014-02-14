@@ -37,8 +37,9 @@ void Worker::run() {
       // ready
       requests_lock->unlock();
 
+      std::shared_ptr<Response> response(new Response(request));
+
       try {
-        std::shared_ptr<Response> response(new Response(request));
         std::cout << "path: " << request-> path << std::endl;
 
         make_action(request, response);
@@ -46,8 +47,9 @@ void Worker::run() {
         response->send();
 
       } catch (HTTP::Error &e) {
-        std::unique_ptr<Response> response(new Response(request, e));
-        response->send();
+        std::unique_ptr<Response> error_response(new Response(request, e));
+        error_response->headers.insert(response->headers.begin(), response->headers.end());
+        error_response->send();
       }
 
       std::cout << request->handle << " is my handle\n";

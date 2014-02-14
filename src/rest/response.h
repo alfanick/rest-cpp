@@ -31,6 +31,7 @@ class Response {
     std::map< std::string, std::string > headers;
 
     void use_json();
+    void authorization(std::string realm);
 
     Json::Value data;
 
