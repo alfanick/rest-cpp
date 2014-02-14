@@ -119,10 +119,6 @@ void Request::parse_header(std::string line) {
   } else
   if (line.find("OPTIONS") == 0) {
     method = Method::OPTIONS;
-  } else
-  if (line.find("Session-Id: ") == 0) {
-    std::string session_id = line.substr(std::string("Session-Id: ").size());
-    session = Session::getSession(session_id);
   }
 
   size_t path_start = line.find_first_of(" ")+1;
