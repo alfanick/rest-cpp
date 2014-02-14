@@ -1,6 +1,8 @@
 #ifndef REST_CPP_ROUTER_H
 #define REST_CPP_ROUTER_H
 
+#include <set>
+#include <memory>
 #include <iostream>
 #include <map>
 #include <functional>
@@ -26,6 +28,76 @@ typedef std::map<std::string, path_lambda> lambda_patterns;
  * @see Service
  */
 class Router {
+  private:
+    class Node {
+      friend class Node;
+      public:
+        Node() { };
+        Node(std::string p);
+        virtual ~Node();
+
+        bool unify(std::string const& path, params_map& params);
+        bool unify(Node* const path, params_map& params);
+        static Node* from_path(std::string const& path);
+
+        bool is_last();
+        const Node* next();
+
+        std::string uri();
+
+        struct Less {
+          bool operator()(const Node* a, const Node* b) const {
+            if (a->path == "*")
+              return false;
+            if (b->path == "*")
+              return true;
+
+            if (a->path[0] == ':')
+              if (b->path[0] != ':')
+                return false;
+            if (b->path[0] == ':')
+              if (a->path[0] != ':')
+                return true;
+
+            return a->path < b->path;
+          }
+        };
+
+      protected:
+        std::string path;
+        std::set<Node*, Less> children;
+    };
+
+    class RootNode final :  public Node {
+      public:
+        RootNode();
+/*
+        virtual bool operator<(Node* const& other) const {
+          return true;
+        }
+  */  };
+
+    class ParameterNode : public Node {
+      public:
+        ParameterNode(std::string const& name);
+/*
+        virtual bool operator<(Node* const& other) const {
+          return false;
+        }
+
+        virtual bool operator<(ParameterNode* const& other) const {
+          return path < other->path;
+        }
+*/
+      protected:
+        std::string name;
+    };
+
+    class SplatNode : public ParameterNode {
+      public:
+        SplatNode();
+    };
+
   public:
     LambdaService ls;
     static int WORKERS;
@@ -34,10 +106,13 @@ class Router {
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
     static void path(std::string const &, service_lambda);
 
+    void route(std::string);
+
     template <class R>
     void resource(std::string const& path) {
       ServiceRegister<R> reg(path);
     }
+
   private:
     Router();
     static Router* pInstance;

@@ -22,6 +22,8 @@ create_service(secret) {
 }
 
 void routes(REST::Router* r) {
+  r->route("/path/:bar/*");
+
   r->resource<HelloWorldService>("przywitanie");
 
   r->path("lol", hole);

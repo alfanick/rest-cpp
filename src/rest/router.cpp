@@ -6,7 +6,6 @@
 #include <algorithm>
 
 namespace REST {
-
   workers_services_vector Router::workers_services;
   Router* Router::pInstance = NULL;
   lambda_patterns* Router::patterns = new lambda_patterns();
@@ -114,6 +113,106 @@ namespace REST {
     std::string name = path.substr(0,path.find("/"));
     std::shared_ptr<LambdaService> lambda_service = std::make_shared<LambdaService>(lambda);
     patterns->insert(std::make_pair(name, std::make_pair(path, lambda_service)));
+  }
+
+  void Router::route(std::string path) {
+    Router::Node::from_path(path);
+
+    std::set<Router::Node*, Router::Node::Less> test;
+    //test.insert(Router::Node::from_path("/"));
+    //test.insert(Router::Node::from_path("/b"));
+    //test.insert(Router::Node::from_path("/a/:foo"));
+    //test.insert(Router::Node::from_path("/:bar"));
+    //test.insert(Router::Node::from_path("/*"));
+
+    test.insert(new RootNode());
+    test.insert(new SplatNode());
+    test.insert(new Node("foo"));
+    test.insert(new ParameterNode("foo"));
+    for (auto n : test) {
+      std::cout << n->uri() << std::endl;
+    }
+  }
+
+
+  Router::Node::Node(std::string p) : path(p) {
+  }
+
+  Router::Node::~Node() {
+    std::cout << "usuwam\n";
+    for (auto c : children)
+      delete c;
+  }
+
+  std::string Router::Node::uri() {
+    return path;
+  }
+
+  bool Router::Node::is_last() {
+    return children.empty();
+  }
+
+  const Router::Node* Router::Node::next() {
+    return *children.begin();
+  }
+
+  bool Router::Node::unify(std::string const& path, params_map& params) {
+    return unify(from_path(path), params);
+  }
+
+  bool Router::Node::unify(Router::Node* const path, params_map& params) {
+
+  }
+
+  Router::Node* Router::Node::from_path(std::string const& p) {
+    std::string path = p;
+
+    RootNode* root = new RootNode();
+    Node* current = root;
+
+    while (path.find("/") == 0) {
+      path.erase(0, 1);
+
+      std::cout << "Path is '"<<path<<"'\n";
+
+      size_t next = path.find("/");
+
+      std::string name = path;
+
+      if (next != std::string::npos) {
+        name = path.substr(0, next);
+        path = path.substr(next);
+      }
+
+      if (name[0] == ':') {
+        ParameterNode* pn = new ParameterNode(name.substr(1));
+        current->children.insert(pn);
+        current = pn;
+      } else
+      if (name == "*") {
+        SplatNode* sn = new SplatNode();
+        current->children.insert(sn);
+        current = sn;
+      }
+
+      std::cout << "  Name is '"<<name<<"'\n";
+    }
+
+    return root;
+  }
+
+  Router::RootNode::RootNode() : Router::Node::Node("") {
+    std::cout << "New RootNode\n";
+  }
+
+  Router::ParameterNode::ParameterNode(std::string const& name) : Router::Node::Node(":" + name) {
+    std::cout << "New ParameterNode("<<name<<")\n";
+  }
+
+  Router::SplatNode::SplatNode() : Router::ParameterNode::ParameterNode("*") {
+    name = "*";
+    path = "*";
+    std::cout << "New SplatNode\n";
   }
 
 }
