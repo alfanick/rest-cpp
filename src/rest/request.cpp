@@ -11,22 +11,30 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
   bool is_header = true;
   char* buffer = new char[BUFFER_SIZE];
 
-  recv(client, buffer, BUFFER_SIZE, 0);
-  std::istringstream request_stream(buffer);
 
+  // receive data from client
+  recv(client, buffer, BUFFER_SIZE, 0);
+
+  // parse each line
+  std::istringstream request_stream(buffer);
   while (std::getline(request_stream, line)) {
+    // if method is undefined, assumie its first line
     if (method == Method::UNDEFINED) {
+      // so parse header
       parse_header(line);
       continue;
     }
 
+    // next lines are headers, strip them
     line.erase(line.find_last_not_of(" \n\r\t")+1);
 
+    // if line is empty, then content should follow
     if (line.size() == 0) {
       is_header = false;
       break;
     }
 
+    // extract name and value from header
     size_t colon;
     std::string name = line.substr(0, colon = line.find(":"));
     std::string value = line.substr(colon+1, line.size() - colon);
@@ -35,7 +43,9 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
     headers.insert(std::make_pair(name, value));
   }
 
+  // if has content
   if (!is_header) {
+    // assume proper content length
     size_t content_length = header("Content-Length", 0);
     raw.reserve(content_length);
 
@@ -57,7 +67,9 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
 
   delete buffer;
 
+  // if has some content
   if (!raw.empty()) {
+    // try to parse it
     auto ct = headers.find("Content-Type");
     if (ct != headers.end()) {
       if (ct->second == "application/x-www-form-urlencoded") {
