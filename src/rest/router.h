@@ -38,6 +38,7 @@ class Router {
 
         bool unify(std::string const& path, params_map& params);
         bool unify(Node* const path, params_map& params);
+        bool merge(Node* const path);
         static Node* from_path(std::string const& path);
 
         bool is_last();
@@ -45,7 +46,9 @@ class Router {
 
         std::string uri();
 
-        struct Less {
+        void print(int level);
+
+        static struct Less {
           bool operator()(const Node* a, const Node* b) const {
             if (a->path == "*")
               return false;
@@ -59,9 +62,17 @@ class Router {
               if (a->path[0] != ':')
                 return true;
 
+            std::cout << "lol\n";
             return a->path < b->path;
           }
-        };
+        } less;
+
+        static struct Equal {
+          bool operator()(const Node* a, const Node* b) const {
+            std::cout << "lol2\n";
+            return (!less(a,b)) && (!less(b,a));
+          }
+        } equal;
 
       protected:
         std::string path;
@@ -119,6 +130,8 @@ class Router {
     static workers_services_vector workers_services;
     static path_tuple* extractParams(std::string const&);
     static lambda_patterns* patterns;
+
+    RootNode* root;
 };
 
 }

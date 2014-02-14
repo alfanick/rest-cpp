@@ -22,7 +22,13 @@ create_service(secret) {
 }
 
 void routes(REST::Router* r) {
+  r->route("/lol/foo");
   r->route("/path/:bar/*");
+  r->route("/path/:bar/*");
+  r->route("/path/:bar/edit");
+  r->route("/path/:bar/*");
+  r->route("/");
+  r->route("/*");
 
   r->resource<HelloWorldService>("przywitanie");
 
