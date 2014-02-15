@@ -138,8 +138,6 @@ class Router {
       std::shared_ptr<Router::Node> splat_node = Router::Node::from_path(path + "/*");
       splat_node->end()->service = node->end()->service;
       root->merge(splat_node);
-
-      root->print(2);
     }
 
   private:

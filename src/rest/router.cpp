@@ -44,10 +44,6 @@ namespace REST {
     std::shared_ptr<Router::Node> node = Router::Node::from_path(path);
     node->end()->add_service(std::make_shared<LambdaService>(lambda));
     root->merge(node);
-
-    if (node->end()->is_root()) {
-      std::cout << "to jes root\n";
-    }
   }
 
   Router::Node::Node(std::string p, std::shared_ptr<Node> const& pr) : path(p), parent(pr) {
@@ -112,7 +108,6 @@ namespace REST {
     if (Router::Node::equal(path, shared_from_this())) {
       if (path->service.size() > 0) {
         service = path->service;
-        std::cout << "kopiuje service\n";
       }
 
       std::vector< std::shared_ptr<Node> > common_paths(path->children.size());
@@ -159,8 +154,6 @@ namespace REST {
     if (match != nullptr) {
       std::cout << "matched '"<< path <<"' to '"<<match->uri()<<"'\n";
     }
-
-    std::cout << "services " << match->service.size() << std::endl;
 
     return match;
   }
@@ -222,7 +215,6 @@ namespace REST {
     while (path.find("/") == 0) {
       path.erase(0, 1);
       if (path.empty()) {
-        std::cout << "pusty" << std::endl;
         break;
       }
 

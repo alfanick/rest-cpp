@@ -4,11 +4,6 @@
 class HelloWorldService : public REST::Service {
   public:
     HelloWorldService() {
-      std::cout << "nowy HelloWorldService\n";
-    }
-
-    ~HelloWorldService() {
-      std::cout <<"znikam\n";
     }
 
     void before() {
