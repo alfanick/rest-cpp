@@ -16,7 +16,7 @@ create_service(hole) {
 }
 
 create_service(secret) {
-  service->ensure_authorization("Some secret", [](std::string username, std::string password) -> bool {
+  service->ensure_authorization("Some secret", [](std::string username, std::string password) {
     return username == "root" && password == "spam";
   });
 
