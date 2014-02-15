@@ -18,8 +18,8 @@ namespace REST {
   }
 
   void Router::print() {
-    std::cout << "Available routes:\n\n";
-    root->print(0);
+    std::cout << "Available routes:\n";
+    root->print(2);
   }
 
   Router* Router::Instance() {
