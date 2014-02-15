@@ -29,7 +29,7 @@ typedef std::map<std::string, path_lambda> lambda_patterns;
  */
 class Router {
   private:
-    class Node : public std::enable_shared_from_this<Node> {
+    class Node {
       friend class Node;
       friend class Router;
       public:
