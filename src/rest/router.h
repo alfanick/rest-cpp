@@ -89,10 +89,6 @@ class Router {
 
             return a->path < b->path;
           }
-
-          bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
-            return operator()(a.get(), b.get());
-          }
         } less;
 
         static struct Unifiable {
@@ -107,17 +103,9 @@ class Router {
 
             return a->path == b->path;
           }
-
-          bool operator()(const std::shared_ptr<Node>a, const std::shared_ptr<Node> b) const {
-            return operator()(a.get(), b.get());
-          }
         } unifiable;
 
         static struct Equal {
-          bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
-            return (!less(a,b)) && (!less(b,a));
-          }
-
           bool operator()(const Node* a, const Node* b) const {
             return (!less(a,b)) && (!less(b,a));
           }
