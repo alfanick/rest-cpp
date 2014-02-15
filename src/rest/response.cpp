@@ -14,7 +14,9 @@ Response::Response(std::shared_ptr<Request> request) {
 Response::Response(std::shared_ptr<Request> request, HTTP::Error &error) : Response(request) {
   status = error.code();
   status_message = error.what();
-  raw = error.what();
+  use_json();
+  data["error"]["code"] = status;
+  data["error"]["message"] = status_message;
 }
 
 void Response::use_json() {
