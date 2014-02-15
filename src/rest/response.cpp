@@ -33,7 +33,7 @@ size_t Response::send() {
   std::string payload = is_json ? json_writer.write(data) : raw;
 
   // start http
-  std::string content = "HTTP/1.0 " + std::to_string(status) + " " + status_message + "\r\n";
+  std::string content = "HTTP/1.1 " + std::to_string(status) + " " + status_message + "\r\n";
 
   // content size
   headers["Content-Length"] = std::to_string(payload.size());
