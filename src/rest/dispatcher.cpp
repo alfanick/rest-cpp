@@ -28,12 +28,11 @@ Dispatcher::~Dispatcher() {
 
 void Dispatcher::dispatch(int worker_id, std::shared_ptr<Request> request) {
   requests_lock[worker_id].lock();
-
   requests[worker_id].push(request);
+  requests_lock[worker_id].unlock();
+
   requests_empty[worker_id].try_lock();
   requests_empty[worker_id].unlock();
-
-  requests_lock[worker_id].unlock();
 }
 
 void Dispatcher::next(int client, struct sockaddr_storage client_addr) {
