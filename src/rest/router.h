@@ -53,7 +53,7 @@ class Router {
         }
 
         template <class T>
-        void add_service(std::shared_ptr<T> srv) {
+        void add_service(const T* srv) {
           service.clear();
           service.resize(Router::WORKERS);
 
@@ -131,7 +131,7 @@ class Router {
     template <class R>
     void resource(std::string const& path) {
       Router::Node* node = Router::Node::from_path(path);
-      node->end()->add_service(std::make_shared<R>());
+      node->end()->add_service((R*)(NULL));
       root->merge(node);
 
       Router::Node* splat_node = Router::Node::from_path(path + "/*");
