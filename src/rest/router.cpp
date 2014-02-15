@@ -6,17 +6,11 @@
 #include <algorithm>
 
 namespace REST {
-  workers_services_vector Router::workers_services;
   Router* Router::pInstance = NULL;
-  lambda_patterns* Router::patterns = new lambda_patterns();
   int Router::WORKERS = 256;
   std::shared_ptr<Router::Node> Router::root = std::make_shared<Router::Node>();
 
   Router::Router() {
-    workers_services.resize(WORKERS);
-
-    for (int i = 0; i < WORKERS; i++)
-      workers_services[i] = std::make_shared<names_services_map>();
   }
 
   Router* Router::Instance() {
@@ -35,8 +29,6 @@ namespace REST {
 
     std::shared_ptr<Service> service = node->find_service(worker_id);
 
-    node.reset();
-
     return service;
   }
 
@@ -50,6 +42,10 @@ namespace REST {
   }
 
   Router::Node::~Node() {
+    std::cout << "czyszcze\n";
+    for (auto c : children) {
+      //c.reset();
+    }
     children.clear();
   }
 

@@ -120,7 +120,6 @@ class Router {
     };
 
   public:
-    LambdaService ls;
     static int WORKERS;
     static Router* Instance();
 
@@ -143,9 +142,6 @@ class Router {
   private:
     Router();
     static Router* pInstance;
-    static workers_services_vector workers_services;
-    static path_tuple* extractParams(std::string const&);
-    static lambda_patterns* patterns;
 
     static std::shared_ptr<Node> root;
 };
