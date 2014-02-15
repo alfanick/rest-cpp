@@ -20,6 +20,7 @@ namespace REST {
     ERROR(NotAuthorized, 401, "Not Authorized");
     ERROR(NotFound, 404, "Not Found");
     ERROR(MethodNotAllowed, 405, "Method Not Allowed");
+    ERROR(NotImplemented, 501, "Not Implemented");
   }
 }
 

@@ -36,7 +36,7 @@ namespace REST {
         update();
         break;
       default:
-        throw HTTP::MethodNotAllowed();
+        throw HTTP::NotImplemented();
     }
     after();
   }
