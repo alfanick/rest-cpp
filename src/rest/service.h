@@ -25,6 +25,7 @@ class Service {
 
   public:
     Service();
+
     virtual void before();
     virtual void after();
     virtual void create();

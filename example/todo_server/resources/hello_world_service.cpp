@@ -7,6 +7,10 @@ class HelloWorldService : public REST::Service {
       std::cout << "nowy HelloWorldService\n";
     }
 
+    ~HelloWorldService() {
+      std::cout <<"znikam\n";
+    }
+
     void before() {
 //      ensure_session();
       response->use_json();

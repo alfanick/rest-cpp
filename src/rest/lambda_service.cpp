@@ -2,8 +2,8 @@
 
 namespace REST {
 
-  LambdaService::LambdaService(LambdaService &ls) {
-    fun = ls.fun;
+  LambdaService::LambdaService(std::shared_ptr<LambdaService> const& ls) {
+    fun = ls->fun;
   }
 
   LambdaService::LambdaService() {}

@@ -10,10 +10,9 @@ namespace REST {
   Router* Router::pInstance = NULL;
   lambda_patterns* Router::patterns = new lambda_patterns();
   int Router::WORKERS = 256;
+  std::shared_ptr<Router::Node> Router::root = std::make_shared<Router::Node>();
 
   Router::Router() {
-    root = std::make_shared<Router::Node>();
-
     workers_services.resize(WORKERS);
 
     for (int i = 0; i < WORKERS; i++)
@@ -29,104 +28,29 @@ namespace REST {
 
 
   std::shared_ptr<Service> Router::getResource(std::shared_ptr<Request> request, int worker_id) {
-    std::string path = request->path;
-    path_tuple* pair = extractParams(path);
-    if(pair == NULL)
+    std::shared_ptr<Node> node = match(request->path, request->parameters);
+
+    if (node == nullptr)
       return NULL;
 
-    std::string name = pair->first;
-    std::shared_ptr<params_map> params = pair->second;
-
-    // std::cout << "name: " << name << "\nparams:\n";
-    // for(params_map::iterator iter = params->begin(); iter != params->end(); ++iter) {
-    //   std::cout << "\t" << iter->first << ": " << iter->second << "\n";
-    // }
-
-    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-
-    std::shared_ptr<names_services_map> names_services = workers_services[worker_id];
-
-    std::shared_ptr<Service> service;
-    names_services_map::iterator niter = names_services->find(name);
-    if(niter == names_services->end()) {
-      service = (std::shared_ptr<Service>) ServiceFactory::createInstance(name);
-      if(service == NULL) {
-        auto liter = patterns->find(name);
-        if(liter != patterns->end())
-          service = liter->second.second;
-      }
-      names_services->insert(std::make_pair(name, service));
-    } else {
-      service = niter->second;
-    }
-    request->parameters.insert(params->begin(), params->end());
-
-    return service;
-  }
-
-
-  path_tuple* Router::extractParams(std::string const& path) {
-    if(path.size() == 0 || path[0] != '/')
-      return NULL;
-
-    std::string str = path.substr(1);
-    std::string res_name = str;
-    std::string params_part = "";
-
-    if(str.find("/") != std::string::npos) {
-      res_name = str.substr(0, str.find("/"));
-      params_part = str.substr(str.find("/"));
-    }
-
-    std::shared_ptr<params_map> params = std::make_shared<params_map>();
-
-    if(ServiceFactory::exist(res_name) && params_part.size() != 0) {
-      int slash = params_part.find("/");
-      int number = 0;
-      while(slash != std::string::npos) {
-        params_part = params_part.substr(slash+1);
-        slash = params_part.find("/");
-        params->insert(std::make_pair(std::to_string(number++),Request::uri_decode(params_part.substr(0, slash))));
-      }
-    } else {
-      auto iter = patterns->find(res_name);
-      if(iter != patterns->end()) {
-        std::string pattern = iter->second.first;
-        pattern = pattern.substr(pattern.find(res_name) + res_name.size());
-        int pattern_separator = pattern.find("/:");
-        int param_separator = params_part.find("/");
-        while(pattern_separator != std::string::npos && param_separator != std::string::npos) {
-          pattern = pattern.substr(pattern_separator+2);
-          params_part = params_part.substr(param_separator+1);
-          pattern_separator = pattern.find("/:");
-          param_separator = params_part.find("/");
-          std::string parameter_name = pattern.substr(0, pattern_separator);
-          std::string parameter_value = params_part.substr(0, param_separator);
-          params->insert(std::make_pair(parameter_name, parameter_value));
-        }
-      }
-    }
-    return new path_tuple(res_name, params);
+    return node->find_service(worker_id);
   }
 
   void Router::path(std::string const& path, service_lambda lambda) {
-    if(path.size() == 0)
-      return;
-    std::string name = path.substr(0,path.find("/"));
-    std::shared_ptr<LambdaService> lambda_service = std::make_shared<LambdaService>(lambda);
-    patterns->insert(std::make_pair(name, std::make_pair(path, lambda_service)));
+    std::shared_ptr<Router::Node> node = Router::Node::from_path(path);
+    node->end()->add_service(std::make_shared<LambdaService>(lambda));
+    root->merge(node);
   }
-
-  void Router::route(std::string path) {
-    root->merge(Router::Node::from_path(path));
-  }
-
 
   Router::Node::Node(std::string p, std::shared_ptr<Node> const& pr) : path(p), parent(pr) {
   }
 
   Router::Node::~Node() {
     children.clear();
+  }
+
+  std::shared_ptr<Service> Router::Node::find_service(int worker_id) {
+    return service[worker_id];
   }
 
   std::string Router::Node::uri() {
@@ -138,6 +62,28 @@ namespace REST {
       previous = previous->parent;
     }
     return address;
+  }
+
+  std::shared_ptr<Router::Node> Router::Node::start() {
+    std::shared_ptr<Node> previous = shared_from_this();
+
+    while (true) {
+      if (previous->parent == nullptr)
+        return previous;
+      else
+        previous = previous->parent;
+    }
+  }
+
+  std::shared_ptr<Router::Node> Router::Node::end() {
+    std::shared_ptr<Node> current = shared_from_this();
+
+    while (true) {
+      if (current->is_last())
+        return current;
+      else
+        current = current->next();
+    }
   }
 
   bool Router::Node::is_last() {
@@ -172,14 +118,18 @@ namespace REST {
       auto difit = std::set_difference(path->children.begin(), path->children.end(), children.begin(), children.end(), new_paths.begin(), Router::Node::less);
       new_paths.resize(difit - new_paths.begin());
 
+      for (auto p : new_paths) {
+        p->parent = shared_from_this();
+      }
+
       children.insert(new_paths.begin(), new_paths.end());
     }
 
     return true;
   }
 
-  void Router::match(std::string const& path, params_map& params) {
-    root->unify(root, path, params);
+  std::shared_ptr<Router::Node> Router::match(std::string const& path, params_map& params) {
+    return root->unify(root, path.empty() ? "/" : path, params);
   }
 
   bool Router::Node::is_splat() {
@@ -190,20 +140,22 @@ namespace REST {
     return parent == nullptr;
   }
 
-  bool Router::Node::unify(std::shared_ptr<Router::Node> const& root, std::string const& path, params_map& params) {
+  std::shared_ptr<Router::Node> Router::Node::unify(std::shared_ptr<Router::Node> const& root, std::string const& path, params_map& params) {
     std::shared_ptr<Node> match = unify(root, from_path(path), params);
 
     if (match != nullptr) {
       std::cout << "matched '"<< path <<"' to '"<<match->uri()<<"'\n";
     }
 
-    return match != nullptr;
+    std::cout << "services " << match->service.size() << std::endl;
+
+    return match;
   }
 
   std::shared_ptr<Router::Node> Router::Node::unify(std::shared_ptr<Router::Node> const& root, std::shared_ptr<Router::Node> const path, params_map& params) {
     if (Router::Node::unifiable(root, path)) {
       if ((root->is_last() && (path->is_last() || root->is_splat())) ||
-          (path->is_root() && path->is_last())) {
+          (path->is_last())) {
         return root;
       } else
       if (root->is_last() && !path->is_last()) {
@@ -256,8 +208,10 @@ namespace REST {
 
     while (path.find("/") == 0) {
       path.erase(0, 1);
-      if (path.empty())
+      if (path.empty()) {
+        std::cout << "pusty" << std::endl;
         break;
+      }
 
       size_t next = path.find("/");
 

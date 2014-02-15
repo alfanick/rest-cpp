@@ -31,22 +31,43 @@ class Router {
   private:
     class Node : public std::enable_shared_from_this<Node> {
       friend class Node;
+      friend class Router;
       public:
         Node() { };
         Node(std::string p, std::shared_ptr<Node> const& pr);
         ~Node();
 
-        bool unify(std::shared_ptr<Node> const& root, std::string const& path, params_map& params);
+        std::shared_ptr<Node> unify(std::shared_ptr<Node> const& root, std::string const& path, params_map& params);
         std::shared_ptr<Node> unify(std::shared_ptr<Node> const& root, std::shared_ptr<Node> const path, params_map& params);
         bool merge(std::shared_ptr<Node> const path);
         static std::shared_ptr<Node> from_path(std::string const& path);
 
         void inject(std::shared_ptr<Node> const& rhs, params_map& params);
 
+        void add_service(std::shared_ptr<LambdaService> srv) {
+          service.clear();
+          service.resize(Router::WORKERS);
+
+          for (int i = 0; i < Router::WORKERS; i++)
+            service[i] = std::make_shared<LambdaService>(srv);
+        }
+
+        template <class T>
+        void add_service(std::shared_ptr<T> srv) {
+          service.clear();
+          service.resize(Router::WORKERS);
+
+          for (int i = 0; i < Router::WORKERS; i++)
+            service[i] = std::make_shared<T>();
+        };
+        std::shared_ptr<Service> find_service(int worker_id);
+
         bool is_root();
         bool is_last();
         bool is_splat();
         std::shared_ptr<Node> next();
+        std::shared_ptr<Node> start();
+        std::shared_ptr<Node> end();
 
         std::string uri();
 
@@ -94,6 +115,8 @@ class Router {
         std::string path;
         std::shared_ptr<Node> parent = nullptr;
         std::set<std::shared_ptr<Node>, Less> children;
+
+        std::vector< std::shared_ptr<Service> > service;
     };
 
   public:
@@ -104,12 +127,19 @@ class Router {
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
     static void path(std::string const &, service_lambda);
 
-    void route(std::string);
-    void match(std::string const&, params_map&);
+    static std::shared_ptr<Node> match(std::string const&, params_map&);
 
     template <class R>
     void resource(std::string const& path) {
-      ServiceRegister<R> reg(path);
+      std::shared_ptr<Router::Node> node = Router::Node::from_path(path);
+      node->end()->add_service(std::make_shared<R>());
+      root->merge(node);
+
+      std::shared_ptr<Router::Node> splat_node = Router::Node::from_path(path + "/*");
+      splat_node->end()->service = node->end()->service;
+      root->merge(splat_node);
+
+      root->print(2);
     }
 
   private:
@@ -119,7 +149,7 @@ class Router {
     static path_tuple* extractParams(std::string const&);
     static lambda_patterns* patterns;
 
-    std::shared_ptr<Node> root;
+    static std::shared_ptr<Node> root;
 };
 
 }

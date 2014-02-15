@@ -10,10 +10,10 @@ namespace REST {
 
 typedef std::function<void(Service *)> service_lambda;
 
-class LambdaService : public Service { 
+class LambdaService : public Service {
   public:
     LambdaService();
-    LambdaService(LambdaService &ls);
+    LambdaService(std::shared_ptr<LambdaService> const& ls);
     LambdaService(service_lambda);
     ~LambdaService();
     void make_action();
