@@ -23,17 +23,19 @@ create_service(secret) {
   service->response->raw = "You are awesome!";
 }
 
-namespace Resources {
-  class BarResource : public REST::Service {
-    public:
-      void read() {
-        response->raw = "OMG!";
-      }
-  };
+namespace Im {
+  namespace Kinda {
+    class DynamicResource : public REST::Service {
+      public:
+        void read() {
+          response->raw = "OMG! C++ is cool!";
+        }
+    };
+  }
 }
 
 void routes(REST::Router* r) {
-  r->resource<Resources::BarResource>();
+  r->resource<Im::Kinda::DynamicResource>();
   r->resource<HelloWorldService>("/przywitanie");
 
   r->path("/", hole);
