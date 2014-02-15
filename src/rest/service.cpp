@@ -31,6 +31,7 @@ namespace REST {
       case Request::Method::DELETE:
         destroy();
         break;
+      case Request::Method::PATCH:
       case Request::Method::PUT:
         update();
         break;

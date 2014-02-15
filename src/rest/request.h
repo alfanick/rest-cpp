@@ -36,7 +36,7 @@ class Request {
   friend class Response;
 
   public:
-    enum class Method { GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, UNDEFINED };
+    enum class Method { GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, PATCH, UNDEFINED };
 
     static size_t BUFFER_SIZE;
 

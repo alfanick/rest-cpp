@@ -110,6 +110,9 @@ void Request::parse_header(std::string line) {
   if (line.find("PUT") == 0) {
     method = Method::PUT;
   } else
+  if (line.find("PATCH") == 0) {
+    method = Method::PATCH;
+  } else
   if (line.find("DELETE") == 0) {
     method = Method::DELETE;
   } else
