@@ -29,31 +29,31 @@ typedef std::map<std::string, path_lambda> lambda_patterns;
  */
 class Router {
   private:
-    class Node {
+    class Node : public std::enable_shared_from_this<Node> {
       friend class Node;
       public:
         Node() { };
-        Node(std::string p, Node* const& pr);
+        Node(std::string p, std::shared_ptr<Node> const& pr);
         ~Node();
 
-        bool unify(Node* const& root, std::string const& path, params_map& params);
-        Node* unify(Node* const& root, Node* const path, params_map& params);
-        bool merge(Node* const path);
-        static Node* from_path(std::string const& path);
+        bool unify(std::shared_ptr<Node> const& root, std::string const& path, params_map& params);
+        std::shared_ptr<Node> unify(std::shared_ptr<Node> const& root, std::shared_ptr<Node> const path, params_map& params);
+        bool merge(std::shared_ptr<Node> const path);
+        static std::shared_ptr<Node> from_path(std::string const& path);
 
-        void inject(Node* const& rhs, params_map& params);
+        void inject(std::shared_ptr<Node> const& rhs, params_map& params);
 
         bool is_root();
         bool is_last();
         bool is_splat();
-        Node* next();
+        std::shared_ptr<Node> next();
 
         std::string uri();
 
         void print(int level);
 
         static struct Less {
-          bool operator()(const Node* a, const Node* b) const {
+          bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
             if (a->path[0] == '*')
               return false;
             if (b->path[0] == '*')
@@ -71,7 +71,7 @@ class Router {
         } less;
 
         static struct Unifiable {
-          bool operator()(const Node* a, const Node* b) const {
+          bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
             if (a == nullptr || b == nullptr)
               return false;
 
@@ -85,15 +85,15 @@ class Router {
         } unifiable;
 
         static struct Equal {
-          bool operator()(const Node* a, const Node* b) const {
+          bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
             return (!less(a,b)) && (!less(b,a));
           }
         } equal;
 
       protected:
         std::string path;
-        Node* parent = nullptr;
-        std::set<Node*, Less> children;
+        std::shared_ptr<Node> parent = nullptr;
+        std::set<std::shared_ptr<Node>, Less> children;
     };
 
   public:
@@ -119,7 +119,7 @@ class Router {
     static path_tuple* extractParams(std::string const&);
     static lambda_patterns* patterns;
 
-    Node* root;
+    std::shared_ptr<Node> root;
 };
 
 }
