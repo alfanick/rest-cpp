@@ -17,6 +17,11 @@ namespace REST {
     delete root;
   }
 
+  void Router::print() {
+    std::cout << "Available routes:\n\n";
+    root->print(0);
+  }
+
   Router* Router::Instance() {
     if(pInstance == NULL){
       pInstance = new Router();
@@ -98,7 +103,15 @@ namespace REST {
   }
 
   void Router::Node::print(int level) {
-    std::cout << std::string(level*2, ' ') << "/" << path << std::endl;
+    std::cout << std::string(level * 2, ' ') << "/" << path;
+    if (!service.empty()) {
+      if (dynamic_cast< LambdaService* >(service[0].get()) != nullptr) {
+        std::cout << " - lambda";
+      } else {
+        std::cout << " - resource";
+      }
+    }
+    std::cout << std::endl;
     for (auto next : children)
       next->print(level+1);
   }

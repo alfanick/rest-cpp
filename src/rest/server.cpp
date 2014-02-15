@@ -46,6 +46,8 @@ Server::~Server() {
 void Server::run() {
   int status;
 
+  router()->print();
+
   status = listen(handle, BACKLOG_SIZE);
   if (status == -1)
     throw ServerError();

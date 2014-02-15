@@ -139,6 +139,8 @@ class Router {
       root->merge(splat_node);
     }
 
+    void print();
+
     ~Router();
 
   private:
