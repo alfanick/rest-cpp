@@ -40,8 +40,10 @@ size_t Response::send() {
   headers["Server"] += ", took " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count() / 1000.0f) + "ms";
 
   // add headers
-  for (auto header : headers)
+  for (auto header : headers) {
+    header.second.erase(header.second.find_last_not_of(" \n\r\t")+1);
     content += header.first + ": " + header.second + "\r\n";
+  }
 
   content += "\r\n";
 

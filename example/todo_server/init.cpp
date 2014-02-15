@@ -1,4 +1,6 @@
 #include <rest/rest.h>
+#include <fstream>
+#include <cstdlib>
 
 #include "resources/hello_world_service.cpp"
 
@@ -23,8 +25,39 @@ create_service(secret) {
   service->response->raw = "You are awesome!";
 }
 
+create_service(public_folder) {
+  std::string file_path = "./public/" + service->request->parameter("0", std::string(""));
+
+  if (file_path.find("..") != std::string::npos)
+    throw Forbidden();
+
+  std::ifstream file(file_path);
+
+  if (!file)
+    throw NotFound();
+
+  file.seekg(0, std::ios::end);
+  std::streampos length = file.tellg();
+  file.seekg(0,std::ios::beg);
+
+  service->response->raw.resize(length);
+  file.read(&(service->response->raw[0]), length);
+  file.close();
+
+  FILE* mt = popen(("file --mime-type -b " + file_path).c_str(), "r");
+  if (mt == NULL) {
+    service->response->headers["Content-Type"] = "application/octet-stream";
+  } else {
+    char mime[128];
+    fgets(mime, 127, mt);
+    pclose(mt);
+    service->response->headers["Content-Type"] = mime;
+  }
+}
+
 void routes(REST::Router* r) {
   r->resource<HelloWorldService>("/przywitanie");
+  r->path("/*", public_folder);
 
   r->path("/", hole);
   r->path("/lol", hole);
