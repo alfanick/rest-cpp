@@ -8,9 +8,13 @@
 namespace REST {
   Router* Router::pInstance = NULL;
   int Router::WORKERS = 256;
-  std::shared_ptr<Router::Node> Router::root = std::make_shared<Router::Node>();
+  Router::Node* Router::root = new Router::Node();
 
   Router::Router() {
+  }
+
+  Router::~Router() {
+    delete root;
   }
 
   Router* Router::Instance() {
@@ -22,7 +26,7 @@ namespace REST {
 
 
   std::shared_ptr<Service> Router::getResource(std::shared_ptr<Request> request, int worker_id) {
-    std::shared_ptr<Node> node = match(request->path, request->parameters);
+    Node* node = match(request->path, request->parameters);
 
     if (node == nullptr)
       return NULL;
@@ -33,18 +37,17 @@ namespace REST {
   }
 
   void Router::path(std::string const& path, service_lambda lambda) {
-    std::shared_ptr<Router::Node> node = Router::Node::from_path(path);
+    Node* node = Router::Node::from_path(path);
     node->end()->add_service(std::make_shared<LambdaService>(lambda));
     root->merge(node);
   }
 
-  Router::Node::Node(std::string p, std::shared_ptr<Node> const& pr) : path(p), parent(pr) {
+  Router::Node::Node(std::string p, Node* const& pr) : path(p), parent(pr) {
   }
 
   Router::Node::~Node() {
-    std::cout << "czyszcze\n";
     for (auto c : children) {
-      //c.reset();
+      delete c;
     }
     children.clear();
   }
@@ -55,7 +58,7 @@ namespace REST {
 
   std::string Router::Node::uri() {
     std::string address;
-    std::shared_ptr<Node> previous = shared_from_this();
+    Node* previous = this;
 
     while (previous != nullptr) {
       address = (previous->is_root() ? "" : "/" + previous->path) + address;
@@ -64,8 +67,8 @@ namespace REST {
     return address;
   }
 
-  std::shared_ptr<Router::Node> Router::Node::start() {
-    std::shared_ptr<Node> previous = shared_from_this();
+  Router::Node* Router::Node::start() {
+    Node* previous = this;
 
     while (true) {
       if (previous->parent == nullptr)
@@ -75,8 +78,8 @@ namespace REST {
     }
   }
 
-  std::shared_ptr<Router::Node> Router::Node::end() {
-    std::shared_ptr<Node> current = shared_from_this();
+  Router::Node* Router::Node::end() {
+    Node* current = this;
 
     while (true) {
       if (current->is_last())
@@ -90,7 +93,7 @@ namespace REST {
     return children.empty();
   }
 
-  std::shared_ptr<Router::Node> Router::Node::next() {
+  Router::Node* Router::Node::next() {
     return *(children.begin());
   }
 
@@ -100,30 +103,30 @@ namespace REST {
       next->print(level+1);
   }
 
-  bool Router::Node::merge(std::shared_ptr<Router::Node> const path) {
-    if (Router::Node::equal(path, shared_from_this())) {
+  bool Router::Node::merge(Router::Node* const path) {
+    if (Router::Node::equal(path, this)) {
       if (path->service.size() > 0) {
         service = path->service;
       }
 
-      std::vector< std::shared_ptr<Node> > common_paths(path->children.size());
+      std::vector< Node* > common_paths(path->children.size());
       auto irfit = std::set_intersection(path->children.begin(), path->children.end(), children.begin(), children.end(), common_paths.begin(), Router::Node::less);
       common_paths.resize(irfit - common_paths.begin());
 
       for (auto next : common_paths) {
-        auto common = std::find_if(children.begin(), children.end(), [&next](const std::shared_ptr<Node> c) { return Router::Node::equal(next, c); });
+        auto common = std::find_if(children.begin(), children.end(), [&next](const Node* c) { return Router::Node::equal(next, c); });
 
         (*common)->merge(next);
       }
 
       // see whats new to add
       //   - set difference
-      std::vector< std::shared_ptr<Node> > new_paths(path->children.size());
+      std::vector< Node* > new_paths(path->children.size());
       auto difit = std::set_difference(path->children.begin(), path->children.end(), children.begin(), children.end(), new_paths.begin(), Router::Node::less);
       new_paths.resize(difit - new_paths.begin());
 
       for (auto p : new_paths) {
-        p->parent = shared_from_this();
+        p->parent = this;
       }
 
       children.insert(new_paths.begin(), new_paths.end());
@@ -132,7 +135,7 @@ namespace REST {
     return true;
   }
 
-  std::shared_ptr<Router::Node> Router::match(std::string const& path, params_map& params) {
+  Router::Node* Router::match(std::string const& path, params_map& params) {
     return root->unify(root, path.empty() ? "/" : path, params);
   }
 
@@ -144,8 +147,11 @@ namespace REST {
     return parent == nullptr;
   }
 
-  std::shared_ptr<Router::Node> Router::Node::unify(std::shared_ptr<Router::Node> const& root, std::string const& path, params_map& params) {
-    std::shared_ptr<Node> match = unify(root, from_path(path), params);
+  Router::Node* Router::Node::unify(Router::Node* const& root, std::string const& path, params_map& params) {
+    Node* node = from_path(path);
+    Node* match = unify(root, node, params);
+
+    delete node;
 
     if (match != nullptr) {
       std::cout << "matched '"<< path <<"' to '"<<match->uri()<<"'\n";
@@ -154,7 +160,7 @@ namespace REST {
     return match;
   }
 
-  std::shared_ptr<Router::Node> Router::Node::unify(std::shared_ptr<Router::Node> const& root, std::shared_ptr<Router::Node> const path, params_map& params) {
+  Router::Node* Router::Node::unify(Router::Node* const& root, Router::Node* const path, params_map& params) {
     if (Router::Node::unifiable(root, path)) {
       if ((root->is_last() && (path->is_last() || root->is_splat())) ||
           (path->is_last())) {
@@ -165,7 +171,7 @@ namespace REST {
       }
     }
 
-    std::shared_ptr<Node> match;
+    Node* match;
 
     for (auto next : root->children) {
       if (!Router::Node::unifiable(next, path->next()))
@@ -180,14 +186,14 @@ namespace REST {
     return nullptr;
   }
 
-  void Router::Node::inject(std::shared_ptr<Router::Node> const& rhs, params_map& params) {
+  void Router::Node::inject(Router::Node* const& rhs, params_map& params) {
     if (path[0] == ':') {
       params[path.substr(1)] = rhs->path;
     } else
     if (path[0] == '*') {
       int i = 1;
       std::string splat;
-      std::shared_ptr<Node> current = rhs;
+      Node* current = rhs;
       while (true) {
         splat += current->path;
         params[std::to_string(i++)] = current->path;
@@ -202,11 +208,11 @@ namespace REST {
     }
   }
 
-  std::shared_ptr<Router::Node> Router::Node::from_path(std::string const& p) {
+  Router::Node* Router::Node::from_path(std::string const& p) {
     std::string path = p;
 
-    std::shared_ptr<Node> root = std::make_shared<Node>();
-    std::shared_ptr<Node> current = root;
+    Node* root = new Node();
+    Node* current = root;
 
     while (path.find("/") == 0) {
       path.erase(0, 1);
@@ -223,7 +229,7 @@ namespace REST {
         path = path.substr(next);
       }
 
-      std::shared_ptr<Node> node = std::make_shared<Node>(name, current);
+      Node* node = new Node(name, current);
       current->children.insert(node);
       current = node;
     }

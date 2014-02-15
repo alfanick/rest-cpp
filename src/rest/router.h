@@ -34,15 +34,15 @@ class Router {
       friend class Router;
       public:
         Node() { };
-        Node(std::string p, std::shared_ptr<Node> const& pr);
+        Node(std::string p, Node* const& pr);
         ~Node();
 
-        std::shared_ptr<Node> unify(std::shared_ptr<Node> const& root, std::string const& path, params_map& params);
-        std::shared_ptr<Node> unify(std::shared_ptr<Node> const& root, std::shared_ptr<Node> const path, params_map& params);
-        bool merge(std::shared_ptr<Node> const path);
-        static std::shared_ptr<Node> from_path(std::string const& path);
+        Node* unify(Node* const& root, std::string const& path, params_map& params);
+        Node* unify(Node* const& root, Node* const path, params_map& params);
+        bool merge(Node* const path);
+        static Node* from_path(std::string const& path);
 
-        void inject(std::shared_ptr<Node> const& rhs, params_map& params);
+        void inject(Node* const& rhs, params_map& params);
 
         void add_service(std::shared_ptr<LambdaService> srv) {
           service.clear();
@@ -65,16 +65,16 @@ class Router {
         bool is_root();
         bool is_last();
         bool is_splat();
-        std::shared_ptr<Node> next();
-        std::shared_ptr<Node> start();
-        std::shared_ptr<Node> end();
+        Node* next();
+        Node* start();
+        Node* end();
 
         std::string uri();
 
         void print(int level);
 
         static struct Less {
-          bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
+          bool operator()(const Node* a, const Node* b) const {
             if (a->path[0] == '*')
               return false;
             if (b->path[0] == '*')
@@ -89,10 +89,14 @@ class Router {
 
             return a->path < b->path;
           }
+
+          bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
+            return operator()(a.get(), b.get());
+          }
         } less;
 
         static struct Unifiable {
-          bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
+          bool operator()(const Node* a, const Node* b) const {
             if (a == nullptr || b == nullptr)
               return false;
 
@@ -103,18 +107,26 @@ class Router {
 
             return a->path == b->path;
           }
+
+          bool operator()(const std::shared_ptr<Node>a, const std::shared_ptr<Node> b) const {
+            return operator()(a.get(), b.get());
+          }
         } unifiable;
 
         static struct Equal {
           bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) const {
             return (!less(a,b)) && (!less(b,a));
           }
+
+          bool operator()(const Node* a, const Node* b) const {
+            return (!less(a,b)) && (!less(b,a));
+          }
         } equal;
 
       protected:
         std::string path;
-        std::shared_ptr<Node> parent = nullptr;
-        std::set<std::shared_ptr<Node>, Less> children;
+        Node* parent = nullptr;
+        std::set<Node*, Less> children;
 
         std::vector< std::shared_ptr<Service> > service;
     };
@@ -126,24 +138,26 @@ class Router {
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
     static void path(std::string const &, service_lambda);
 
-    static std::shared_ptr<Node> match(std::string const&, params_map&);
+    static Node* match(std::string const&, params_map&);
 
     template <class R>
     void resource(std::string const& path) {
-      std::shared_ptr<Router::Node> node = Router::Node::from_path(path);
+      Router::Node* node = Router::Node::from_path(path);
       node->end()->add_service(std::make_shared<R>());
       root->merge(node);
 
-      std::shared_ptr<Router::Node> splat_node = Router::Node::from_path(path + "/*");
+      Router::Node* splat_node = Router::Node::from_path(path + "/*");
       splat_node->end()->service = node->end()->service;
       root->merge(splat_node);
     }
+
+    ~Router();
 
   private:
     Router();
     static Router* pInstance;
 
-    static std::shared_ptr<Node> root;
+    static Node* root;
 };
 
 }
