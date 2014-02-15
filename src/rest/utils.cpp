@@ -3,9 +3,19 @@
 namespace REST {
 namespace Utils {
 
+std::string rfc1123_datetime( time_t time ) {
+  struct tm * timeinfo;
+  char buffer [80];
+
+  timeinfo = gmtime ( &time );
+  strftime (buffer,80,"%a, %d %b %Y %H:%M:%S GMT",timeinfo);
+
+  return buffer;
+}
+
 // from http://stackoverflow.com/questions/180947/base64-decode-snippet-in-c
 
-static const std::string base64_chars = 
+static const std::string base64_chars =
              "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
              "abcdefghijklmnopqrstuvwxyz"
              "0123456789+/";

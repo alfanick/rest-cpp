@@ -38,6 +38,7 @@ size_t Response::send() {
   // content size
   headers["Content-Length"] = std::to_string(payload.size());
   headers["Server"] += ", took " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count() / 1000.0f) + "ms";
+  headers.insert(std::make_pair("Date", Utils::rfc1123_datetime(time(0))));
 
   // add headers
   for (auto header : headers)
