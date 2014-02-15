@@ -12,7 +12,7 @@ namespace REST {
   int Router::WORKERS = 256;
 
   Router::Router() {
-    root = new Router::RootNode();
+    root = new Router::Node();
 
     workers_services.resize(WORKERS);
 
@@ -119,11 +119,10 @@ namespace REST {
 
   void Router::route(std::string path) {
     root->merge(Router::Node::from_path(path));
-    root->print(0);
   }
 
 
-  Router::Node::Node(std::string p) : path(p) {
+  Router::Node::Node(std::string p, Node* const& pr) : path(p), parent(pr) {
   }
 
   Router::Node::~Node() {
@@ -133,15 +132,22 @@ namespace REST {
   }
 
   std::string Router::Node::uri() {
-    return path;
+    std::string address;
+    Node* previous = this;
+
+    while (previous) {
+      address = (previous->is_root() ? "" : "/" + previous->path) + address;
+      previous = previous->parent;
+    }
+    return address;
   }
 
   bool Router::Node::is_last() {
     return children.empty();
   }
 
-  const Router::Node* Router::Node::next() {
-    return *children.begin();
+  Router::Node* Router::Node::next() {
+    return *(children.begin());
   }
 
   void Router::Node::print(int level) {
@@ -152,8 +158,6 @@ namespace REST {
 
   bool Router::Node::merge(Router::Node* const path) {
     if (Router::Node::equal(path, this)) {
-      std::cout<<"aha\n";
-
       std::vector< Node* > common_paths(path->children.size());
       auto irfit = std::set_intersection(path->children.begin(), path->children.end(), children.begin(), children.end(), common_paths.begin(), Router::Node::less);
       common_paths.resize(irfit - common_paths.begin());
@@ -163,7 +167,6 @@ namespace REST {
 
         (*common)->merge(next);
       }
-      std::cout << "wspolne " << common_paths.size() << std::endl;
 
       // see whats new to add
       //   - set difference
@@ -171,38 +174,92 @@ namespace REST {
       auto difit = std::set_difference(path->children.begin(), path->children.end(), children.begin(), children.end(), new_paths.begin(), Router::Node::less);
       new_paths.resize(difit - new_paths.begin());
 
-      std::cout << "dodaje" << new_paths.size() << std::endl;
       children.insert(new_paths.begin(), new_paths.end());
-    } else {
-      std::cout << "nie eq\n";
     }
 
-    /*for (auto next : path->children) {
-      merge(next);
-    }*/
     return true;
   }
 
-  bool Router::Node::unify(std::string const& path, params_map& params) {
-    return unify(from_path(path), params);
+  void Router::match(std::string const& path, params_map& params) {
+    root->unify(root, path, params);
   }
 
-  bool Router::Node::unify(Router::Node* const path, params_map& params) {
+  bool Router::Node::is_splat() {
+    return path[0] == '*';
+  }
 
+  bool Router::Node::is_root() {
+    return parent == nullptr;
+  }
+
+  bool Router::Node::unify(Router::Node* const& root, std::string const& path, params_map& params) {
+    Node* match = unify(root, from_path(path), params);
+
+    if (match != nullptr) {
+      std::cout << "matched '"<< path <<"' to '"<<match->uri()<<"'\n";
+    }
+
+    return match != nullptr;
+  }
+
+  Router::Node* Router::Node::unify(Router::Node* const& root, Router::Node* const path, params_map& params) {
+    if (Router::Node::unifiable(root, path)) {
+      if ((root->is_last() && (path->is_last() || root->is_splat())) ||
+          (path->is_root() && path->is_last())) {
+        return root;
+      } else
+      if (root->is_last() && !path->is_last()) {
+        return nullptr;
+      }
+    }
+
+    Node* match;
+
+    for (auto next : root->children) {
+      if (!Router::Node::unifiable(next, path->next()))
+        continue;
+
+      if ((match = unify(next, path->next(), params)) != nullptr) {
+        next->inject(path->next(), params);
+        return match;
+      }
+    }
+
+    return nullptr;
+  }
+
+  void Router::Node::inject(Router::Node* const& rhs, params_map& params) {
+    if (path[0] == ':') {
+      params[path.substr(1)] = rhs->path;
+    } else
+    if (path[0] == '*') {
+      int i = 1;
+      std::string splat;
+      Node* current = rhs;
+      while (true) {
+        splat += current->path;
+        params[std::to_string(i++)] = current->path;
+        if (!current->is_last()) {
+          splat += "/";
+        } else {
+          break;
+        }
+        current = current->next();
+      };
+      params["0"] = splat;
+    }
   }
 
   Router::Node* Router::Node::from_path(std::string const& p) {
     std::string path = p;
 
-    RootNode* root = new RootNode();
+    Node* root = new Node();
     Node* current = root;
 
     while (path.find("/") == 0) {
       path.erase(0, 1);
       if (path.empty())
         break;
-
-      std::cout << "Path is '"<<path<<"'\n";
 
       size_t next = path.find("/");
 
@@ -213,39 +270,11 @@ namespace REST {
         path = path.substr(next);
       }
 
-      if (name[0] == ':') {
-        ParameterNode* pn = new ParameterNode(name.substr(1));
-        current->children.insert(pn);
-        current = pn;
-      } else
-      if (name == "*") {
-        SplatNode* sn = new SplatNode();
-        current->children.insert(sn);
-        current = sn;
-      } else {
-        Node* n = new Node(name);
-        current->children.insert(n);
-        current = n;
-      }
-
-      std::cout << "  Name is '"<<name<<"'\n";
+      Node* node = new Node(name, current);
+      current->children.insert(node);
+      current = node;
     }
 
     return root;
   }
-
-  Router::RootNode::RootNode() : Router::Node::Node("") {
-    std::cout << "New RootNode\n";
-  }
-
-  Router::ParameterNode::ParameterNode(std::string const& name) : Router::Node::Node(":" + name) {
-    std::cout << "New ParameterNode("<<name<<")\n";
-  }
-
-  Router::SplatNode::SplatNode() : Router::ParameterNode::ParameterNode("*") {
-    name = "*";
-    path = "*";
-    std::cout << "New SplatNode\n";
-  }
-
 }

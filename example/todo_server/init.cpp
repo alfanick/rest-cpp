@@ -23,12 +23,28 @@ create_service(secret) {
 
 void routes(REST::Router* r) {
   r->route("/lol/foo");
+  r->route("/task/:id");
   r->route("/path/:bar/*");
   r->route("/path/:bar/*");
   r->route("/path/:bar/edit");
   r->route("/path/:bar/*");
   r->route("/");
   r->route("/*");
+  r->route("/:foo");
+
+  REST::params_map params;
+
+  r->match("/task/17", params);
+  //r->match("/foo/bar", params);
+  //r->match("/path/12/edit", params);
+  r->match("/path/12/69/lol", params);
+  std::cout <<"start\n";
+  r->match("/", params);
+
+  for (auto p : params) {
+    std::cout << "'"<<p.first<<"': '"<<p.second<<"'\n";
+  }
+  //r->match("/path/lol/edit", params);
 
   r->resource<HelloWorldService>("przywitanie");
 

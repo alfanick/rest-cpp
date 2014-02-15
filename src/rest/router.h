@@ -33,16 +33,20 @@ class Router {
       friend class Node;
       public:
         Node() { };
-        Node(std::string p);
-        virtual ~Node();
+        Node(std::string p, Node* const& pr);
+        ~Node();
 
-        bool unify(std::string const& path, params_map& params);
-        bool unify(Node* const path, params_map& params);
+        bool unify(Node* const& root, std::string const& path, params_map& params);
+        Node* unify(Node* const& root, Node* const path, params_map& params);
         bool merge(Node* const path);
         static Node* from_path(std::string const& path);
 
+        void inject(Node* const& rhs, params_map& params);
+
+        bool is_root();
         bool is_last();
-        const Node* next();
+        bool is_splat();
+        Node* next();
 
         std::string uri();
 
@@ -50,9 +54,9 @@ class Router {
 
         static struct Less {
           bool operator()(const Node* a, const Node* b) const {
-            if (a->path == "*")
+            if (a->path[0] == '*')
               return false;
-            if (b->path == "*")
+            if (b->path[0] == '*')
               return true;
 
             if (a->path[0] == ':')
@@ -62,51 +66,34 @@ class Router {
               if (a->path[0] != ':')
                 return true;
 
-            std::cout << "lol\n";
             return a->path < b->path;
           }
         } less;
 
+        static struct Unifiable {
+          bool operator()(const Node* a, const Node* b) const {
+            if (a == nullptr || b == nullptr)
+              return false;
+
+            if (b->path.size() > 0 && (b->path[0] == '*' || b->path[0] == ':'))
+              return false;
+            if (a->path.size() > 0 && (a->path[0] == '*' || a->path[0] == ':'))
+              return true;
+
+            return a->path == b->path;
+          }
+        } unifiable;
+
         static struct Equal {
           bool operator()(const Node* a, const Node* b) const {
-            std::cout << "lol2\n";
             return (!less(a,b)) && (!less(b,a));
           }
         } equal;
 
       protected:
         std::string path;
+        Node* parent = nullptr;
         std::set<Node*, Less> children;
-    };
-
-    class RootNode final :  public Node {
-      public:
-        RootNode();
-/*
-        virtual bool operator<(Node* const& other) const {
-          return true;
-        }
-  */  };
-
-    class ParameterNode : public Node {
-      public:
-        ParameterNode(std::string const& name);
-/*
-        virtual bool operator<(Node* const& other) const {
-          return false;
-        }
-
-        virtual bool operator<(ParameterNode* const& other) const {
-          return path < other->path;
-        }
-*/
-      protected:
-        std::string name;
-    };
-
-    class SplatNode : public ParameterNode {
-      public:
-        SplatNode();
     };
 
   public:
@@ -118,6 +105,7 @@ class Router {
     static void path(std::string const &, service_lambda);
 
     void route(std::string);
+    void match(std::string const&, params_map&);
 
     template <class R>
     void resource(std::string const& path) {
@@ -131,7 +119,7 @@ class Router {
     static path_tuple* extractParams(std::string const&);
     static lambda_patterns* patterns;
 
-    RootNode* root;
+    Node* root;
 };
 
 }
