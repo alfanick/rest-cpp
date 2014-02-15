@@ -23,7 +23,17 @@ create_service(secret) {
   service->response->raw = "You are awesome!";
 }
 
+namespace Resources {
+  class BarResource : public REST::Service {
+    public:
+      void read() {
+        response->raw = "OMG!";
+      }
+  };
+}
+
 void routes(REST::Router* r) {
+  r->resource<Resources::BarResource>();
   r->resource<HelloWorldService>("/przywitanie");
 
   r->path("/", hole);
