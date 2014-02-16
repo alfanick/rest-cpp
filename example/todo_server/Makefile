@@ -1,6 +1,10 @@
+address?=0.0.0.0
+port?=8080
+workers?=4
+
 CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2
 INCLUDES=-I../../src
-LIBRARY=-L../../lib -lrest
+LIBRARY=-L../../lib -lrest -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers)
 
 ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
