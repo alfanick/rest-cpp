@@ -32,6 +32,7 @@ There are configuration options available such as:
   - `address=ip_or_host` - address for server to bind, default: `0.0.0.0`
   - `port=number` - port to listen, default: `8080` (ports lower than 1024 may require superuser privileges)
   - `workers=number` - number of workers, default: `4`
+  - `dispatcher=lc/rr` - workers dispatcher algorithm - lc for LeastConnections, rr for RoundRobin, default: `lc`
 
 To use options pass them to make, i.e. `make run workers=2 port=9000`.
 
