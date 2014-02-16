@@ -14,8 +14,12 @@ required. Not tested on other platforms.
 
 ### Library
 
-Build library using `make` on root directory. Then copy created library to
-`/usr/local/lib` or to project directory.
+Build library using `make` on root directory.
+
+### Installation
+
+Run `make install` on project folder - it will build the library and
+copy headers, library and generator to `/usr/local`.
 
 ### Example
 
@@ -35,6 +39,16 @@ There are configuration options available such as:
   - `dispatcher=lc/rr` - workers dispatcher algorithm - `lc` for `LeastConnections`, `rr` for `RoundRobin`, default: `lc`
 
 To use options pass them to `make`, i.e. `make run workers=2 port=9000`.
+
+
+Generator
+---------
+
+There is basic app generator included - `bin/rest-cpp`. Python in version greater than 2.5 is required.
+Generator is installed to `/usr/local/bin`.
+
+Generator allows you to create new app, that is `Makefile` and `init.cpp` files. Generated `Makefile` works as
+described in Example section. To generate new app use `rest-cpp new test_app`.
 
 
 Example
