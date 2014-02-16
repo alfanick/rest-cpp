@@ -1,0 +1,84 @@
+#!/usr/bin/python
+
+import sys, os, string, re
+
+class Template(string.Template):
+    delimiter = '%'
+
+Makefile = """address?=0.0.0.0
+port?=8080
+workers?=4
+dispatcher?=lc
+
+CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2
+INCLUDES=
+LIBRARY=-lrest -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
+
+ifneq ($(shell uname),Darwin)
+CXX=g++ -std=gnu++11 -Wall -pthread -O2
+endif
+
+.PHONY: server run library
+default: server
+
+run: server
+\t@./%name
+
+server:
+\t@$(CXX) $(INCLUDES) *.cpp -o %name $(LIBRARY)
+
+"""
+
+init_cpp = """#include <rest/rest.h>
+
+create_json_service(hello_world) {
+  service->response->data["result"] = "Hello world!";
+}
+
+void routes(REST::Router* r) {
+  r->path("/", hello_world);
+}
+
+"""
+
+FILES_LIST = (("Makefile", Makefile), ("init.cpp", init_cpp))
+
+def snake(name):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name.replace('-', '_'))
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+if __name__ == "__main__":
+    directory = "."
+
+    if len(sys.argv) == 1:
+        sys.exit(1)
+    elif len(sys.argv) > 1:
+        if (sys.argv[1] == "new") and len(sys.argv) > 2:
+            directory = sys.argv[2]
+            print sys.argv[2]
+        else:
+            sys.exit(1)
+
+    full_directory = os.path.abspath(directory)
+    name = snake(os.path.basename(directory))
+
+    print("New rest-cpp project: %s" % name)
+
+    # ensure directory exists
+    if not os.path.isdir(full_directory):
+        os.makedirs(full_directory)
+        print("  creating directory: %s " % directory)
+
+    for (filename, content) in FILES_LIST:
+        full_name = os.path.join(full_directory, filename)
+
+        if not os.path.isfile(full_name):
+            print("  creating file: %s" % os.path.join(directory, filename))
+            content = Template(content).substitute(name=name)
+
+            with open(full_name, "w") as f:
+                f.write(content)
+        else:
+            print("  skipping file: %s" % os.path.join(directory, filename))
+
+    print("Done. Have fun!")
