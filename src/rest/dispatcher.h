@@ -11,6 +11,7 @@
 
 #include "worker.h"
 #include "request.h"
+#include "router.h"
 
 namespace REST {
 

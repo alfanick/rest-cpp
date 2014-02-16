@@ -6,12 +6,9 @@ Router* Server::router() {
   return Router::Instance();
 }
 
-Server::Server(std::string address, int port, int threads) {
+Server::Server(std::string address, int port, Dispatcher* d) : dispatcher(d) {
   srand(time(0));
-  Router::WORKERS = threads;
   Router::Instance();
-  //dispatcher = new RoundRobinDispatcher(threads);
-  dispatcher = new LeastConnectionsDispatcher(threads);
   int status;
 
   memset(&host_info, 0, sizeof(host_info));

@@ -16,6 +16,18 @@
 #define SERVER_WORKERS 4
 #endif
 
+#ifdef SERVER_DISPATCHER_lc
+#define SERVER_DISPATCHER LeastConnectionsDispatcher
+#endif
+
+#ifdef SERVER_DISPATCHER_rr
+#define SERVER_DISPATCHER RoundRobinDispatcher
+#endif
+
+#ifndef SERVER_DISPATCHER
+#define SERVER_DISPATCHER LeastConnectionsDispatcher
+#endif
+
 #define create_service(NAME) void NAME(REST::Service* service)
 #define create_json_service(NAME) inline void NAME##_wrapped(REST::Service*); void NAME(REST::Service* service) { service->response->use_json(); NAME##_wrapped(service); } inline void NAME##_wrapped(REST::Service* service)
 
@@ -39,8 +51,7 @@ void main_stop_server(int a = 0) {
 
 int main(int argc, char **argv) {
   signal(SIGINT, main_stop_server);
-
-  server_instance = new REST::Server(STR(SERVER_BIND), SERVER_PORT, SERVER_WORKERS);
+  server_instance = new REST::Server(STR(SERVER_BIND), SERVER_PORT, new REST::SERVER_DISPATCHER(SERVER_WORKERS));
 
   ::routes(server_instance->router());
 
