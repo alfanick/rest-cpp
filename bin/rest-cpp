@@ -95,7 +95,7 @@ if __name__ == "__main__":
             cmd_new(directory)
         elif sys.argv[1] == "build" or sys.argv[1] == "server":
             if os.path.isfile("Makefile"):
-                os.execvp("make", sys.argv[1:])
+                os.execvp("make", sys.argv)
             else:
                 print("Not in rest-cpp project directory.")
                 sys.exit(1)
