@@ -58,6 +58,8 @@ namespace REST {
   }
 
   std::shared_ptr<Service> Router::Node::find_service(int worker_id) {
+    if (service.empty())
+      return nullptr;
     return service[worker_id];
   }
 
