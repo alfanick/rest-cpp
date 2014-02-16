@@ -55,12 +55,11 @@ if __name__ == "__main__":
     elif len(sys.argv) > 1:
         if (sys.argv[1] == "new") and len(sys.argv) > 2:
             directory = sys.argv[2]
-            print sys.argv[2]
         else:
             sys.exit(1)
 
     full_directory = os.path.abspath(directory)
-    name = snake(os.path.basename(directory))
+    name = snake(os.path.basename(full_directory))
 
     print("New rest-cpp project: %s" % name)
 
