@@ -7,6 +7,8 @@ LIBRARY=
 CPP_FILES := $(wildcard src/rest/*.cpp)
 OBJ_FILES := $(addprefix obj/,$(notdir $(CPP_FILES:.cpp=.o)))
 
+default: librest
+
 example: librest
 	$(MAKE) -C example/todo_server
 
