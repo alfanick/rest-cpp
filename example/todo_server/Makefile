@@ -5,7 +5,7 @@ dispatcher?=lc
 
 CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2
 INCLUDES=-I../../src
-LIBRARY=-L. -lrest -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
+LIBRARY=-L. -lrestcpp -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
 
 ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
