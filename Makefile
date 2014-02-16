@@ -25,5 +25,5 @@ lib/librest.so: $(OBJ_FILES)
 	$(CXX) -fPIC -shared -o lib/librest.so $^ 
 
 obj/%.o: src/rest/%.cpp
-	   $(CXX) $(INCLUDES) -c -o $@ $<
+	$(CXX) $(INCLUDES) -c -o $@ $<
 

@@ -10,8 +10,13 @@ ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
 endif
 
-.PHONY: server run
+.PHONY: server run library
 default: server
+
+library:
+	@echo Rebuilding REST library
+	@rm ../../obj/*.o
+	@$(MAKE) -s -C ../..
 
 run: server
 	@echo Listening on $(address):$(port), $(workers) workers
