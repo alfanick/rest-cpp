@@ -47,21 +47,11 @@ def snake(name):
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name.replace('-', '_'))
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
-if __name__ == "__main__":
-    directory = "."
-
-    if len(sys.argv) == 1:
-        sys.exit(1)
-    elif len(sys.argv) > 1:
-        if (sys.argv[1] == "new") and len(sys.argv) > 2:
-            directory = sys.argv[2]
-        else:
-            sys.exit(1)
-
+def cmd_new(directory):
     full_directory = os.path.abspath(directory)
     name = snake(os.path.basename(full_directory))
 
-    print("New rest-cpp project: %s" % name)
+    print("rest-cpp project: %s" % name)
 
     # ensure directory exists
     if not os.path.isdir(full_directory):
@@ -81,3 +71,31 @@ if __name__ == "__main__":
             print("  skipping file: %s" % os.path.join(directory, filename))
 
     print("Done. Have fun!")
+
+def cmd_help():
+    print("rest-cpp")
+    print("REST-like framework and server for blazing fast web applications in C++11.\n")
+    print("Commands")
+    print("  - new [directory] - create new project or update files")
+    print("  - build - build binary")
+    print("  - server - build and start server")
+    print("  - help - show this message")
+
+if __name__ == "__main__":
+    directory = "."
+
+    if len(sys.argv) == 1:
+        cmd_help()
+        sys.exit(1)
+    elif len(sys.argv) > 1:
+        if sys.argv[1] == "new":
+            if len(sys.argv) == 3:
+                directory = sys.argv[2]
+
+            cmd_new(directory)
+        elif sys.argv[1] == "build" or sys.argv[1] == "server":
+            if os.path.isfile("Makefile"):
+                os.execvp("make", sys.argv[1:])
+            else:
+                print("Not in rest-cpp project directory.")
+                sys.exit(1)
