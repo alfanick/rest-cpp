@@ -19,13 +19,12 @@ Build library using `make` on root directory.
 ### Installation
 
 Run `make install` on project folder - it will build the library and
-copy headers, library and generator to `/usr/local`.
+copy headers, shared library and generator to `/usr/local`.
 
 ### Example
 
 Example contains symlinks to library, so copying it isn't needed. To
 build example, go to `example/todo_server` and use `make`. 
-You may copy `Makefile` and change it accordingly to your project and needs.
 
 However few more tasks are available:
   - `make run` - build and start server
@@ -48,7 +47,7 @@ There is basic app generator included - `bin/rest-cpp`. Python in version greate
 Generator is installed to `/usr/local/bin`.
 
 Generator allows you to create new app, that is `Makefile` and `init.cpp` files. Generated `Makefile` works as
-described in Example section. To generate new app use `rest-cpp new test_app`.
+described in [Example](#example) section. To generate new app use `rest-cpp new test_app`.
 
 
 Example
