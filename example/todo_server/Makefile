@@ -10,7 +10,12 @@ ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
 endif
 
-.PHONY: server
+.PHONY: server run
+default: server
+
+run: server
+	@echo Listening on $(address):$(port), $(workers) workers
+	@./todo_server
 
 server:
-	$(CXX) $(INCLUDES) *.cpp -o todo_server $(LIBRARY)
+	@$(CXX) $(INCLUDES) *.cpp -o todo_server $(LIBRARY)
