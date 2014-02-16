@@ -11,16 +11,11 @@ ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
 endif
 
-.PHONY: server run library
+.PHONY: server run
 default: server
 
-library:
-	@echo Rebuilding REST library
-	@rm ../../obj/*.o
-	@$(MAKE) -s -C ../..
-
-run: server
+server: build
 	@DYLD_LIBRARY_PATH=. LD_LIBRARY_PATH=. ./todo_server
 
-server:
+build:
 	@$(CXX) $(INCLUDES) *.cpp -o todo_server $(LIBRARY)

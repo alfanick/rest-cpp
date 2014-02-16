@@ -18,13 +18,13 @@ ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
 endif
 
-.PHONY: server run library
+.PHONY: server build
 default: server
 
-run: server
+server: build
 \t@DYLD_LIBRARY_PATH=/usr/local/lib LD_LIBRARY_PATH=/usr/local/lib ./%name
 
-server:
+build:
 \t@$(CXX) $(INCLUDES) *.cpp -o %name $(LIBRARY)
 
 """

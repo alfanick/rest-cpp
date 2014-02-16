@@ -27,9 +27,8 @@ Example contains symlinks to library, so copying it isn't needed. To
 build example, go to `example/todo_server` and use `make`. 
 
 However few more tasks are available:
-  - `make run` - build and start server
-  - `make library` - build library
-  - `make server` - default action, build server
+  - `make server` - default action, build and start server
+  - `make build` - build server
 
 There are configuration options available such as:
   - `address=ip_or_host` - address for server to bind, default: `0.0.0.0`
@@ -37,7 +36,7 @@ There are configuration options available such as:
   - `workers=number` - number of workers, default: `4`
   - `dispatcher=lc/rr` - workers dispatcher algorithm - `lc` for `LeastConnections`, `rr` for `RoundRobin`, default: `lc`
 
-To use options pass them to `make`, i.e. `make run workers=2 port=9000`.
+To use options pass them to `make`, i.e. `make server workers=2 port=9000`.
 
 
 Generator

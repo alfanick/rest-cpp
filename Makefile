@@ -10,7 +10,7 @@ OBJ_FILES := $(addprefix obj/,$(notdir $(CPP_FILES:.cpp=.o)))
 default: librestcpp
 
 example: librestcpp
-	$(MAKE) -C example/todo_server
+	$(MAKE) -C example/todo_server build
 
 ifeq ($(shell uname),Darwin)
 librestcpp: lib/librestcpp.dylib
