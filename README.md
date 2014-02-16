@@ -15,7 +15,7 @@ required. Not tested on other platforms.
 ### Library
 
 Build library using `make` on root directory. Then copy created library to
-`/usr/local/share` or to project directory.
+`/usr/local/lib` or to project directory.
 
 ### Example
 
