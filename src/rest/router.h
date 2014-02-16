@@ -133,7 +133,7 @@ class Router {
       node->end()->add_service((R*)(NULL));
       root->merge(node);
 
-      Router::Node* splat_node = Router::Node::from_path(path + "/*");
+      Router::Node* splat_node = Router::Node::from_path(path == "/" ? "/*" : (path+"/*"));
       splat_node->end()->service = node->end()->service;
       root->merge(splat_node);
     }
