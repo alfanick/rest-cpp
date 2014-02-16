@@ -33,7 +33,7 @@ There are configuration options available such as:
   - `port=number` - port to listen, default: `8080` (ports lower than 1024 may require superuser privileges)
   - `workers=number` - number of workers, default: `4`
 
-To use options pass to make, i.e. `make run workers=2 port=9000`.
+To use options pass them to make, i.e. `make run workers=2 port=9000`.
 
 
 Example
