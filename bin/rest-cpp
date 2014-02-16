@@ -22,7 +22,7 @@ endif
 default: server
 
 run: server
-\t@./%name
+\t@DYLD_LIBRARY_PATH=/usr/local/lib LD_LIBRARY_PATH=/usr/local/lib ./%name
 
 server:
 \t@$(CXX) $(INCLUDES) *.cpp -o %name $(LIBRARY)

@@ -32,7 +32,7 @@ obj/%.o: src/rest/%.cpp
 clean:
 	@rm -f obj/*.o
 
-install: clean librestcpp
+install: librestcpp
 	@echo "Installing headers"
 	@rsync -r --exclude="*.cpp" src/ /usr/local/include/
 	@echo "Installing library"
