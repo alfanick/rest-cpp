@@ -1,4 +1,5 @@
 #include "request.h"
+#include <cstring>
 
 namespace REST {
 

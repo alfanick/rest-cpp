@@ -30,7 +30,6 @@ typedef std::map<std::string, path_lambda> lambda_patterns;
 class Router {
   private:
     class Node {
-      friend class Node;
       friend class Router;
       public:
         Node() { };

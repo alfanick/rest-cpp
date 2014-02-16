@@ -4,7 +4,7 @@ workers?=4
 
 CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2
 INCLUDES=-I../../src
-LIBRARY=-L../../lib -lrest -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers)
+LIBRARY=-L. -lrest -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers)
 
 ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
@@ -20,7 +20,7 @@ library:
 
 run: server
 	@echo Listening on $(address):$(port), $(workers) workers
-	@./todo_server
+	@DYLD_LIBRARY_PATH=. LD_LIBRARY_PATH=. ./todo_server
 
 server:
 	@$(CXX) $(INCLUDES) *.cpp -o todo_server $(LIBRARY)
