@@ -20,8 +20,7 @@ library:
 	@$(MAKE) -s -C ../..
 
 run: server
-	@echo Listening on $(address):$(port), $(workers) workers, $(dispatcher) dispatcher
 	@DYLD_LIBRARY_PATH=. LD_LIBRARY_PATH=. ./todo_server
 
 server:
-	$(CXX) $(INCLUDES) *.cpp -o todo_server $(LIBRARY)
+	@$(CXX) $(INCLUDES) *.cpp -o todo_server $(LIBRARY)
