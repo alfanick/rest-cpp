@@ -21,7 +21,7 @@ Build library using `make` on root directory. Then copy created library to
 
 Example contains symlinks to library, so copying it isn't needed. To
 build example, go to `example/todo_server` and use `make`. 
-You may copy Makefile and change it accordingly to your project and needs.
+You may copy `Makefile` and change it accordingly to your project and needs.
 
 However few more tasks are available:
   - `make run` - build and start server
@@ -32,9 +32,9 @@ There are configuration options available such as:
   - `address=ip_or_host` - address for server to bind, default: `0.0.0.0`
   - `port=number` - port to listen, default: `8080` (ports lower than 1024 may require superuser privileges)
   - `workers=number` - number of workers, default: `4`
-  - `dispatcher=lc/rr` - workers dispatcher algorithm - lc for LeastConnections, rr for RoundRobin, default: `lc`
+  - `dispatcher=lc/rr` - workers dispatcher algorithm - `lc` for `LeastConnections`, `rr` for `RoundRobin`, default: `lc`
 
-To use options pass them to make, i.e. `make run workers=2 port=9000`.
+To use options pass them to `make`, i.e. `make run workers=2 port=9000`.
 
 
 Example
