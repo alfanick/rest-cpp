@@ -1,46 +1,47 @@
 rest-cpp
 ========
-
 REST-like framework and server for blazing fast web applications in
 C++11.
 
 
+Quick start
+-----------
+    $ rest-cpp new blog
+    $ cd blog
+    $ rest-cpp server
+    
+    Now navigate your browser to http://127.0.0.1:8080
+
+
 Building
 --------
-
 On OS X Commanand Line Tools are required; on Linux gcc-4.8 or newer is
 required. Not tested on other platforms.
 
 
 ### Library
-
 Build library using `make` on root directory.
 
 ### Installation
-
 Run `make install` on project folder - it will build the library and
 copy headers, shared library and generator to `/usr/local`.
 
 ### Example
-
 After bulding the [Library](#library), go to `example/todo_server` and use `make`. 
 
 
 Usage
 -----
-
 You may build your own apps from scratch, but you can just `#include <rest/rest.h>`
 and use simplified workflow. To make it even easier, you can use `rest-cpp` utility
 to do some work for you.
 
 ### rest-cpp utility
-
 `rest-cpp` allows you to create and manage app.
 It is installed to `/usr/local/bin` and requires Python in version at
 least 2.5 (which probably you have already installed).
 
 #### New application
-
 Use `rest-cpp new [directory]` to create new application. `directory`
 isn't required, app will be created in current directory if omitted.
 
@@ -52,7 +53,6 @@ Existing files are skipped, to update file to new version, just remove
 previous one.
 
 ##### Makefile
-
 Available tasks:
   - `make server` - default action, build and start server
   - `make build` - build server
@@ -73,19 +73,16 @@ make (you can use the same options as above).*
 
 Example
 -------
-
 lorem ipsum
 
 
 Basis of operation
 ------------------
-
 lorem ipsum
 
 
 Authors
 -------
-
 - Amadeusz Juskowiak - amadeusz[at]me.com
 - Błażej Kotowski - kotowski.blazej[at]gmail.com
 
