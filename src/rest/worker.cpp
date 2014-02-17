@@ -6,7 +6,7 @@
 
 namespace REST {
 
-Worker::Worker(int i, std::queue< std::shared_ptr<Request> > *rq, std::mutex *re, std::mutex *rl, std::atomic_size_t *rc) :
+Worker::Worker(int i, std::queue< std::shared_ptr<Request> > *rq, std::mutex *re, std::mutex *rl, size_t *rc) :
  id(i), requests_queue(rq), requests_empty(re), requests_lock(rl), requests_count(rc) {
   run();
   server_header = "rest-cpp, worker " + std::to_string(id);

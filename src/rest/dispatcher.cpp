@@ -6,7 +6,7 @@ Dispatcher::Dispatcher(int wc) : workers_count(wc) {
   Router::WORKERS = workers_count;
   requests_empty = new std::mutex[workers_count];
   requests_lock = new std::mutex[workers_count];
-  requests_count = new std::atomic_size_t[workers_count];
+  requests_count = new size_t[workers_count];
   workers.resize(workers_count);
   requests.resize(workers_count);
 
