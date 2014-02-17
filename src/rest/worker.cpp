@@ -6,8 +6,8 @@
 
 namespace REST {
 
-Worker::Worker(int i, std::queue< std::shared_ptr<Request> > *rq, std::mutex *re, std::mutex *rl) :
- id(i), requests_queue(rq), requests_empty(re), requests_lock(rl) {
+Worker::Worker(int i, std::queue< std::shared_ptr<Request> > *rq, std::mutex *re, std::mutex *rl, std::atomic_size_t *rc) :
+ id(i), requests_queue(rq), requests_empty(re), requests_lock(rl), requests_count(rc) {
   run();
   server_header = "rest-cpp, worker " + std::to_string(id);
 }
@@ -53,6 +53,8 @@ void Worker::run() {
         error_response->headers.insert(response->headers.begin(), response->headers.end());
         error_response->send();
       }
+
+      (*requests_count)--;
 
       std::cout << request->handle << " is my handle\n";
       std::cout << id << ": got request\n";

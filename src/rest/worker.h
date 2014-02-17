@@ -22,7 +22,7 @@ namespace REST {
 class Worker {
 
   public:
-    Worker(int id, std::queue< std::shared_ptr<Request> > *requests_queue, std::mutex *requests_empty, std::mutex *requests_lock);
+    Worker(int id, std::queue< std::shared_ptr<Request> > *requests_queue, std::mutex *requests_empty, std::mutex *requests_lock, std::atomic_size_t *requests_count);
 
     void make_action(std::shared_ptr<Request> request, std::shared_ptr<Response> response);
 
@@ -39,6 +39,7 @@ class Worker {
     std::queue< std::shared_ptr<Request> > *requests_queue;
     std::mutex *requests_empty;
     std::mutex *requests_lock;
+    std::atomic_size_t *requests_count;
 
     std::thread thread;
 };

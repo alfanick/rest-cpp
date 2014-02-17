@@ -8,6 +8,7 @@
 #include <thread>
 #include <mutex>
 #include <unistd.h>
+#include <atomic>
 
 #include "worker.h"
 #include "request.h"
@@ -37,6 +38,7 @@ class Dispatcher {
     int workers_count;
     std::vector< std::shared_ptr<Worker> > workers;
     std::vector< std::queue< std::shared_ptr<Request> > > requests;
+    std::atomic_size_t *requests_count;
     std::mutex *requests_empty;
     std::mutex *requests_lock;
 };
