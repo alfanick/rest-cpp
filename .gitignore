@@ -5,6 +5,9 @@
 
 example/todo_server/todo_server
 
+docs/*
+!docs/.keep
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
