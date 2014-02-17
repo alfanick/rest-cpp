@@ -9,8 +9,8 @@ Quick start
     $ rest-cpp new blog
     $ cd blog
     $ rest-cpp server
-    
-    Now navigate your browser to http://127.0.0.1:8080
+
+Navigate your browser to http://127.0.0.1:8080 now.
 
 
 Building
