@@ -30,12 +30,11 @@ obj/%.o: src/rest/%.cpp
 	$(CXX) $(INCLUDES) -c -o $@ $<
 
 docs:
-	@doxygen doxygen.conf
+	@doxygen docs/doxygen.conf
 
 clean:
+	@rm -rf docs/html
 	@rm -f obj/*.o
-	@rm -fr docs/*
-	@touch docs/.keep
 
 install: librestcpp
 	@echo "Installing headers"

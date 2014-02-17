@@ -7,6 +7,7 @@ example/todo_server/todo_server
 
 docs/*
 !docs/.keep
+!docs/doxygen.conf
 
 # Compiled Dynamic libraries
 *.so
