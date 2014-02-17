@@ -54,7 +54,8 @@ void Worker::run() {
         error_response->send();
       }
 
-      (*requests_count)--;
+      if ((*requests_count) > 0)
+        (*requests_count)--;
 
       std::cout << request->handle << " is my handle\n";
       std::cout << id << ": got request\n";
