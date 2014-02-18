@@ -225,7 +225,7 @@ namespace REST {
   }
 
   Router::Node* Router::Node::from_path(std::string const& p) {
-    std::string path = p;
+    std::string path = ((!p.empty()) && (p[0] != '/')) ? "/" + p : p;
 
     Node* root = new Node();
     Node* current = root;
