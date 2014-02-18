@@ -47,7 +47,6 @@ class Router {
         void add_service(const T* srv) {
           service.clear();
           service.resize(Router::WORKERS);
-          std::cout << "dodaje: " << typeid(T).name() << std::endl;
           for (int i = 0; i < Router::WORKERS; i++)
             service[i] = std::make_shared<T>();
         };
@@ -113,9 +112,8 @@ class Router {
 
   public:
     static int WORKERS;
-    static Router* Instance();
-    static Node* unify(std::string const&, std::map<std::string, std::string>&);
-    static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
+    static Router* instance();
+    static std::shared_ptr<Service> find(std::shared_ptr<Request>, int);
 
 
     void match(std::string const &, LambdaService::function);
@@ -164,6 +162,8 @@ class Router {
     ~Router();
 
   private:
+    static Node* unify(std::string const&, std::map<std::string, std::string>&);
+
     template <class R, int N>
     static std::string to_path() {
       std::string name = typeid(R).name();

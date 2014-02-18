@@ -23,7 +23,7 @@ namespace REST {
     root->print(1);
   }
 
-  Router* Router::Instance() {
+  Router* Router::instance() {
     if(pInstance == NULL){
       pInstance = new Router();
     }
@@ -31,11 +31,11 @@ namespace REST {
   }
 
 
-  std::shared_ptr<Service> Router::getResource(std::shared_ptr<Request> request, int worker_id) {
+  std::shared_ptr<Service> Router::find(std::shared_ptr<Request> request, int worker_id) {
     Node* node = unify(request->path, request->parameters);
 
     if (node == nullptr)
-      return NULL;
+      return nullptr;
 
     std::shared_ptr<Service> service = node->find_service(worker_id);
 

@@ -3,12 +3,12 @@
 namespace REST {
 
 Router* Server::router() {
-  return Router::Instance();
+  return Router::instance();
 }
 
 Server::Server(std::string address, int port, Dispatcher* d) : dispatcher(d) {
   srand(time(0));
-  Router::Instance();
+  Router::instance();
   int status;
 
   memset(&host_info, 0, sizeof(host_info));
