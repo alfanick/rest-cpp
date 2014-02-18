@@ -1,5 +1,6 @@
 #include "router.h"
 #include "service.h"
+#include "resource.h"
 #include "lambda_service.h"
 #include <string>
 #include <iostream>
@@ -19,7 +20,7 @@ namespace REST {
 
   void Router::print() {
     std::cout << "Available routes:\n";
-    root->print(2);
+    root->print(1);
   }
 
   Router* Router::Instance() {
@@ -109,8 +110,11 @@ namespace REST {
     if (!service.empty()) {
       if (dynamic_cast< LambdaService* >(service[0].get()) != nullptr) {
         std::cout << " - lambda";
-      } else {
+      } else
+      if (dynamic_cast< Resource* >(service[0].get()) != nullptr) {
         std::cout << " - resource";
+      } else {
+        std::cout << " - service";
       }
     }
     std::cout << std::endl;
