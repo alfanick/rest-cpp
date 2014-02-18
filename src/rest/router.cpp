@@ -41,7 +41,7 @@ namespace REST {
     return service;
   }
 
-  void Router::path(std::string const& path, service_lambda lambda) {
+  void Router::route(std::string const& path, service_lambda lambda) {
     Node* node = Router::Node::from_path(path);
     node->end()->add_service(std::make_shared<LambdaService>(lambda));
     root->merge(node);

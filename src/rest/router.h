@@ -123,7 +123,7 @@ class Router {
     static Router* Instance();
 
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
-    static void path(std::string const &, service_lambda);
+    void route(std::string const &, service_lambda);
 
     static Node* match(std::string const&, params_map&);
 

@@ -38,12 +38,12 @@ void routes(REST::Router* r) {
   r->resource<Im::Kinda::DynamicResource>();
   r->resource<HelloWorldService>("/przywitanie");
 
-  r->path("/", hole);
-  r->path("/lol", hole);
-  r->path("/sum/:a/:b", adder);
-  r->path("/secret", secret);
+  r->route("/", hole);
+  r->route("/lol", hole);
+  r->route("/sum/:a/:b", adder);
+  r->route("/secret", secret);
 
-  r->path("/fibonacci/:fib", [](REST::Service* service) {
+  r->route("/fibonacci/:fib", [](REST::Service* service) {
     int num = service->request->parameter("fib", 0);
     int fib1=1, fib2=1, res=0;
     if(num ==0 || num == 1 || num == 2)
