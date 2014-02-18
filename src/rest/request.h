@@ -32,6 +32,7 @@ class Response;
  * and headers.
  */
 class Request {
+  friend class Dispatcher;
   friend class Worker;
   friend class Response;
 
@@ -40,7 +41,7 @@ class Request {
 
     static size_t BUFFER_SIZE;
 
-    Request(int client, struct sockaddr_storage client_addr);
+
     ~Request();
 
     Method method = Method::UNDEFINED;
@@ -74,6 +75,13 @@ class Request {
     std::shared_ptr<Session> session = nullptr;
 
   private:
+    Request(int client, struct sockaddr_storage client_addr);
+
+    static std::shared_ptr<Request> make(int client, struct sockaddr_storage client_addr) {
+      std::shared_ptr<Request> instance(new Request(client, client_addr));
+      return instance;
+    }
+
     void parse_header(std::string line);
     void parse_query_string(std::string query);
 

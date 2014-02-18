@@ -40,7 +40,7 @@ void Dispatcher::dispatch(int worker_id, std::shared_ptr<Request> request) {
 }
 
 void Dispatcher::next(int client, struct sockaddr_storage client_addr) {
-  dispatch(next_worker_id(), std::make_shared<Request>(client, client_addr));
+  dispatch(next_worker_id(), Request::make(client, client_addr));
 }
 
 }

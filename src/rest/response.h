@@ -18,13 +18,11 @@ namespace REST {
  * and status code.
  */
 class Response {
+  friend class Worker;
 
   public:
-    Response(std::shared_ptr<Request> request);
-    Response(std::shared_ptr<Request> request, HTTP::Error &error);
     ~Response();
 
-    size_t send();
 
     int status = 200;
     std::string status_message = "OK";
@@ -40,6 +38,10 @@ class Response {
     static Json::FastWriter json_writer;
 
   private:
+    Response(std::shared_ptr<Request> request);
+    Response(std::shared_ptr<Request> request, HTTP::Error &error);
+    size_t send();
+
     int handle;
     bool is_json = false;
 };
