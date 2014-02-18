@@ -121,24 +121,56 @@ class Router {
     static Node* match(std::string const&, std::map<std::string, std::string>&);
 
     template <class R>
-    void resource(std::string const& path) {
+    Router::Node* resource(std::string const& path) {
       Router::Node* node = Router::Node::from_path(path);
       node->end()->add_service((R*)(NULL));
       root->merge(node);
 
+      return node;
+    }
+
+    template <class R>
+    void resources(std::string const& path) {
+      Router::Node* node = resource<R>(path);
       Router::Node* splat_node = Router::Node::from_path(path == "/" ? "/*" : (path+"/*"));
       splat_node->end()->service = node->end()->service;
+
       root->merge(splat_node);
     }
 
-    template <class R, size_t N>
+    template <class R, int N>
+    void resources() {
+      resources<R>(to_path<R, N>());
+    }
+
+    template <class R>
+    void resources() {
+      resources<R, 0>();
+    }
+
+    template <class R, int N>
     void resource() {
+      resource<R>(to_path<R, N>());
+    }
+
+    template <class R>
+    void resource() {
+      resource<R, 0>();
+    }
+
+    void print();
+
+    ~Router();
+
+  private:
+    template <class R, int N>
+    static std::string to_path() {
       std::string name = typeid(R).name();
       std::string path = "";
       path.reserve(name.size());
       std::transform(name.begin(), name.end(), name.begin(), ::tolower);
       size_t number_position = 0;
-      size_t strip = N;
+      int strip = N;
       while ((number_position = name.find_first_of("0123456789")) != std::string::npos) {
         if (number_position != 0)
           name = name.substr(number_position);
@@ -150,7 +182,7 @@ class Router {
         size_t name_length = std::stol(number);
 
         name = name.substr(number.size());
-        if (strip == 0)
+        if (strip <= 0)
           path += "/"+name.substr(0, name_length);
         else
           strip--;
@@ -165,19 +197,16 @@ class Router {
       if (s == (path.size() - 8))
         path.erase(path.rfind("resource"));
 
-      resource<R>(path);
+      while (strip < 0) {
+        strip++;
+
+        std::cout << path << std::endl;
+        path.erase(path.rfind("/"));
+      }
+
+      return path;
     }
 
-    template <class R>
-    void resource() {
-      resource<R, 0>();
-    }
-
-    void print();
-
-    ~Router();
-
-  private:
     Router();
     static Router* pInstance;
 
