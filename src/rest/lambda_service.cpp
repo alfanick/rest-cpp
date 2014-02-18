@@ -7,7 +7,7 @@ namespace REST {
   }
 
   LambdaService::LambdaService() {}
-  LambdaService::LambdaService(service_lambda lambda) {
+  LambdaService::LambdaService(LambdaService::function lambda) {
     fun = lambda;
   }
 

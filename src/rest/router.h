@@ -12,14 +12,6 @@
 
 namespace REST {
 
-typedef std::map<std::string, std::shared_ptr<Service> > names_services_map;
-typedef std::vector< std::shared_ptr<names_services_map> > workers_services_vector;
-typedef std::map<std::string, std::string> params_map;
-typedef std::pair<std::string, std::shared_ptr<params_map> > path_tuple;
-typedef std::function<void(Service *)> service_lambda;
-typedef std::pair<std::string, std::shared_ptr<LambdaService> > path_lambda;
-typedef std::map<std::string, path_lambda> lambda_patterns;
-
 /**
  * Router resolves URL to Request::parameters and
  * finds Service corresponding to the URL.
@@ -124,7 +116,7 @@ class Router {
     static Router* Instance();
 
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
-    void route(std::string const &, service_lambda);
+    void route(std::string const &, LambdaService::function);
 
     static Node* match(std::string const&, params_map&);
 

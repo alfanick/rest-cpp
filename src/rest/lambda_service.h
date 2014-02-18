@@ -8,20 +8,20 @@
 
 namespace REST {
 
-typedef std::function<void(Service *)> service_lambda;
-
 /**
  * @private
  */
 class LambdaService : public Service {
   public:
+    typedef std::function<void(LambdaService *)> function;
+
     LambdaService();
     LambdaService(std::shared_ptr<LambdaService> const& ls);
-    LambdaService(service_lambda);
+    LambdaService(function);
   protected:
     void make_action() final;
   private:
-    service_lambda fun;
+    function fun;
 };
 
 }
