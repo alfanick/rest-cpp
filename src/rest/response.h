@@ -35,9 +35,10 @@ class Response {
     Json::Value data;
     std::chrono::high_resolution_clock::time_point start_time;
 
-    static Json::FastWriter json_writer;
 
   private:
+    static Json::FastWriter json_writer;
+
     Response(std::shared_ptr<Request> request);
     Response(std::shared_ptr<Request> request, HTTP::Error &error);
     size_t send();
