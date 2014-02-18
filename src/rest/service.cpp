@@ -3,6 +3,7 @@
 namespace REST {
 
   Service::Service() {}
+  Service::~Service() {}
 
   void Service::before() {}
   void Service::after() {}

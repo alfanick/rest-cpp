@@ -23,6 +23,7 @@ class Service {
 
   public:
     Service();
+    virtual ~Service() = 0;
 
     std::shared_ptr<Response> response;
     std::shared_ptr<Request> request;

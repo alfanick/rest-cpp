@@ -37,6 +37,16 @@ namespace Im {
 class FooBar : public REST::Service {
   void method(REST::Request::Method method) {
     std::cout << "ollol\n";
+    switch (method) {
+      case REST::Request::Method::GET:
+        std::cout << "GET\n";
+        break;
+      case REST::Request::Method::POST:
+        std::cout << "POST\n";
+        break;
+      default:
+        std::cout << "other\n";
+    }
   }
 };
 
