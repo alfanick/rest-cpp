@@ -31,7 +31,7 @@ namespace REST {
 
 
   std::shared_ptr<Service> Router::getResource(std::shared_ptr<Request> request, int worker_id) {
-    Node* node = match(request->path, request->parameters);
+    Node* node = unify(request->path, request->parameters);
 
     if (node == nullptr)
       return NULL;
@@ -41,7 +41,7 @@ namespace REST {
     return service;
   }
 
-  void Router::route(std::string const& path, LambdaService::function lambda) {
+  void Router::match(std::string const& path, LambdaService::function lambda) {
     Node* node = Router::Node::from_path(path);
     node->end()->add_service(std::make_shared<LambdaService>(lambda));
     root->merge(node);
@@ -150,7 +150,7 @@ namespace REST {
     return true;
   }
 
-  Router::Node* Router::match(std::string const& path, std::map<std::string, std::string>& params) {
+  Router::Node* Router::unify(std::string const& path, std::map<std::string, std::string>& params) {
     return root->unify(root, path.empty() ? "/" : path, params);
   }
 

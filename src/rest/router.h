@@ -114,11 +114,11 @@ class Router {
   public:
     static int WORKERS;
     static Router* Instance();
-
+    static Node* unify(std::string const&, std::map<std::string, std::string>&);
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
-    void route(std::string const &, LambdaService::function);
 
-    static Node* match(std::string const&, std::map<std::string, std::string>&);
+
+    void match(std::string const &, LambdaService::function);
 
     template <class R>
     Router::Node* resource(std::string const& path) {

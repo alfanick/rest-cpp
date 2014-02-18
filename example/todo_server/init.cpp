@@ -51,16 +51,16 @@ class FooBar : public REST::Service {
 };
 
 void routes(REST::Router* r) {
-  r->resource<Im::Kinda::DynamicResource>();
-  r->resource<HelloWorldService>("/przywitanie");
+  r->resources<Im::Kinda::DynamicResource>();
+  r->resources<HelloWorldService>("/przywitanie");
 
   r->resource<FooBar>("/lolo");
-  r->route("/", hole);
-  r->route("/lol", hole);
-  r->route("/sum/:a/:b", adder);
-  r->route("/secret", secret);
+  r->match("/", hole);
+  r->match("/lol", hole);
+  r->match("/sum/:a/:b", adder);
+  r->match("/secret", secret);
 
-  r->route("/fibonacci/:fib", [](REST::Service* service) {
+  r->match("/fibonacci/:fib", [](REST::Service* service) {
     int num = service->request->parameter("fib", 0);
     int fib1=1, fib2=1, res=0;
     if(num ==0 || num == 1 || num == 2)
