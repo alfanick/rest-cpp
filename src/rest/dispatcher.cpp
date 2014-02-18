@@ -3,7 +3,7 @@
 namespace REST {
 
 Dispatcher::Dispatcher(int wc) : workers_count(wc) {
-  Router::WORKERS = workers_count;
+  Worker::POOL_SIZE = workers_count;
   requests_empty = new std::mutex[workers_count];
   requests_lock = new std::mutex[workers_count];
   requests_count = new size_t[workers_count];

@@ -27,12 +27,12 @@ class Service {
 
     std::shared_ptr<Response> response;
     std::shared_ptr<Request> request;
+    std::shared_ptr<Session> session;
 
     void ensure_session();
     void ensure_authorization(std::string const& realm, std::function<bool(std::string, std::string)> handler);
 
   protected:
-    std::shared_ptr<Session> session = nullptr;
 
     virtual void make_action();
 

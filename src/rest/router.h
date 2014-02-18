@@ -9,6 +9,7 @@
 #include <vector>
 #include "service.h"
 #include "lambda_service.h"
+#include "worker.h"
 
 namespace REST {
 
@@ -37,17 +38,17 @@ class Router {
 
         void add_service(std::shared_ptr<LambdaService> srv) {
           service.clear();
-          service.resize(Router::WORKERS);
+          service.resize(Worker::POOL_SIZE);
 
-          for (int i = 0; i < Router::WORKERS; i++)
+          for (int i = 0; i < Worker::POOL_SIZE; i++)
             service[i] = std::make_shared<LambdaService>(srv);
         }
 
         template <class T>
         void add_service(const T* srv) {
           service.clear();
-          service.resize(Router::WORKERS);
-          for (int i = 0; i < Router::WORKERS; i++)
+          service.resize(Worker::POOL_SIZE);
+          for (int i = 0; i < Worker::POOL_SIZE; i++)
             service[i] = std::make_shared<T>();
         };
         std::shared_ptr<Service> find_service(int worker_id);
@@ -111,7 +112,6 @@ class Router {
     };
 
   public:
-    static int WORKERS;
     static Router* instance();
     static std::shared_ptr<Service> find(std::shared_ptr<Request>, int);
 

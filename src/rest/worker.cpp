@@ -6,6 +6,8 @@
 
 namespace REST {
 
+int Worker::POOL_SIZE = 256;
+
 Worker::Worker(int i, std::queue< std::shared_ptr<Request> > *rq, std::mutex *re, std::mutex *rl, size_t *rc) :
  id(i), requests_queue(rq), requests_empty(re), requests_lock(rl), requests_count(rc) {
   run();

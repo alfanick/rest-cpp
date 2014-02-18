@@ -8,7 +8,6 @@
 
 namespace REST {
   Router* Router::pInstance = NULL;
-  int Router::WORKERS = 256;
   Router::Node* Router::root = new Router::Node();
 
   Router::Router() {

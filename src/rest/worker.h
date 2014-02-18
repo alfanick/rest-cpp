@@ -29,6 +29,7 @@ class Worker final {
 
     void stop();
 
+    static int POOL_SIZE;
   private:
     void run();
     std::string server_header;
