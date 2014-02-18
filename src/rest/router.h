@@ -72,6 +72,7 @@ class Router {
 
         void print(int level);
 
+      private:
         static struct Less {
           bool operator()(const Node* a, const Node* b) const {
             if (a->path[0] == '*')

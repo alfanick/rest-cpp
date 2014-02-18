@@ -7,6 +7,9 @@
 
 namespace REST {
 
+  /**
+   * @private
+   */
   CREATE(Exception, std::exception, "Undefined exception");
 
   CREATE(ServerError, Exception, "Server exception");
