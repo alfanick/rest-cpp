@@ -36,7 +36,7 @@ create_json_service(hello_world) {
 }
 
 void routes(REST::Router* r) {
-  r->path("/", hello_world);
+  r->route("/", hello_world);
 }
 
 """
