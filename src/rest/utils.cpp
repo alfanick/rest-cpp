@@ -1,7 +1,36 @@
 #include "utils.h"
 
+#include <cstdlib>
+
 namespace REST {
 namespace Utils {
+
+const static char DEC2HEX[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+std::string random_uuid() {
+  std::string uuid(36, ' ');
+
+  for (int i = 0; i < 36; i++) {
+    switch (i) {
+      case 8:
+      case 13:
+      case 18:
+      case 23:
+        uuid[i] = '-';
+        break;
+      case 14:
+        uuid[i] = '4';
+        break;
+      case 19:
+        uuid[i] = DEC2HEX[rand()%4 + 8];
+        break;
+      default:
+        uuid[i] = DEC2HEX[rand()%16];
+    }
+  }
+
+  return uuid;
+}
 
 // Source: http://www.codeguru.com/cpp/cpp/algorithms/strings/article.php/c12759/URI-Encoding-and-Decoding.htm
 

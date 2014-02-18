@@ -46,14 +46,6 @@ namespace REST {
     return iter->second;
   }
 
-  std::string Session::generateId() {
-    std::string result = "";
-    for(int i=0; i<64; i++) {
-      result += char((rand() % 26) + 97);
-    }
-    return result;
-  }
-
   void Session::killSessions() {
     for(auto iter = sessions->begin(); iter != sessions->end();) {
       if(time(0) - iter->second->modified_at > LIFETIME)

@@ -22,7 +22,7 @@ namespace REST {
 
   void Service::ensure_session() {
     if (session == nullptr) {
-      session = Session::getSession(Session::generateId());
+      session = Session::getSession(Utils::random_uuid());
     }
   }
 
