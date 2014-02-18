@@ -14,7 +14,7 @@ class Resource : public Service {
 
     virtual ~Resource() = 0;
 
-  protected:
+  private:
     void make_action() final;
 };
 
