@@ -150,7 +150,7 @@ namespace REST {
     return true;
   }
 
-  Router::Node* Router::match(std::string const& path, params_map& params) {
+  Router::Node* Router::match(std::string const& path, std::map<std::string, std::string>& params) {
     return root->unify(root, path.empty() ? "/" : path, params);
   }
 
@@ -162,7 +162,7 @@ namespace REST {
     return parent == nullptr;
   }
 
-  Router::Node* Router::Node::unify(Router::Node* const& root, std::string const& path, params_map& params) {
+  Router::Node* Router::Node::unify(Router::Node* const& root, std::string const& path, std::map<std::string, std::string>& params) {
     Node* node = from_path(path);
     Node* match = unify(root, node, params);
 
@@ -175,7 +175,7 @@ namespace REST {
     return match;
   }
 
-  Router::Node* Router::Node::unify(Router::Node* const& root, Router::Node* const path, params_map& params) {
+  Router::Node* Router::Node::unify(Router::Node* const& root, Router::Node* const path, std::map<std::string, std::string>& params) {
     if (Router::Node::unifiable(root, path)) {
       if ((root->is_last() && (path->is_last() || root->is_splat())) ||
           (path->is_last())) {
@@ -201,7 +201,7 @@ namespace REST {
     return nullptr;
   }
 
-  void Router::Node::inject(Router::Node* const& rhs, params_map& params) {
+  void Router::Node::inject(Router::Node* const& rhs, std::map<std::string, std::string>& params) {
     if (path[0] == ':') {
       params[path.substr(1)] = Utils::uri_decode(rhs->path);
     } else

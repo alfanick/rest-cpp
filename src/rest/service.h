@@ -11,8 +11,6 @@
 
 namespace REST {
 
-typedef std::map<std::string, std::string> params_map;
-
 class Worker;
 
 /**

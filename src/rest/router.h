@@ -28,12 +28,12 @@ class Router {
         Node(std::string p, Node* const& pr);
         ~Node();
 
-        Node* unify(Node* const& root, std::string const& path, params_map& params);
-        Node* unify(Node* const& root, Node* const path, params_map& params);
+        Node* unify(Node* const& root, std::string const& path, std::map<std::string, std::string>& params);
+        Node* unify(Node* const& root, Node* const path, std::map<std::string, std::string>& params);
         bool merge(Node* const path);
         static Node* from_path(std::string const& path);
 
-        void inject(Node* const& rhs, params_map& params);
+        void inject(Node* const& rhs, std::map<std::string, std::string>& params);
 
         void add_service(std::shared_ptr<LambdaService> srv) {
           service.clear();
@@ -118,7 +118,7 @@ class Router {
     static std::shared_ptr<Service> getResource(std::shared_ptr<Request>, int);
     void route(std::string const &, LambdaService::function);
 
-    static Node* match(std::string const&, params_map&);
+    static Node* match(std::string const&, std::map<std::string, std::string>&);
 
     template <class R>
     void resource(std::string const& path) {
