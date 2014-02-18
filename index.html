@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>rest-cpp by alfanick</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>rest-cpp</h1>
+          <h2>REST-like framework and server for blazing fast web applications in C++11.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/alfanick/rest-cpp/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/alfanick/rest-cpp/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/alfanick/rest-cpp" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="rest-cpp" class="anchor" href="#rest-cpp"><span class="octicon octicon-link"></span></a>rest-cpp</h1>
+
+<p>REST-like framework and server for blazing fast web applications in
+C++11.</p>
+
+<h2>
+<a name="quick-start" class="anchor" href="#quick-start"><span class="octicon octicon-link"></span></a>Quick start</h2>
+
+<pre><code>$ rest-cpp new blog
+$ cd blog
+$ rest-cpp server
+</code></pre>
+
+<p>Navigate your browser to <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a> now.</p>
+
+<h2>
+<a name="building" class="anchor" href="#building"><span class="octicon octicon-link"></span></a>Building</h2>
+
+<p>On OS X Commanand Line Tools are required; on Linux gcc-4.8 or newer is
+required. Not tested on other platforms.</p>
+
+<h3>
+<a name="library" class="anchor" href="#library"><span class="octicon octicon-link"></span></a>Library</h3>
+
+<p>Build library using <code>make</code> on root directory.</p>
+
+<h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Run <code>make install</code> on project folder - it will build the library and
+copy headers, shared library and generator to <code>/usr/local</code>.</p>
+
+<h3>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<p>After bulding the <a href="#library">Library</a>, go to <code>example/todo_server</code> and use <code>make</code>. </p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>You may build your own apps from scratch, but you can just <code>#include &lt;rest/rest.h&gt;</code>
+and use simplified workflow. To make it even easier, you can use <code>rest-cpp</code> utility
+to do some work for you.</p>
+
+<h3>
+<a name="rest-cpp-utility" class="anchor" href="#rest-cpp-utility"><span class="octicon octicon-link"></span></a>rest-cpp utility</h3>
+
+<p><code>rest-cpp</code> allows you to create and manage app.
+It is installed to <code>/usr/local/bin</code> and requires Python in version at
+least 2.5 (which probably you have already installed).</p>
+
+<h4>
+<a name="new-application" class="anchor" href="#new-application"><span class="octicon octicon-link"></span></a>New application</h4>
+
+<p>Use <code>rest-cpp new [directory]</code> to create new application. <code>directory</code>
+isn't required, app will be created in current directory if omitted.</p>
+
+<p>Created are two files:</p>
+
+<ul>
+<li>
+<code>init.cpp</code> with basic "hello world"</li>
+<li>
+<code>Makefile</code> with build commands</li>
+</ul><p>Existing files are skipped, to update file to new version, just remove
+previous one.</p>
+
+<h5>
+<a name="makefile" class="anchor" href="#makefile"><span class="octicon octicon-link"></span></a>Makefile</h5>
+
+<p>Available tasks:</p>
+
+<ul>
+<li>
+<code>make server</code> - default action, build and start server</li>
+<li>
+<code>make build</code> - build server</li>
+</ul><p>Available options:</p>
+
+<ul>
+<li>
+<code>address=ip_or_host</code> - address for server to bind, default: <code>0.0.0.0</code>
+</li>
+<li>
+<code>port=number</code> - port to listen, default: <code>8080</code> (ports lower than 1024 may require superuser privileges)</li>
+<li>
+<code>workers=number</code> - number of workers, default: <code>4</code>
+</li>
+<li>
+<code>dispatcher=lc/rr</code> - workers dispatcher algorithm - <code>lc</code> for <code>LeastConnections</code>, <code>rr</code> for <code>RoundRobin</code>, default: <code>lc</code>
+</li>
+</ul><p>To use options pass them to <code>make</code>, i.e. <code>make server workers=2 port=9000</code>.
+Options are complitation-time, not runtime - this means, to i.e. change
+port, you must pass port to make during building process.</p>
+
+<p><em><code>rest-cpp</code> wraps make, so you can use <code>rest-cpp build</code> and <code>rest-cpp server</code> instead of
+make (you can use the same options as above).</em></p>
+
+<h2>
+<a name="example-1" class="anchor" href="#example-1"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<p>lorem ipsum</p>
+
+<h2>
+<a name="basis-of-operation" class="anchor" href="#basis-of-operation"><span class="octicon octicon-link"></span></a>Basis of operation</h2>
+
+<p>lorem ipsum</p>
+
+<h2>
+<a name="authors" class="anchor" href="#authors"><span class="octicon octicon-link"></span></a>Authors</h2>
+
+<ul>
+<li>Amadeusz Juskowiak - amadeusz[at]me.com</li>
+<li>Błażej Kotowski - kotowski.blazej[at]gmail.com</li>
+</ul><p>Made with love, inspired by put.poznan.pl</p>
+        </section>
+
+        <footer>
+          rest-cpp is maintained by <a href="https://github.com/alfanick">alfanick</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-48179210-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+      </div>
+    </div>
+  </body>
+</html>
