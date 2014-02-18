@@ -65,7 +65,6 @@ $(document).ready(function(){initNavTree('class_r_e_s_t_1_1_resource.html','');}
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="class_r_e_s_t_1_1_resource-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">REST::Resource Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
@@ -76,16 +75,7 @@ $(document).ready(function(){initNavTree('class_r_e_s_t_1_1_resource.html','');}
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_r_e_s_t_1_1_resource__inherit__graph.svg" width="160" height="416"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for REST::Resource:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="class_r_e_s_t_1_1_resource__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_r_e_s_t_1_1_resource__inherit__graph.svg" width="160" height="403"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -110,11 +100,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ensure_session</b> ()
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ensure_authorization</b> (std::string const &amp;realm, std::function&lt; bool(std::string, std::string)&gt; handler)</td></tr>
 <tr class="separator:a5f29b7a17108f09810c7246788597356 inherit pub_methods_class_r_e_s_t_1_1_service"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:ad5ba299f3983108c63e511883af4796a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad5ba299f3983108c63e511883af4796a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>make_action</b> () final</td></tr>
-<tr class="separator:ad5ba299f3983108c63e511883af4796a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_attribs_class_r_e_s_t_1_1_service"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_r_e_s_t_1_1_service')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_r_e_s_t_1_1_service.html">REST::Service</a></td></tr>
+<tr class="memitem:a763579d8e59a0a31325c8eabba1210c1 inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a763579d8e59a0a31325c8eabba1210c1"></a>
+std::shared_ptr&lt; <a class="el" href="class_r_e_s_t_1_1_response.html">Response</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>response</b></td></tr>
+<tr class="separator:a763579d8e59a0a31325c8eabba1210c1 inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa900c6178d3f8dadcd85363048971962 inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa900c6178d3f8dadcd85363048971962"></a>
+std::shared_ptr&lt; <a class="el" href="class_r_e_s_t_1_1_request.html">Request</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>request</b></td></tr>
+<tr class="separator:aa900c6178d3f8dadcd85363048971962 inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_class_r_e_s_t_1_1_service"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_r_e_s_t_1_1_service')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_r_e_s_t_1_1_service.html">REST::Service</a></td></tr>
 <tr class="memitem:a68c9561ea907d21b4a6c204d93e3124b inherit pro_methods_class_r_e_s_t_1_1_service"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68c9561ea907d21b4a6c204d93e3124b"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>before</b> ()</td></tr>
@@ -125,19 +119,6 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>after</b> ()<
 <tr class="memitem:ae003059b999a5e5b824f08593a375b20 inherit pro_methods_class_r_e_s_t_1_1_service"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae003059b999a5e5b824f08593a375b20"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>method</b> (Request::Method method)</td></tr>
 <tr class="separator:ae003059b999a5e5b824f08593a375b20 inherit pro_methods_class_r_e_s_t_1_1_service"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_class_r_e_s_t_1_1_service"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_r_e_s_t_1_1_service')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_r_e_s_t_1_1_service.html">REST::Service</a></td></tr>
-<tr class="memitem:a763579d8e59a0a31325c8eabba1210c1 inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a763579d8e59a0a31325c8eabba1210c1"></a>
-std::shared_ptr&lt; <a class="el" href="class_r_e_s_t_1_1_response.html">Response</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>response</b></td></tr>
-<tr class="separator:a763579d8e59a0a31325c8eabba1210c1 inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa900c6178d3f8dadcd85363048971962 inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa900c6178d3f8dadcd85363048971962"></a>
-std::shared_ptr&lt; <a class="el" href="class_r_e_s_t_1_1_request.html">Request</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>request</b></td></tr>
-<tr class="separator:aa900c6178d3f8dadcd85363048971962 inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36032f4f87eef20431cfde7626b7773f inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36032f4f87eef20431cfde7626b7773f"></a>
-std::shared_ptr&lt; params_map &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>params</b></td></tr>
-<tr class="separator:a36032f4f87eef20431cfde7626b7773f inherit pub_attribs_class_r_e_s_t_1_1_service"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_class_r_e_s_t_1_1_service"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_class_r_e_s_t_1_1_service')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="class_r_e_s_t_1_1_service.html">REST::Service</a></td></tr>
 <tr class="memitem:a3fea34acdf313c897e3f53c4455c416e inherit pro_attribs_class_r_e_s_t_1_1_service"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fea34acdf313c897e3f53c4455c416e"></a>
 std::shared_ptr&lt; <a class="el" href="class_r_e_s_t_1_1_session.html">Session</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>session</b> = nullptr</td></tr>

@@ -73,20 +73,12 @@ $(document).ready(function(){initNavTree('class_r_e_s_t_1_1_router.html','');});
 <div class="title">REST::Router Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for REST::Router:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_r_e_s_t_1_1_router__coll__graph.svg" width="136" height="344"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a32ac617301740e7698fa8b87dd821fd1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32ac617301740e7698fa8b87dd821fd1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>route</b> (std::string const &amp;, service_lambda)</td></tr>
-<tr class="separator:a32ac617301740e7698fa8b87dd821fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac861bf8f0c83fc89e3c4e60fcbfd83d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac861bf8f0c83fc89e3c4e60fcbfd83d1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>route</b> (std::string const &amp;, LambdaService::function)</td></tr>
+<tr class="separator:ac861bf8f0c83fc89e3c4e60fcbfd83d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44edf7386977a64097a91ae6e3e87dbf"><td class="memTemplParams" colspan="2"><a class="anchor" id="a44edf7386977a64097a91ae6e3e87dbf"></a>
 template&lt;class R &gt; </td></tr>
 <tr class="memitem:a44edf7386977a64097a91ae6e3e87dbf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>resource</b> (std::string const &amp;path)</td></tr>
@@ -111,9 +103,9 @@ static <a class="el" href="class_r_e_s_t_1_1_router.html">Router</a> *&#160;</td
 <tr class="memitem:ad1cbbdf2a16199015bac567975eec4c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1cbbdf2a16199015bac567975eec4c1"></a>
 static std::shared_ptr&lt; <a class="el" href="class_r_e_s_t_1_1_service.html">Service</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getResource</b> (std::shared_ptr&lt; <a class="el" href="class_r_e_s_t_1_1_request.html">Request</a> &gt;, int)</td></tr>
 <tr class="separator:ad1cbbdf2a16199015bac567975eec4c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac464797c2bb996e7480e8325fa2d431"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac464797c2bb996e7480e8325fa2d431"></a>
-static Node *&#160;</td><td class="memItemRight" valign="bottom"><b>match</b> (std::string const &amp;, params_map &amp;)</td></tr>
-<tr class="separator:aac464797c2bb996e7480e8325fa2d431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfe7e4037748a897ea120c6570612a2a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abfe7e4037748a897ea120c6570612a2a"></a>
+static Node *&#160;</td><td class="memItemRight" valign="bottom"><b>match</b> (std::string const &amp;, std::map&lt; std::string, std::string &gt; &amp;)</td></tr>
+<tr class="separator:abfe7e4037748a897ea120c6570612a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
