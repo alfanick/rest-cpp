@@ -11,8 +11,6 @@ namespace REST {
     fun = lambda;
   }
 
-  LambdaService::~LambdaService() {}
-
   void LambdaService::make_action() {
     fun(this);
   }

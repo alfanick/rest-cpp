@@ -1,11 +1,8 @@
-#include <rest/service.h>
+#include <rest/resource.h>
 #include <iostream>
 
-class HelloWorldService : public REST::Service {
+class HelloWorldService : public REST::Resource {
   public:
-    HelloWorldService() {
-    }
-
     void before() {
 //      ensure_session();
       response->use_json();

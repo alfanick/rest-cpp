@@ -26,13 +26,6 @@ class Service {
   public:
     Service();
 
-    virtual void before();
-    virtual void after();
-    virtual void create();
-    virtual void update();
-    virtual void destroy();
-    virtual void read();
-    virtual void make_action();
     std::shared_ptr<Response> response;
     std::shared_ptr<Request> request;
     std::shared_ptr<params_map> params;
@@ -42,6 +35,13 @@ class Service {
 
   protected:
     std::shared_ptr<Session> session = nullptr;
+
+    virtual void make_action();
+
+    virtual void before();
+    virtual void after();
+
+    virtual void method(Request::Method method);
 };
 
 }

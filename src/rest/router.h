@@ -55,7 +55,7 @@ class Router {
         void add_service(const T* srv) {
           service.clear();
           service.resize(Router::WORKERS);
-
+          std::cout << "dodaje: " << typeid(T).name() << std::endl;
           for (int i = 0; i < Router::WORKERS; i++)
             service[i] = std::make_shared<T>();
         };

@@ -15,8 +15,8 @@ class LambdaService : public Service {
     LambdaService();
     LambdaService(std::shared_ptr<LambdaService> const& ls);
     LambdaService(service_lambda);
-    ~LambdaService();
-    void make_action();
+  protected:
+    void make_action() final;
   private:
     service_lambda fun;
 };

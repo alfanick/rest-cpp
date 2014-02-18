@@ -25,7 +25,7 @@ create_service(secret) {
 
 namespace Im {
   namespace Kinda {
-    class DynamicResource : public REST::Service {
+    class DynamicResource : public REST::Resource {
       public:
         void read() {
           response->raw = "OMG! C++ is cool!";

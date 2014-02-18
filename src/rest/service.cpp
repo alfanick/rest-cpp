@@ -6,38 +6,16 @@ namespace REST {
 
   void Service::before() {}
   void Service::after() {}
-  void Service::read() {
-    throw HTTP::MethodNotAllowed();
-  }
-  void Service::create() {
-    throw HTTP::MethodNotAllowed();
-  }
-  void Service::update() {
-    throw HTTP::MethodNotAllowed();
-  }
-  void Service::destroy() {
-    throw HTTP::MethodNotAllowed();
+
+  void Service::method(Request::Method method) {
+    throw HTTP::NotImplemented();
   }
 
   void Service::make_action() {
     before();
-    switch (request->method) {
-      case Request::Method::GET:
-        read();
-        break;
-      case Request::Method::POST:
-        create();
-        break;
-      case Request::Method::DELETE:
-        destroy();
-        break;
-      case Request::Method::PATCH:
-      case Request::Method::PUT:
-        update();
-        break;
-      default:
-        throw HTTP::NotImplemented();
-    }
+
+    method(request->method);
+
     after();
   }
 
