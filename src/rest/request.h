@@ -39,7 +39,6 @@ class Request {
   public:
     enum class Method { GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, PATCH, UNDEFINED };
 
-    static size_t BUFFER_SIZE;
 
 
     ~Request();
@@ -76,6 +75,8 @@ class Request {
 
   private:
     Request(int client, struct sockaddr_storage client_addr);
+
+    static size_t BUFFER_SIZE;
 
     static std::shared_ptr<Request> make(int client, struct sockaddr_storage client_addr) {
       std::shared_ptr<Request> instance(new Request(client, client_addr));
