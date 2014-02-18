@@ -19,7 +19,7 @@ namespace REST {
  *
  * @see Dispatcher
  */
-class Worker {
+class Worker final {
 
   public:
     Worker(int id, std::queue< std::shared_ptr<Request> > *requests_queue, std::mutex *requests_empty, std::mutex *requests_lock, size_t *requests_count);
@@ -32,7 +32,6 @@ class Worker {
     void run();
     std::string server_header;
 
-  protected:
     int id;
     std::atomic_bool should_run;
 
