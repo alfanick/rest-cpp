@@ -48,7 +48,6 @@ class Request {
     std::multimap< std::string, std::string > headers;
     std::map< std::string, std::string > parameters;
     std::pair< std::string, std::string > authorization;
-    std::chrono::high_resolution_clock::time_point time;
 
     std::string raw;
     size_t length = 0;
@@ -85,6 +84,7 @@ class Request {
 
     void parse_header(std::string line);
     void parse_query_string(std::string query);
+    std::chrono::high_resolution_clock::time_point time;
 
     int handle;
     struct sockaddr_storage addr;

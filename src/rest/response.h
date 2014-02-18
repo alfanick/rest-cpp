@@ -33,7 +33,6 @@ class Response {
     void authorization(std::string realm);
 
     Json::Value data;
-    std::chrono::high_resolution_clock::time_point start_time;
 
 
   private:
@@ -42,6 +41,8 @@ class Response {
     Response(std::shared_ptr<Request> request);
     Response(std::shared_ptr<Request> request, HTTP::Error &error);
     size_t send();
+
+    std::chrono::high_resolution_clock::time_point start_time;
 
     int handle;
     bool is_json = false;
