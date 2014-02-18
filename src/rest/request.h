@@ -73,8 +73,6 @@ class Request {
     std::shared_ptr<Json::Value> data = nullptr;
     std::shared_ptr<Session> session = nullptr;
 
-    static std::string uri_decode(const std::string& src);
-
   private:
     void parse_header(std::string line);
     void parse_query_string(std::string query);

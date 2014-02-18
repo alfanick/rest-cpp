@@ -34,10 +34,17 @@ namespace Im {
   }
 }
 
+class FooBar : public REST::Service {
+  void method(REST::Request::Method method) {
+    std::cout << "ollol\n";
+  }
+};
+
 void routes(REST::Router* r) {
   r->resource<Im::Kinda::DynamicResource>();
   r->resource<HelloWorldService>("/przywitanie");
 
+  r->resource<FooBar>("/lolo");
   r->route("/", hole);
   r->route("/lol", hole);
   r->route("/sum/:a/:b", adder);

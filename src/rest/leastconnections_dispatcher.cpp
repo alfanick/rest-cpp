@@ -2,7 +2,9 @@
 #include <iostream>
 namespace REST {
 
-int LeastConnectionsDispatcher::next_worker_id() {
+namespace Dispatchers {
+
+int LeastConnections::next_worker_id() {
   best_worker_lock.lock();
 
   best_worker_queue_size = 10000;
@@ -20,6 +22,8 @@ int LeastConnectionsDispatcher::next_worker_id() {
   best_worker_lock.unlock();
 
   return best_worker_id;
+}
+
 }
 
 }

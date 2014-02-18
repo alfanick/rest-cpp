@@ -203,14 +203,14 @@ namespace REST {
 
   void Router::Node::inject(Router::Node* const& rhs, params_map& params) {
     if (path[0] == ':') {
-      params[path.substr(1)] = Request::uri_decode(rhs->path);
+      params[path.substr(1)] = Utils::uri_decode(rhs->path);
     } else
     if (path[0] == '*') {
       int i = 1;
       std::string splat;
       Node* current = rhs;
       while (true) {
-        std::string d = Request::uri_decode(current->path);
+        std::string d = Utils::uri_decode(current->path);
         splat += d;
         params[std::to_string(i++)] = d;
         if (!current->is_last()) {

@@ -6,20 +6,23 @@
 
 namespace REST {
 
+namespace Dispatchers {
+
 /**
  * Selects next not yet used Worker (Round Robin algorithm).
  */
-class RoundRobinDispatcher : public Dispatcher {
+class RoundRobin final : public Dispatcher {
   public:
-    RoundRobinDispatcher(int workers_count) : Dispatcher(workers_count) {};
-
-  protected:
-    int next_worker_id();
+    RoundRobin(int workers_count) : Dispatcher(workers_count) {};
 
   private:
+    int next_worker_id();
+
     int last_worker_id = -1;
     std::mutex last_worker_id_lock;
 };
+
+}
 
 }
 

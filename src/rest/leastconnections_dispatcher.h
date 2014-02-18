@@ -5,22 +5,25 @@
 
 namespace REST {
 
+namespace Dispatchers {
+
 /**
  * Selects next Worker with least connections in its queue.
  */
-class LeastConnectionsDispatcher : public Dispatcher {
+class LeastConnections final : public Dispatcher {
   public:
-    LeastConnectionsDispatcher(int workers_count) : Dispatcher(workers_count) { };
-
-  protected:
-    int next_worker_id();
+    LeastConnections(int workers_count) : Dispatcher(workers_count) { };
 
   private:
+    int next_worker_id();
+
     int best_worker_id = 0;
     unsigned int best_worker_queue_size = 10000;
 
     std::mutex best_worker_lock;
 };
+
+}
 
 }
 

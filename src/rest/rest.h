@@ -17,15 +17,15 @@
 #endif
 
 #ifdef SERVER_DISPATCHER_lc
-#define SERVER_DISPATCHER LeastConnectionsDispatcher
+#define SERVER_DISPATCHER Dispatchers::LeastConnections
 #endif
 
 #ifdef SERVER_DISPATCHER_rr
-#define SERVER_DISPATCHER RoundRobinDispatcher
+#define SERVER_DISPATCHER Dispatchers::RoundRobinDispatcher
 #endif
 
 #ifndef SERVER_DISPATCHER
-#define SERVER_DISPATCHER LeastConnectionsDispatcher
+#define SERVER_DISPATCHER Dispatchers::LeastConnectionsDispatcher
 #endif
 
 #define create_service(NAME) void NAME(REST::Service* service)
