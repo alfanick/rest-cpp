@@ -1,0 +1,3 @@
+<map id="REST::Resource" name="REST::Resource">
+<area shape="rect" id="node2" href="$class_r_e_s_t_1_1_service.html" title="{REST::Service\n|+ response\l+ request\l+ params\l# session\l|+ Service()\l+ ensure_session()\l+ ensure_authorization()\l# make_action()\l# before()\l# after()\l# method()\l}" alt="" coords="4,6,155,212"/>
+</map>

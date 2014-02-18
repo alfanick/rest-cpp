@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node2" href="$class_r_e_s_t_1_1_h_t_t_p_1_1_method_not_allowed.html" title="REST::HTTP::MethodNotAllowed" alt="" coords="179,4,376,31"/>
+<area shape="rect" id="node3" href="$class_r_e_s_t_1_1_h_t_t_p_1_1_not_authorized.html" title="REST::HTTP::NotAuthorized" alt="" coords="191,55,364,81"/>
+<area shape="rect" id="node4" href="$class_r_e_s_t_1_1_h_t_t_p_1_1_not_found.html" title="REST::HTTP::NotFound" alt="" coords="203,105,352,132"/>
+<area shape="rect" id="node5" href="$class_r_e_s_t_1_1_h_t_t_p_1_1_not_implemented.html" title="REST::HTTP::NotImplemented" alt="" coords="185,156,370,183"/>
+</map>
