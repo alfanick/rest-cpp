@@ -2,7 +2,7 @@
 #define REST_CPP_DISPATCHER_ROUNDROBIN_H
 
 #include <mutex>
-#include "dispatcher.h"
+#include "../dispatcher.h"
 
 namespace REST {
 

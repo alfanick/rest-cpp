@@ -1,4 +1,4 @@
-#include "leastconnections_dispatcher.h"
+#include "leastconnections.h"
 #include <iostream>
 namespace REST {
 

@@ -4,7 +4,7 @@ LIBRARY=
 
 .PHONY: clean example librestcpp install docs
 
-CPP_FILES := $(wildcard src/rest/*.cpp)
+CPP_FILES := $(shell find src -type f -name '*.cpp')
 OBJ_FILES := $(addprefix obj/,$(notdir $(CPP_FILES:.cpp=.o)))
 
 default: librestcpp
@@ -27,6 +27,9 @@ lib/librestcpp.so: $(OBJ_FILES)
 	$(CXX) -fPIC -shared -o lib/librestcpp.so $^ 
 
 obj/%.o: src/rest/%.cpp
+	$(CXX) $(INCLUDES) -c -o $@ $<
+
+obj/%.o: src/rest/dispatchers/%.cpp
 	$(CXX) $(INCLUDES) -c -o $@ $<
 
 docs:
