@@ -237,6 +237,8 @@ namespace REST {
       }
 
       size_t next = path.find("/");
+      if (next == 0)
+        continue;
 
       std::string name = path;
 
