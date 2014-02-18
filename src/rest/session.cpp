@@ -2,7 +2,7 @@
 
 namespace REST {
 
-  sessions_map* Session::sessions = new sessions_map;
+  std::map<std::string, std::shared_ptr<Session> >* Session::sessions = new std::map<std::string, std::shared_ptr<Session> >;
 
   // 24 hours
   const int Session::LIFETIME = 86400;
@@ -18,7 +18,7 @@ namespace REST {
   Session::~Session() {
   }
 
-  sessions_map* Session::Sessions() {
+  std::map<std::string, std::shared_ptr<Session> >* Session::Sessions() {
     if(sessions_added > SESSION_CHECK) {
       sessions_added = 0;
       killSessions();
@@ -55,7 +55,7 @@ namespace REST {
   }
 
   void Session::killSessions() {
-    for(sessions_map::iterator iter = sessions->begin(); iter != sessions->end();) {
+    for(auto iter = sessions->begin(); iter != sessions->end();) {
       if(time(0) - iter->second->modified_at > LIFETIME)
         sessions->erase(iter);
       else

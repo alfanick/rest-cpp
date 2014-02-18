@@ -11,9 +11,6 @@ namespace REST {
 
 class Session;
 
-class Worker;
-typedef std::map<std::string, std::shared_ptr<Session> > sessions_map;
-
 /**
  * Session hold data between requests.
  */
@@ -22,7 +19,7 @@ class Session {
   public:
     Session(std::string i);
     ~Session();
-    static sessions_map* Sessions();
+    static std::map< std::string, std::shared_ptr<Session> >* Sessions();
     static std::shared_ptr<Session> getSession(std::string);
 
     std::map<std::string, std::string> data;
@@ -38,7 +35,7 @@ class Session {
     std::string id;
     int created_at;
     int modified_at;
-    static sessions_map* sessions;
+    static std::map< std::string, std::shared_ptr<Session> >* sessions;
 };
 
 }
