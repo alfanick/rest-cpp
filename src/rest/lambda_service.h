@@ -10,6 +10,9 @@ namespace REST {
 
 typedef std::function<void(Service *)> service_lambda;
 
+/**
+ * @private
+ */
 class LambdaService : public Service {
   public:
     LambdaService();
