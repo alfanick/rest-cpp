@@ -45,7 +45,7 @@ class Router {
         }
 
         template <class T>
-        void add_service(const T* srv) {
+        void add_service() {
           service.clear();
           service.resize(Worker::POOL_SIZE);
           for (int i = 0; i < Worker::POOL_SIZE; i++)
@@ -121,14 +121,14 @@ class Router {
     template <class R>
     void resource(std::string const& path) {
       Router::Node* node = Router::Node::from_path(path);
-      node->end()->add_service((R*)(NULL));
+      node->end()->add_service<R>();
       root->merge(node);
     }
 
     template <class R>
     void resources(std::string const& path) {
       Router::Node* node = Router::Node::from_path(path);
-      node->end()->add_service((R*)(NULL));
+      node->end()->add_service<R>();
       root->merge(node);
 
       Router::Node* splat_node = Router::Node::from_path(path == "/" ? "/*" : (path+"/*"));
