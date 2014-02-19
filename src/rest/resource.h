@@ -12,6 +12,7 @@ class Resource : public Service {
     virtual void update();
     virtual void destroy();
 
+    //! \private
     virtual ~Resource() = 0;
 
   private:
