@@ -119,22 +119,33 @@ class Router {
     void match(std::string const &, LambdaService::function);
 
     template <class R>
-    void resource(std::string const& path) {
+    void mount(std::string const& path, bool exact) {
       Router::Node* node = Router::Node::from_path(path);
       node->end()->add_service<R>();
       root->merge(node);
-    }
 
-    template <class R>
-    void resources(std::string const& path) {
-      Router::Node* node = Router::Node::from_path(path);
-      node->end()->add_service<R>();
-      root->merge(node);
+      if (exact)
+        return;
 
       Router::Node* splat_node = Router::Node::from_path(path == "/" ? "/*" : (path+"/*"));
       splat_node->end()->service = node->end()->service;
 
       root->merge(splat_node);
+    }
+
+    template <class R>
+    void mount(std::string const& path) {
+      mount<R>(path, false);
+    }
+
+    template <class R>
+    void resource(std::string const& path) {
+      mount<R>(path, true);
+    }
+
+    template <class R>
+    void resources(std::string const& path) {
+      mount<R>(path);
     }
 
     template <class R, int N>
