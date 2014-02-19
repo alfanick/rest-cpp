@@ -27,8 +27,6 @@ namespace REST {
 class Server {
 
   public:
-    static const int BACKLOG_SIZE = 1000;
-
     Server(std::string address, int port, Dispatcher* d);
     ~Server();
 

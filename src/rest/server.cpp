@@ -45,7 +45,7 @@ void Server::run() {
 
   router()->print();
 
-  status = listen(handle, BACKLOG_SIZE);
+  status = listen(handle, SOMAXCONN);
   if (status == -1)
     throw ServerError();
 
