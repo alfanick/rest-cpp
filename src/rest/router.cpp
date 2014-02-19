@@ -7,7 +7,6 @@
 #include <algorithm>
 
 namespace REST {
-  Router* Router::pInstance = NULL;
   Router::Node* Router::root = new Router::Node();
 
   Router::Router() {
@@ -23,10 +22,8 @@ namespace REST {
   }
 
   Router* Router::instance() {
-    if(pInstance == NULL){
-      pInstance = new Router();
-    }
-    return pInstance;
+    static Router router;
+    return &router;
   }
 
 

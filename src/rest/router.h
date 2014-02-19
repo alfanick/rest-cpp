@@ -220,7 +220,6 @@ class Router {
     }
 
     Router();
-    static Router* pInstance;
 
     static Node* root;
 };
