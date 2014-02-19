@@ -14,15 +14,6 @@
 
 namespace REST {
 
-template <typename RETURN_TYPE, typename STRING_TYPE>
-RETURN_TYPE parse_string(const STRING_TYPE& str) {
-  std::stringstream buf;
-  buf << str;
-  RETURN_TYPE val;
-  buf >> val;
-  return val;
-}
-
 class Worker;
 class Response;
 /**
@@ -58,7 +49,7 @@ class Request {
       if (h == headers.end())
         return default_value;
       else
-        return parse_string<T>(h->second);
+        return Utils::parse_string<T>(h->second);
     }
 
     template <class T>
@@ -66,7 +57,7 @@ class Request {
       if (parameters[key].empty())
         return default_value;
       else
-        return parse_string<T>(parameters[key]);
+        return Utils::parse_string<T>(parameters[key]);
     }
 
     std::shared_ptr<Json::Value> data = nullptr;

@@ -3,9 +3,19 @@
 
 #include <ctime>
 #include <string>
+#include <sstream>
 
 namespace REST {
 namespace Utils {
+
+template <typename R, typename S>
+R parse_string(const S& str) {
+  std::stringstream buf;
+  buf << str;
+  R val;
+  buf >> val;
+  return val;
+}
 
 std::string random_uuid();
 std::string uri_decode(const std::string& src);
