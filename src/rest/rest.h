@@ -37,14 +37,20 @@
 #include "exceptions.h"
 #include "server.h"
 
+/// \file
+
 using namespace REST::HTTP;
 
 void routes(REST::Router*);
 
 namespace REST {
 
+/**
+ * @private
+ */
 REST::Server *server_instance;
 
+//! \private
 void main_stop_server(int a = 0) {
   delete server_instance;
 }
@@ -64,8 +70,10 @@ int main(int argc, char **argv) {
 
 }
 
+#ifndef WITHOUT_MAIN
 int main(int argc, char **argv) {
   return REST::main(argc, argv);
 }
+#endif
 
 #endif
