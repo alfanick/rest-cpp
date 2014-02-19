@@ -54,7 +54,7 @@ void routes(REST::Router* r) {
   r->resources<Im::Kinda::DynamicResource>();
   r->resources<HelloWorldService>("/przywitanie");
 
-  r->resource<FooBar>("/lolo");
+  r->mount<FooBar>("/lolo", true);
   r->match("/", hole);
   r->match("/lol", hole);
   r->match("/sum/:a/:b", adder);
