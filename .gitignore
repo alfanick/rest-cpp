@@ -5,6 +5,7 @@
 
 example/todo_server/todo_server
 
+tmp/*
 docs/*
 !docs/.keep
 !docs/doxygen.conf

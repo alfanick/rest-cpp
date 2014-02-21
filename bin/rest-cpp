@@ -72,14 +72,22 @@ def cmd_new(directory):
 
     print("Done. Have fun!")
 
+def cmd_generate():
+    if len(sys.argv) == 2:
+        print("You need to provide what to generate.")
+        sys.exit(1)
+    pass
+
 def cmd_help():
     print("rest-cpp")
     print("REST-like framework and server for blazing fast web applications in C++11.\n")
     print("Commands")
     print("  - new [directory] - create new project or update files")
-    print("  - build - build binary")
-    print("  - server - build and start server")
+    print("  - (b)uild - build binary")
+    print("  - (s)erver - build and start server")
     print("  - help - show this message")
+
+SHORTCUTS = {'g' : 'generate', 'b' : 'build', 's' : 'server'}
 
 if __name__ == "__main__":
     directory = "."
@@ -88,6 +96,11 @@ if __name__ == "__main__":
         cmd_help()
         sys.exit(1)
     elif len(sys.argv) > 1:
+        for k,v in SHORTCUTS.iteritems():
+            if k == sys.argv[1]:
+                sys.argv[1] = v
+                break
+
         if sys.argv[1] == "new":
             if len(sys.argv) == 3:
                 directory = sys.argv[2]
@@ -99,3 +112,8 @@ if __name__ == "__main__":
             else:
                 print("Not in rest-cpp project directory.")
                 sys.exit(1)
+        elif sys.argv[1] == "generate":
+            cmd_generate()
+        else:
+            cmd_help()
+            sys.exit(1)
