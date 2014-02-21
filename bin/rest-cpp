@@ -73,6 +73,16 @@ def snake(name):
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name.replace('-', '_'))
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
+def save_if_not_exists(where, what, args={}):
+    if not os.path.isfile(where):
+        print("  creating file: %s" % where)
+        content = Template(what).substitute(**args)
+
+        with open(where, "w") as f:
+            f.write(content)
+    else:
+        print("  skipping file: %s" % where)
+
 def cmd_new(directory):
     full_directory = os.path.abspath(directory)
     name = snake(os.path.basename(full_directory))
@@ -85,25 +95,39 @@ def cmd_new(directory):
         print("  creating directory: %s " % directory)
 
     for (filename, content) in FILES_LIST:
-        full_name = os.path.join(full_directory, filename)
+        save_if_not_exists(os.path.join(directory, filename), content, {'name':name})
 
-        if not os.path.isfile(full_name):
-            print("  creating file: %s" % os.path.join(directory, filename))
-            content = Template(content).substitute(name=name)
-
-            with open(full_name, "w") as f:
-                f.write(content)
-        else:
-            print("  skipping file: %s" % os.path.join(directory, filename))
 
     print("Done. Have fun!")
 
+init_file = ''
 ROUTER_VAR = 'r'
+
+def insert(what, after, where, default = "^"):
+    lines = []
+    last_position = 0
+    for line in where.split("\n"):
+        lines.append(line)
+        if re.search(after, line):
+            last_position = len(lines)-1
+        print line.rstrip()
+
+    print lines
+    print lines[last_position]
+
+    indent = re.match('^(\s*)',lines[last_position]).group(1)
+    what = "\n".join(map(lambda _: indent + _, what.split("\n")))
+
+    lines.insert(last_position+1, what)
+
+    return "\n".join(lines)
 
 def new_lambda():
     pass
 
 def new_simple_service():
+    new_file = insert("// nowy simple", re.escape("r->match"), init_file)
+    print(new_file)
     pass
 
 def new_json_simple_service():
@@ -132,6 +156,8 @@ GENERATE_ACTIONS = {
 }
 
 def cmd_generate():
+    global init_file
+
     if not (os.path.isfile("Makefile") and os.path.isfile("init.cpp")):
         print("You must be in rest-cpp project root.")
         sys.exit(1)
@@ -143,6 +169,11 @@ def cmd_generate():
     except:
         print("You need to provide right action (inline/service/resource/resources/simple/json)")
         sys.exit(1)
+
+    with open("init.cpp", "r") as f:
+        init_file = f.read()
+
+    ROUTER_VAR = re.search("void\s+routes\(REST::Router\s*\*\s+(.+?)\)", init_file, re.MULTILINE).group(1)
 
     action()
 
