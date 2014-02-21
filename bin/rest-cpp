@@ -41,6 +41,32 @@ void routes(REST::Router* r) {
 
 """
 
+_inline_cpp = """%router->match("%uri", [](REST::Service* service) {
+  throw REST::HTTP::NotImplemented();
+});"""
+
+_simple_service_cpp = """create_service(%name) {
+  throw REST::HTTP::NotImplemented();
+}"""
+
+_json_simple_service_cpp = """create_json_service(%name) {
+  throw REST::HTTP::NotImplemented();
+}"""
+
+_simple_service_route = '  %router->match("%uri", %name);'
+
+resource_cpp = """class %name : public REST::Resource {
+  void read() {
+    throw REST::HTTP::NotImplemented();
+  }
+}"""
+
+service_cpp = """class %name : public REST::Resource {
+  void method(REST::Request::Method type) {
+    throw REST::HTTP::NotImplemented();
+  }
+}"""
+
 FILES_LIST = (("Makefile", Makefile), ("init.cpp", init_cpp))
 
 def snake(name):
@@ -72,11 +98,53 @@ def cmd_new(directory):
 
     print("Done. Have fun!")
 
+ROUTER_VAR = 'r'
+
+def new_lambda():
+    pass
+
+def new_simple_service():
+    pass
+
+def new_json_simple_service():
+    pass
+
+def new_resource():
+    pass
+
+def new_resources():
+    pass
+
+def new_service():
+    pass
+
+GENERATE_ACTIONS = {
+    'inline' : new_lambda,
+    'i': new_lambda,
+    'service' : new_service,
+    's': new_service,
+    'resource': new_resource,
+    'resources': new_resources,
+    'r': new_resources,
+    'simple': new_simple_service,
+    'json': new_json_simple_service,
+    'j': new_json_simple_service
+}
+
 def cmd_generate():
+    if not (os.path.isfile("Makefile") and os.path.isfile("init.cpp")):
+        print("You must be in rest-cpp project root.")
+        sys.exit(1)
     if len(sys.argv) == 2:
         print("You need to provide what to generate.")
         sys.exit(1)
-    pass
+    try:
+        action = GENERATE_ACTIONS[sys.argv[2]]
+    except:
+        print("You need to provide right action (inline/service/resource/resources/simple/json)")
+        sys.exit(1)
+
+    action()
 
 def cmd_help():
     print("rest-cpp")
