@@ -70,6 +70,24 @@ port, you must pass port to make during building process.
 *`rest-cpp` wraps make, so you can use `rest-cpp build` and `rest-cpp server` instead of
 make (you can use the same options as above).*
 
+#### Generators
+`rest-cpp` has builtin generators for resources and services. They work
+assuming you made your app using `rake-cpp new`, that is you use
+`init.cpp` file.
+
+Resources classes will be stored in `resources` directory, `services`
+for services. Generators *do not check* if route or other symbol
+already exists in `init.cpp`. However, they *do not override* service or resource class file.
+
+##### Inline Service
+
+##### Simple Service
+
+###### Simple JSON Service
+
+##### Service
+
+##### Resource
 
 Example
 -------
