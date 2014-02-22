@@ -61,7 +61,7 @@ class %name : public REST::Resource {
   void read() {
     throw REST::HTTP::NotImplemented();
   }
-}"""
+};"""
 
 service_cpp = """#include <rest/service.h>
 
@@ -69,7 +69,7 @@ class %name : public REST::Service {
   void method(REST::Request::Method type) {
     throw REST::HTTP::NotImplemented();
   }
-}"""
+};"""
 
 FILES_LIST = (("Makefile", Makefile), ("init.cpp", init_cpp))
 
@@ -91,13 +91,19 @@ def project(directory='.', required=False):
 
     return name
 
-def save_if_not_exists(where, what, args={}):
-    if not os.path.isfile(where):
-        print("  creating file: %s" % where)
+def save_template(where, what, args={}, force=False, test=False):
+    if force or not os.path.isfile(where):
+        if not force:
+            print("  creating file: %s" % where)
+        else:
+            print("  saving file: %s" % where)
         content = Template(what).substitute(**args)
 
-        with open(where, "w") as f:
-            f.write(content)
+        if not test:
+            with open(where, "w") as f:
+                f.write(content)
+        else:
+            print(content)
     else:
         print("  skipping file: %s" % where)
 
@@ -113,7 +119,7 @@ def cmd_new(directory):
     mkdir_if_not_exists(directory)
 
     for (filename, content) in FILES_LIST:
-        save_if_not_exists(os.path.join(directory, filename), content, {'name':name})
+        save_template(os.path.join(directory, filename), content, {'name':name})
 
 
     print("Done. Have fun!")
@@ -121,19 +127,24 @@ def cmd_new(directory):
 init_file = ''
 ROUTER_VAR = 'r'
 
-def insert(what, after, where, default = "^"):
+def insert(what, after, where, default_indent = ''):
     lines = []
-    last_position = 0
-    for line in where.split("\n"):
-        lines.append(line)
-        if re.search(after, line):
-            last_position = len(lines)-1
-        print line.rstrip()
+    last_position = -1
+    for regex in after:
+        lines = []
+        for line in where.split("\n"):
+            lines.append(line)
+            if re.search(regex, line):
+                last_position = len(lines)-1
+        if last_position != -1:
+            break
 
-    print lines
-    print lines[last_position]
+    indent = default_indent
 
-    indent = re.match('^(\s*)',lines[last_position]).group(1)
+    new_indent = re.match('^(\s*)',lines[last_position]).group(1)
+
+    if len(new_indent) > 0:
+        indent = new_indent
     what = "\n".join(map(lambda _: indent + _, what.split("\n")))
 
     lines.insert(last_position+1, what)
@@ -141,11 +152,24 @@ def insert(what, after, where, default = "^"):
     return "\n".join(lines)
 
 def new_lambda():
-    pass
+    uri = sys.argv[3]
+
+    new_file = insert(_inline_cpp,
+            [
+                re.escape("});"),
+                re.escape("%s->match"%ROUTER_VAR),
+                re.escape("%s->resource"%ROUTER_VAR),
+                re.escape("%s->mount"%ROUTER_VAR),
+                "void routes"],
+            init_file, default_indent='  ')
+
+    print "  adding inline service: %s" % uri
+
+    save_template("init.cpp", new_file, {'uri': uri, 'router': ROUTER_VAR},force=True)
+
 
 def new_simple_service():
-    new_file = insert("// nowy simple", re.escape("r->match"), init_file)
-    print(new_file)
+    new_file = insert("// nowy simple", [re.escape("r->match")], init_file)
     pass
 
 def new_json_simple_service():
@@ -156,7 +180,7 @@ def new_resource():
 
     classname = camel(sys.argv[3])
     filename = os.path.join("resources", "%s.cpp" % snake(classname))
-    save_if_not_exists(filename, resource_cpp, {'name': classname})
+    save_template(filename, resource_cpp, {'name': classname})
 
 def new_resources():
     new_resource()
@@ -166,7 +190,7 @@ def new_service():
 
     classname = camel(sys.argv[3])
     filename = os.path.join("services", "%s.cpp" % snake(classname))
-    save_if_not_exists(filename, service_cpp, {'name': classname})
+    save_template(filename, service_cpp, {'name': classname})
 
 
 GENERATE_ACTIONS = {
