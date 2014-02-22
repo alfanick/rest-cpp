@@ -53,7 +53,7 @@ _json_simple_service_cpp = """create_json_service(%name) {
   throw REST::HTTP::NotImplemented();
 }"""
 
-_simple_service_route = '  %router->match("%uri", %name);'
+_simple_service_route = '%router->match("%uri", %name);'
 
 resource_cpp = """#include <rest/resource.h>
 
@@ -163,34 +163,140 @@ def new_lambda():
                 "void routes"],
             init_file, default_indent='  ')
 
-    print "  adding inline service: %s" % uri
+    print("  adding inline service")
+    print("    matching to: %s" % uri)
 
     save_template("init.cpp", new_file, {'uri': uri, 'router': ROUTER_VAR},force=True)
 
 
-def new_simple_service():
-    new_file = insert("// nowy simple", [re.escape("r->match")], init_file)
-    pass
+def new_simple_service(json=False):
+    if len(sys.argv) == 4:
+        print("You need to provide both name and URI.")
+        sys.exit(1)
+
+    name = snake(sys.argv[3])
+    uri = sys.argv[4]
+
+    if not json:
+        service_cpp = _simple_service_cpp
+        print("  adding simple service: %s" % name)
+    else:
+        service_cpp = _json_simple_service_cpp
+        print("  adding JSON simple service: %s" % name)
+
+    print("    matching to: %s" % uri)
+
+    new_file = insert("\n"+service_cpp,
+            [
+                re.escape("#include")],
+            init_file)
+
+    new_file = insert(_simple_service_route,
+            [
+                "%s->match\(.*?,[ a-zA-Z_0-9]+\);"%ROUTER_VAR,
+                "void routes"],
+            new_file, default_indent='  ')
+
+    save_template("init.cpp", new_file, {'uri': uri, 'router': ROUTER_VAR,
+        'name': name},force=True)
 
 def new_json_simple_service():
-    pass
+    new_simple_service(json=True)
 
-def new_resource():
+def new_resource(recursive=False):
     mkdir_if_not_exists("resources")
 
     classname = camel(sys.argv[3])
     filename = os.path.join("resources", "%s.cpp" % snake(classname))
+
+    print("  adding resource: %s" % classname)
+
+    sys.stdout.write("  ")
     save_template(filename, resource_cpp, {'name': classname})
 
+    if len(sys.argv) == 5:
+        uri = sys.argv[4].rstrip("/")
+        if len(uri) == 0:
+            uri = "/"
+        if not recursive:
+            route = '%router->resource<%name>("%uri");'
+            print("    matching to: %s" % uri)
+        else:
+            route = '%router->resources<%name>("%uri");'
+            print("    matching to: %s" % uri)
+            if uri == "/":
+                print("    matching to: /*")
+            else:
+                print("    matching to: %s/*" % uri)
+    else:
+        uri = "/" + classname.lower()
+        if not recursive:
+            route = "%router->resource<%name>();"
+            print("    matching to: %s" % uri)
+        else:
+            route = "%router->resources<%name>();"
+            print("    matching to: %s" % uri)
+            print("    matching to: %s/*" % uri)
+
+    new_file = insert("#include \"%s\"" % filename,
+            [
+                re.escape('#include "resources/'),
+                re.escape('#include <rest/rest.h>')
+                ],
+            init_file)
+
+    new_file = insert(route,
+            [
+                "%s->resource"%ROUTER_VAR,
+                "void routes"],
+            new_file, default_indent='  ')
+
+    sys.stdout.write("  ")
+    save_template("init.cpp", new_file,
+            {'uri':uri,'name':classname,'router':ROUTER_VAR},force=True)
+
+
 def new_resources():
-    new_resource()
+    new_resource(recursive=True)
 
 def new_service():
+    if len(sys.argv) == 4:
+        print("You need to provide both name and URI.")
+        sys.exit(1)
+
     mkdir_if_not_exists("services")
 
+    uri = sys.argv[4]
     classname = camel(sys.argv[3])
     filename = os.path.join("services", "%s.cpp" % snake(classname))
+
+    print("  adding service: %s" % classname)
+
+    sys.stdout.write("  ")
     save_template(filename, service_cpp, {'name': classname})
+
+    print("    matching to: %s" % uri)
+    if uri == "/":
+        print("    matching to: /*")
+    else:
+        print("    matching to: %s/*" % uri)
+
+    new_file = insert("#include \"%s\"" % filename,
+            [
+                re.escape('#include "services/'),
+                re.escape('#include <rest/rest.h>')
+                ],
+            init_file)
+
+    new_file = insert('%router->mount<%name>("%uri");',
+            [
+                "%s->mount"%ROUTER_VAR,
+                "void routes"],
+            new_file, default_indent='  ')
+
+    sys.stdout.write("  ")
+    save_template("init.cpp", new_file,
+            {'uri':uri,'name':classname,'router':ROUTER_VAR},force=True)
 
 
 GENERATE_ACTIONS = {
