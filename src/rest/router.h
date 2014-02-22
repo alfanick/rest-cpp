@@ -212,7 +212,7 @@ class Router {
       while (strip < 0) {
         strip++;
 
-        std::cout << path << std::endl;
+        //std::cout << path << std::endl;
         path.erase(path.rfind("/"));
       }
 

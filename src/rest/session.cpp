@@ -22,7 +22,7 @@ namespace REST {
     if(sessions_added > SESSION_CHECK) {
       sessions_added = 0;
       killSessions();
-      std::cout << "cleaning sessions\n";
+      std::cout << "Cleaning sessions\n";
     }
     return sessions;
   }
@@ -36,11 +36,9 @@ namespace REST {
       sessions_added++;
       Sessions()->insert(std::make_pair(id, s));
       sessions_lock.unlock();
-      std::cout << "nowa sesja dla '"<< id <<"'\n";
       return s;
     }
 
-    std::cout << "mam sesje dla '"<<id<<"'\n";
     iter->second->modified_at = time(0);
     sessions_lock.unlock();
     return iter->second;

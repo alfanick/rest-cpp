@@ -44,7 +44,7 @@ void Worker::run() {
       response->headers["Server"] = server_header;
 
       try {
-        std::cout << "path: " << request-> path << std::endl;
+        std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
 
         make_action(request, response);
 
@@ -58,12 +58,9 @@ void Worker::run() {
 
       if ((*requests_count) > 0)
         (*requests_count)--;
-
-      std::cout << request->handle << " is my handle\n";
-      std::cout << id << ": got request\n";
     }
 
-    std::cout << "stopped worker" << id << std::endl;
+    std::cout << "Stopped worker #" << id << std::endl;
   });
 }
 
@@ -77,7 +74,6 @@ void Worker::make_action(std::shared_ptr<Request> request, std::shared_ptr<Respo
   service->session = nullptr;
   auto session_header = request->headers.find("Session");
   if (session_header != request->headers.end()) {
-    std::cout << "Session ID to: " << session_header->second << std::endl;
     service->session = Session::getSession(session_header->second);
   }
 
@@ -107,8 +103,6 @@ void Worker::make_action(std::shared_ptr<Request> request, std::shared_ptr<Respo
 void Worker::stop() {
   should_run.store(false);
   thread.join();
-
-  std::cout << "stopping worker " << id << std::endl;
 }
 
 }

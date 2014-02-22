@@ -63,7 +63,7 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
         length += buffer_length;
       }
     }
-    std::cout << "content o "<<content_length<<" == "<<length<<" == " <<raw.size()<<"\n";
+    //std::cout << "content o "<<content_length<<" == "<<length<<" == " <<raw.size()<<"\n";
   }
 
   delete buffer;
@@ -77,7 +77,7 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
       size_t colon = decoded.find(":");
       authorization = std::make_pair(decoded.substr(0, colon), decoded.substr(colon+1));
 
-      std::cout <<"username: '"<<authorization.first<<"' password: '"<<authorization.second<<"'\n";
+      //std::cout <<"username: '"<<authorization.first<<"' password: '"<<authorization.second<<"'\n";
       //auth_header = Utils::base64_decode(auth_header);
     }
   }

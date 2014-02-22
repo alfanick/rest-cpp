@@ -169,7 +169,7 @@ namespace REST {
     delete node;
 
     if (match != nullptr) {
-      std::cout << "matched '"<< path <<"' to '"<<match->uri()<<"'\n";
+      std::cout << "Matched '"<< path <<"' to '"<<match->uri()<<"'\n";
     }
 
     return match;
