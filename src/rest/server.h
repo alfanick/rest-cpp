@@ -39,7 +39,7 @@ class Server {
     bool is_running = true;
 
     struct addrinfo host_info;
-    struct addrinfo *host_info_list;
+    struct addrinfo* host_info_list;
     int handle;
 };
 

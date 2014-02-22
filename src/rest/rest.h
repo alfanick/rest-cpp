@@ -48,7 +48,7 @@ namespace REST {
 /**
  * @private
  */
-REST::Server *server_instance;
+REST::Server* server_instance;
 
 //! \private
 void main_stop_server(int a = 0) {

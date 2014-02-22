@@ -38,9 +38,9 @@ class Worker final {
     std::atomic_bool should_run;
 
     std::queue< std::shared_ptr<Request> > *requests_queue;
-    std::mutex *requests_empty;
-    std::mutex *requests_lock;
-    size_t *requests_count;
+    std::mutex* requests_empty;
+    std::mutex* requests_lock;
+    size_t* requests_count;
 
     std::thread thread;
 };

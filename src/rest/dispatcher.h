@@ -39,9 +39,9 @@ class Dispatcher {
     int workers_count;
     std::vector< std::shared_ptr<Worker> > workers;
     std::vector< std::queue< std::shared_ptr<Request> > > requests;
-    size_t *requests_count;
-    std::mutex *requests_empty;
-    std::mutex *requests_lock;
+    size_t* requests_count;
+    std::mutex* requests_empty;
+    std::mutex* requests_lock;
 };
 
 }
