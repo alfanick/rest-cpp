@@ -122,7 +122,7 @@ default. Instead of `create_service`, `create_json_service` is used.
 ##### Service
 Generates full featured Service class - use `rest-cpp generate service NAME [PATH]`.
 You may do anything you want in Service - every HTTP method is allowed.
-`PATH` is optional, if not given, URI is matched to snakecased `NAME`.
+`PATH` is optional, URI is matched to snakecased `NAME` unless given.
 
 Service class is generated in `services/NAME.cpp` as follows:
 
@@ -144,6 +144,7 @@ r->mount<NAME>("PATH");
 ```
 
 ##### Resource
+lorem ipsum
 
 Example
 -------
