@@ -73,13 +73,22 @@ make (you can use the same options as above).*
 #### Generators
 `rest-cpp` has builtin generators for resources and services. They work
 assuming you made your app using `rake-cpp new`, that is you use
-`init.cpp` file.
+`init.cpp` file. Generators must be run in root directory of the
+project.
 
 Resources classes will be stored in `resources` directory, `services`
 for services. Generators *do not check* if route or other symbol
 already exists in `init.cpp`. However, they *do not override* service or resource class file.
 
 ##### Inline Service
+Inline Service is simple service implemented using C++11 lambda. Use
+`rest-cpp generate inline PATH` to generate one, where `PATH` is URI to
+the new service.
+
+The following code will be added to `routes()` in init.cpp:
+    r->match("PATH", [](REST::Service* service) {
+      throw REST::HTTP::NotImplemented();
+    });
 
 ##### Simple Service
 
