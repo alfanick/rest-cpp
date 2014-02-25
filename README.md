@@ -87,9 +87,11 @@ the new service.
 
 The following code will be added to `routes()` in init.cpp:
 
-    r->match("PATH", [](REST::Service* service) {
-      throw REST::HTTP::NotImplemented();
-    });
+```cpp
+r->match("PATH", [](REST::Service* service) {
+  throw REST::HTTP::NotImplemented();
+});
+```
 
 ##### Simple Service
 Simple Service is implemented as function in `init.cpp` file.
@@ -98,12 +100,14 @@ is name of function implementing service and PATH is the URI.
 
 Two things are added to `init.cpp`:
 
-    create_service(NAME) {
-      throw REST::HTTP::NotImplemented();
-    }
+```cpp
+create_service(NAME) {
+  throw REST::HTTP::NotImplemented();
+}
 
-    // inside routes()
-    r->match("PATH", NAME);
+// inside routes()
+r->match("PATH", NAME);
+```
 
 ###### Simple JSON Service
 This is variation of simple service with JSON response enabled by
@@ -126,6 +130,8 @@ lorem ipsum
 Authors
 -------
 - Amadeusz Juskowiak - amadeusz[at]me.com
+
+### Contributors
 - Błażej Kotowski - kotowski.blazej[at]gmail.com
 
 Made with love, inspired by put.poznan.pl
