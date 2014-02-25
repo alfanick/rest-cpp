@@ -6,9 +6,11 @@ C++11.
 
 Quick start
 -----------
-    $ rest-cpp new blog
-    $ cd blog
-    $ rest-cpp server
+``` sh
+$ rest-cpp new blog
+$ cd blog
+$ rest-cpp server
+```
 
 Navigate your browser to http://127.0.0.1:8080 now.
 
