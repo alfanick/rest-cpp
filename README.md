@@ -86,6 +86,7 @@ Inline Service is simple service implemented using C++11 lambda. Use
 the new service.
 
 The following code will be added to `routes()` in init.cpp:
+
     r->match("PATH", [](REST::Service* service) {
       throw REST::HTTP::NotImplemented();
     });
