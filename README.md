@@ -107,9 +107,7 @@ Two things are added to `init.cpp`:
 
 ###### Simple JSON Service
 This is variation of simple service with JSON response enabled by
-default.
-
-Instead of `create_service`, `create_json_service` is used.
+default. Instead of `create_service`, `create_json_service` is used.
 
 ##### Service
 
