@@ -92,8 +92,24 @@ The following code will be added to `routes()` in init.cpp:
     });
 
 ##### Simple Service
+Simple Service is implemented as function in `init.cpp` file.
+Use `rest-cpp generate simple NAME PATH` to generate one, where `NAME`
+is name of function implementing service and PATH is the URI.
+
+Two things are added to `init.cpp`:
+
+    create_service(NAME) {
+      throw REST::HTTP::NotImplemented();
+    }
+
+    // inside routes()
+    r->match("PATH", NAME);
 
 ###### Simple JSON Service
+This is variation of simple service with JSON response enabled by
+default.
+
+Instead of `create_service`, `create_json_service` is used.
 
 ##### Service
 
