@@ -82,6 +82,10 @@ Resources classes will be stored in `resources` directory, `services`
 for services. Generators *do not check* if route or other symbol
 already exists in `init.cpp`. However, they *do not override* service or resource class file.
 
+You may use both snake_case and CamelCase as names, however, generators
+will always use snake_case for filenames, simple service names and URIs (unless given) and
+CamelCase as Service and Resource classnames.
+
 ##### Inline Service
 Inline Service is simple service implemented using C++11 lambda. Use
 `rest-cpp generate inline PATH` to generate one, where `PATH` is URI to
@@ -116,6 +120,28 @@ This is variation of simple service with JSON response enabled by
 default. Instead of `create_service`, `create_json_service` is used.
 
 ##### Service
+Generates full featured Service class - use `rest-cpp generate service NAME [PATH]`.
+You may do anything you want in Service - every HTTP method is allowed.
+`PATH` is optional, if not given, URI is matched to snakecased `NAME`.
+
+Service class is generated in `services/NAME.cpp` as follows:
+
+```cpp
+#include <rest/service.h>
+
+class NAME : public REST::Service {
+  void method(REST::Request::Method type) {
+    throw REST::HTTP::NotImplemented();
+  }
+};
+```
+
+Following route is added to `init.cpp`:
+
+```cpp
+// inside routes()
+r->mount<NAME>("PATH");
+```
 
 ##### Resource
 
