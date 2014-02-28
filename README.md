@@ -170,7 +170,7 @@ Singular resource match exact URI, plural resource match URI with
 optional splat.
 
 ###### Singular resource
-Use `rest-cpp generate **resource** NAME [PATH]` to generate singular
+Use `rest-cpp generate `**`resource`**` NAME [PATH]` to generate singular
 resource. `PATH` is optional, URI is matched to snakecased `NAME` unless
 given.
 
@@ -183,7 +183,7 @@ r->resource<NAME>();
 ```
 
 ###### Plular resource
-Use `rest-cpp generate **resources** NAME [PATH]` to generate plular
+Use `rest-cpp generate `**`resources`**` NAME [PATH]` to generate plular
 resource. `PATH` is optional, URI is matched to snakecased `NAME` if not
 given.
 
