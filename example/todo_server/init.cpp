@@ -1,79 +1,9 @@
 #include <rest/rest.h>
-
-#include "resources/hello_world_service.cpp"
-
-create_json_service(adder) {
-  int a = service->request->parameter("a", 0);
-  int b = service->request->parameter("b", 0);
-
-  service->response->data["result"] = a+b;
-
-  std::cout << "ok\n";
-}
-
-create_service(hole) {
-  throw MethodNotAllowed();
-}
-
-create_service(secret) {
-  service->ensure_authorization("Some secret", [](std::string username, std::string password) {
-    return username == "root" && password == "spam";
-  });
-
-  service->response->raw = "You are awesome!";
-}
-
-namespace Im {
-  namespace Kinda {
-    class DynamicResource : public REST::Resource {
-      public:
-        void read() {
-          response->raw = "OMG! C++ is cool!";
-        }
-    };
-  }
-}
-
-class FooBar : public REST::Service {
-  void method(REST::Request::Method method) {
-    std::cout << "ollol\n";
-    switch (method) {
-      case REST::Request::Method::GET:
-        std::cout << "GET\n";
-        break;
-      case REST::Request::Method::POST:
-        std::cout << "POST\n";
-        break;
-      default:
-        std::cout << "other\n";
-    }
-  }
-};
+#include "resources/list.cpp"
+#include "resources/task.cpp"
 
 void routes(REST::Router* r) {
-  r->resources<Im::Kinda::DynamicResource>();
-  r->resources<HelloWorldService>("/przywitanie");
-
-  r->mount<FooBar>("/lolo", true);
-  r->match("/", hole);
-  r->match("/lol", hole);
-  r->match("/sum/:a/:b", adder);
-  r->match("/secret", secret);
-
-  r->match("/fibonacci/:fib", [](REST::Service* service) {
-    int num = service->request->parameter("fib", 0);
-    int fib1=1, fib2=1, res=0;
-    if(num ==0 || num == 1 || num == 2)
-      res = 1;
-    else {
-      num -= 2;
-      while(num--) {
-        res = fib1 + fib2;
-        fib1 = fib2;
-        fib2 = res;
-      }
-    }
-    service->response->use_json();
-    service->response->data["result"] = res;
-  });
+  r->resources<List>("/");
+  r->resources<Task>("/:list_id/task");
 }
+

@@ -4,18 +4,19 @@ workers?=4
 dispatcher?=lc
 
 CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2
-INCLUDES=-I../../src
-LIBRARY=-L. -lrestcpp -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
+INCLUDES=
+LIBRARY=-lrestcpp -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
 
 ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
 endif
 
-.PHONY: server run
+.PHONY: server build
 default: server
 
 server: build
-	@DYLD_LIBRARY_PATH=. LD_LIBRARY_PATH=. ./todo_server
+	@DYLD_LIBRARY_PATH=/usr/local/lib LD_LIBRARY_PATH=/usr/local/lib ./todo_server
 
 build:
 	@$(CXX) $(INCLUDES) *.cpp -o todo_server $(LIBRARY)
+
