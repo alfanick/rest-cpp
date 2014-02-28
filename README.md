@@ -158,7 +158,7 @@ Generator creates `resources/NAME.cpp` file:
 ```cpp
 #include <rest/resource.h>
 
-class NAME : public REST::RESOURCE {
+class NAME : public REST::Resource {
   void read() {
     throw REST::HTTP::NotImplemented();
   }
