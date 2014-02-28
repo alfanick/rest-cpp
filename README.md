@@ -150,6 +150,7 @@ actions as follows:
   - `GET - read()`
   - `PATCH or PUT - update()`
   - `DELETE - destroy()`
+
 Resource is specialization of Service, you may override `method()` to
 handle other HTTP method (if you like to break REST pattern).
 
