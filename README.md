@@ -144,7 +144,57 @@ r->mount<NAME>("PATH");
 ```
 
 ##### Resource
-lorem ipsum
+Resource represents RESTable resource. HTTP methods are mapped to CRUD
+actions as follows:
+  - `POST - create()`
+  - `GET - read()`
+  - `PATCH or PUT - update()`
+  - `DELETE - destroy()`
+Resource is specialization of Service, you may override `method()` to
+handle other HTTP method (if you like to break REST pattern).
+
+Generator creates `resources/NAME.cpp` file:
+
+```cpp
+#include <rest/resource.h>
+
+class NAME : public REST::RESOURCE {
+  void read() {
+    throw REST::HTTP::NotImplemented();
+  }
+};
+```
+
+Resources may be singular or plural, depending on route generated.
+Singular resource match exact URI, plural resource match URI with
+optional splat.
+
+###### Singular resource
+Use `rest-cpp generate **resource** NAME [PATH]` to generate singular
+resource. `PATH` is optional, URI is matched to snakecased `NAME` unless
+given.
+
+```cpp
+// inside routes()
+r->resource<NAME>("PATH");
+
+// unless PATH given
+r->resource<NAME>();
+```
+
+###### Plular resource
+Use `rest-cpp generate **resources** NAME [PATH]` to generate plular
+resource. `PATH` is optional, URI is matched to snakecased `NAME` if not
+given.
+
+```cpp
+// inside rotues()
+r->resources<NAME>("PATH");
+
+// unless PATH given
+r->resources<NAME>();
+```
+
 
 Example
 -------
