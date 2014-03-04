@@ -8,36 +8,29 @@
 
 class BaseResource : public REST::Resource {
   void before() {
-    std::cout << "ok\n";
-    response->raw = "foobar";
-
     ensure_authorization("Need to authorize", [this](std::string username, std::string password) {
-      return authorize_or_create(username, password);
+      std::ifstream password_file("./data/" + username + "/.password");
+      bool authorized = false;
+
+      if (password_file.is_open()) {
+        std::string saved_password;
+
+        password_file >> saved_password;
+        password_file.close();
+
+        authorized = (password == saved_password);
+      } else {
+        mkdir(("./data/" + username).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+        std::ofstream new_password_file("./data/" + username + "/.password");
+
+        new_password_file << password;
+        new_password_file.close();
+
+        authorized = true;
+      }
+
+      return authorized;
     });
-  }
-
-  bool authorize_or_create(std::string username, std::string password) {
-    std::ifstream password_file("./data/" + username + "/.password");
-    bool authorized = false;
-
-    if (password_file.is_open()) {
-      std::string saved_password;
-
-      password_file >> saved_password;
-      password_file.close();
-
-      authorized = (password == saved_password);
-    } else {
-      mkdir(("./data/" + username).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-      std::ofstream new_password_file("./data/" + username + "/.password");
-
-      new_password_file << password;
-      new_password_file.close();
-
-      authorized = true;
-    }
-
-    return authorized;
   }
 };
 
