@@ -1,7 +1,8 @@
-#include <rest/resource.h>
+#include "_base.h"
 
-class Task : public REST::Resource {
+class Task : public BaseResource {
   void read() {
-    throw REST::HTTP::NotImplemented();
+    //throw REST::HTTP::NotImplemented();
+    response->raw = "foboar";
   }
 };
