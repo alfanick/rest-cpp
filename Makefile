@@ -2,7 +2,7 @@ CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2 -g
 INCLUDES=
 LIBRARY=
 
-.PHONY: clean example librestcpp install docs
+.PHONY: clean example librestcpp install docs infolib
 
 CPP_FILES := $(shell find src -type f -name '*.cpp')
 OBJ_FILES := $(addprefix obj/,$(notdir $(CPP_FILES:.cpp=.o)))
@@ -43,6 +43,7 @@ docs:
 	@doxygen docs/doxygen.conf
 
 clean:
+	@echo "Cleaning build files"
 	@rm -rf docs/html
 	@rm -f obj/*.o
 
