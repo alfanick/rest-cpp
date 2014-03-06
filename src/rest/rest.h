@@ -21,11 +21,15 @@
 #endif
 
 #ifdef SERVER_DISPATCHER_rr
-#define SERVER_DISPATCHER Dispatchers::RoundRobinDispatcher
+#define SERVER_DISPATCHER Dispatchers::RoundRobin
+#endif
+
+#ifdef SERVER_DISPATCHER_uf
+#define SERVER_DISPATCHER Dispatchers::Uniform
 #endif
 
 #ifndef SERVER_DISPATCHER
-#define SERVER_DISPATCHER Dispatchers::LeastConnectionsDispatcher
+#define SERVER_DISPATCHER Dispatchers::LeastConnections
 #endif
 
 #define create_service(NAME) void NAME(REST::Service* service)

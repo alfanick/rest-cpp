@@ -14,6 +14,7 @@
 #include "exceptions.h"
 #include "dispatchers/roundrobin.h"
 #include "dispatchers/leastconnections.h"
+#include "dispatchers/uniform.h"
 #include "router.h"
 
 namespace REST {
