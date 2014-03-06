@@ -2,6 +2,7 @@
 #define REST_CPP_SERVER_H
 
 #include <string>
+#include <sys/un.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -28,6 +29,7 @@ namespace REST {
 class Server {
 
   public:
+    Server(std::string path, Dispatcher* d);
     Server(std::string address, int port, Dispatcher* d);
     ~Server();
 

@@ -9,10 +9,15 @@ Makefile = """address?=0.0.0.0
 port?=8080
 workers?=4
 dispatcher?=lc
+path?=NONE
 
 CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2
 INCLUDES=
 LIBRARY=-lrestcpp -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
+
+ifneq ($(path),NONE)
+LIBRARY+= -DSERVER_PATH=$(path)
+endif
 
 ifneq ($(shell uname),Darwin)
 CXX=g++ -std=gnu++11 -Wall -pthread -O2

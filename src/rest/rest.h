@@ -62,8 +62,13 @@ void main_stop_server(int a = 0) {
 int main(int argc, char **argv) {
   signal(SIGINT, main_stop_server);
 
+#ifndef SERVER_PATH
   std::cout << "Listening on " << STR(SERVER_BIND) << ":" << SERVER_PORT << ", " << SERVER_WORKERS << " workers, " << STR(SERVER_DISPATCHER) << "\n";
   server_instance = new REST::Server(STR(SERVER_BIND), SERVER_PORT, new REST::SERVER_DISPATCHER(SERVER_WORKERS));
+#else
+  std::cout << "Listening on Unix socket " << STR(SERVER_PATH) << ", " << SERVER_WORKERS << " workers, " << STR(SERVER_DISPATCHER) << "\n";
+  server_instance = new REST::Server(STR(SERVER_PATH), new REST::SERVER_DISPATCHER(SERVER_WORKERS));
+#endif
 
   ::routes(server_instance->router());
 

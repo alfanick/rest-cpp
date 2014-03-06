@@ -6,6 +6,22 @@ Router* Server::router() {
   return Router::instance();
 }
 
+Server::Server(std::string path, Dispatcher* d) : dispatcher(d) {
+  srand(time(0));
+  Router::instance();
+
+  unlink(path.c_str());
+  struct sockaddr_un local;
+  handle = socket(AF_UNIX, SOCK_STREAM, 0);
+  local.sun_family = AF_UNIX;
+  strcpy(local.sun_path, path.c_str());
+
+  int yes = 1;
+  if (bind(handle, (struct sockaddr *)&local, strlen(local.sun_path) + sizeof(local.sun_family) + 1) == -1)
+    throw PortInUseError();
+
+}
+
 Server::Server(std::string address, int port, Dispatcher* d) : dispatcher(d) {
   srand(time(0));
   Router::instance();
@@ -38,6 +54,10 @@ Server::~Server() {
 
   freeaddrinfo(host_info_list);
   close(handle);
+
+#ifdef SERVER_PATH
+  unlink(STR(SERVER_PATH));
+#endif
 }
 
 void Server::run() {
