@@ -12,25 +12,32 @@ default: librestcpp
 example: librestcpp
 	$(MAKE) -C example/todo_server build
 
+infolib:
+	@echo "Building rest-cpp"
+
 ifeq ($(shell uname),Darwin)
-librestcpp: lib/librestcpp.dylib
+librestcpp: infolib | lib/librestcpp.dylib
 else
 CXX=g++ -std=gnu++11 -Wall -pthread -O2
 INCLUDES=-fPIC
-librestcpp: lib/librestcpp.so
+librestcpp: infolib | lib/librestcpp.so
 endif
 
 lib/librestcpp.dylib: $(OBJ_FILES)
-	$(CXX) -dynamiclib -Wl,-install_name,librestcpp.dylib -o lib/librestcpp.dylib $^
+	@echo "  building lib/librestcpp.dylib"
+	@$(CXX) -dynamiclib -Wl,-install_name,librestcpp.dylib -o lib/librestcpp.dylib $^
 
 lib/librestcpp.so: $(OBJ_FILES)
-	$(CXX) -fPIC -shared -o lib/librestcpp.so $^ 
+	@echo "  building lib/librestcpp.so"
+	@$(CXX) -fPIC -shared -o lib/librestcpp.so $^ 
 
 obj/%.o: src/rest/%.cpp
-	$(CXX) $(INCLUDES) -c -o $@ $<
+	@echo "  compiling $<"
+	@$(CXX) $(INCLUDES) -c -o $@ $<
 
 obj/%.o: src/rest/dispatchers/%.cpp
-	$(CXX) $(INCLUDES) -c -o $@ $<
+	@echo "  compiling $<"
+	@$(CXX) $(INCLUDES) -c -o $@ $<
 
 docs:
 	@doxygen docs/doxygen.conf
@@ -40,9 +47,10 @@ clean:
 	@rm -f obj/*.o
 
 install: librestcpp
-	@echo "Installing headers"
+	@echo "Installing rest-cpp"
+	@echo "  copying headers"
 	@rsync -r --exclude="*.cpp" src/ /usr/local/include/
-	@echo "Installing library"
+	@echo "  copying library"
 	@cp -f lib/librestcpp.* /usr/local/lib
-	@echo "Installing generator"
+	@echo "  installing rest-cpp command"
 	@cp -f bin/rest-cpp /usr/local/bin
