@@ -16,7 +16,6 @@ Server::Server(std::string path, Dispatcher* d) : dispatcher(d) {
   local.sun_family = AF_UNIX;
   strcpy(local.sun_path, path.c_str());
 
-  int yes = 1;
   if (bind(handle, (struct sockaddr *)&local, strlen(local.sun_path) + sizeof(local.sun_family) + 1) == -1)
     throw PortInUseError();
 
