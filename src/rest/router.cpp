@@ -16,6 +16,34 @@ namespace REST {
     delete root;
   }
 
+  bool Router::Node::Less::operator()(const Node* a, const Node* b) const {
+    if (a->path[0] == '*')
+      return false;
+    if (b->path[0] == '*')
+      return true;
+
+    if (a->path[0] == ':')
+      if (b->path[0] != ':')
+        return false;
+    if (b->path[0] == ':')
+      if (a->path[0] != ':')
+        return true;
+
+    return a->path < b->path;
+  }
+
+  bool Router::Node::Unifiable::operator()(const Node* a, const Node* b) const {
+    if (a == nullptr || b == nullptr)
+      return false;
+
+    if (b->path.size() > 0 && (b->path[0] == '*' || b->path[0] == ':'))
+      return false;
+    if (a->path.size() > 0 && (a->path[0] == '*' || a->path[0] == ':'))
+      return true;
+
+    return a->path == b->path;
+  }
+
   void Router::print() {
     std::cout << "Available routes:\n";
     root->print(1);
@@ -193,6 +221,8 @@ namespace REST {
         continue;
 
       if ((match = unify(next, path->next(), params)) != nullptr) {
+        if (match->service.empty())
+          continue;
         next->inject(path->next(), params);
         return match;
       }

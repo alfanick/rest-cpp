@@ -8,6 +8,7 @@
 
 class BaseResource : public REST::Resource {
   void before() {
+    response->use_json();
     ensure_authorization("Need to authorize", [this](std::string username, std::string password) {
       std::ifstream password_file("./data/" + username + "/.password");
       bool authorized = false;
@@ -29,9 +30,15 @@ class BaseResource : public REST::Resource {
         authorized = true;
       }
 
+      if (authorized)
+        data_path = "./data/" + username;
+
       return authorized;
     });
   }
+
+  protected:
+    std::string data_path;
 };
 
 #endif
