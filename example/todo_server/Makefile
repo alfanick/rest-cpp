@@ -12,6 +12,9 @@ LIBRARY=-lrestcpp -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKER
 
 ifneq ($(path),NONE)
 LIBRARY+= -DSERVER_PATH=$(path)
+pe=$(shell seq 0 $$(( $(size) - 1 )) )
+else
+pe=$(shell seq $(port) $$(( $(port) + $(size) - 1 )) )
 endif
 
 ifneq ($(shell uname),Darwin)
@@ -24,14 +27,18 @@ default: server
 server: build
 	@DYLD_LIBRARY_PATH=/usr/local/lib LD_LIBRARY_PATH=/usr/local/lib ./todo_server
 
-pe=$(shell seq $(port) $$(( $(port) + $(size) - 1 )) )
 
 pool:
 ifeq ($(size),0)
 	@echo "You need to provide size of the pool (size=n)."
 else
 	@echo "Building server pool: "
-	@$(foreach nport,$(pe),echo "  building $(name).$(nport)"; $(MAKE) build --no-print-directory name="$(name).$(nport)" address=$(address) port=$(nport) workers=$(workers) dispatcher=$(dispatcher) path="$(path)";)
+ifeq ($(path),NONE)
+	@$(foreach nport,$(pe),echo "  building $(name).$(nport)"; $(MAKE) build --no-print-directory name="$(name).$(nport)" address=$(address) port=$(nport) workers=$(workers) dispatcher=$(dispatcher);)
+else
+	@$(foreach nport,$(pe),echo "  building $(name).$(nport)"; $(MAKE) build --no-print-directory name="$(name).$(nport)" workers=$(workers) dispatcher=$(dispatcher) path="$(path).$(nport)";)
+endif
+
 endif
 
 build:
