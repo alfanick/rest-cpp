@@ -1,4 +1,5 @@
 #include "_base.h"
+#include <dirent.h>
 
 class List : public BaseResource {
   /**
@@ -7,7 +8,15 @@ class List : public BaseResource {
   void read() {
     auto& object = response->data["folder"];
     object["owner"] = request->authorization.first;
-    object["splat"] = request->parameter("0", std::string(""));
+
+    auto dir = opendir(data_path.c_str());
+
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != NULL)
+      if (entry->d_name[0] != '.')
+        object["lists"].append(entry->d_name);
+
+    closedir(dir);
   }
   /**
    * Remove todo list
