@@ -3,7 +3,8 @@
 #include "resources/task.cpp"
 
 void routes(REST::Router* r) {
-  r->resources<List>("/");
+  r->resource<List>("/");
+  r->resource<List>("/:list_id");
   r->resources<Task>("/:list_id/task");
 }
 

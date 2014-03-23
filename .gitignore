@@ -3,7 +3,7 @@
 *.lo
 *.o
 
-example/todo_server/todo_server
+example/todo_server/todo_server*
 
 tmp/*
 docs/*
