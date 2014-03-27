@@ -29,7 +29,7 @@ Dispatcher::~Dispatcher() {
   delete[] requests_count;
 }
 
-void Dispatcher::dispatch(int worker_id, std::shared_ptr<Request> request) {
+void Dispatcher::dispatch(int worker_id, Request::shared request) {
   requests_lock[worker_id].lock();
   requests[worker_id].push(request);
   requests_count[worker_id]++;

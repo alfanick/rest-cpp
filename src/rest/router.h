@@ -89,7 +89,7 @@ class Router {
 
   public:
     static Router* instance();
-    static std::shared_ptr<Service> find(std::shared_ptr<Request>, int);
+    static std::shared_ptr<Service> find(Request::shared, int);
 
 
     void match(std::string const &, LambdaService::function);

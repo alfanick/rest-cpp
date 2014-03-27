@@ -30,7 +30,7 @@ class Dispatcher {
     Dispatcher(int workers_count);
     virtual ~Dispatcher();
 
-    void dispatch(int worker_id, std::shared_ptr<Request> request);
+    void dispatch(int worker_id, Request::shared request);
     void next(int client, struct sockaddr_storage client_addr);
 
   protected:
@@ -38,7 +38,7 @@ class Dispatcher {
 
     int workers_count;
     std::vector< std::shared_ptr<Worker> > workers;
-    std::vector< std::queue< std::shared_ptr<Request> > > requests;
+    std::vector< std::queue< Request::shared > > requests;
     size_t* requests_count;
     std::mutex* requests_empty;
     std::mutex* requests_lock;

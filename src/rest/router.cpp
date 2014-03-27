@@ -55,7 +55,7 @@ namespace REST {
   }
 
 
-  std::shared_ptr<Service> Router::find(std::shared_ptr<Request> request, int worker_id) {
+  std::shared_ptr<Service> Router::find(Request::shared request, int worker_id) {
     Node* node = unify(request->path, request->parameters);
 
     if (node == nullptr)

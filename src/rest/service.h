@@ -27,7 +27,7 @@ class Service {
     virtual ~Service() = 0;
 
     std::shared_ptr<Response> response;
-    std::shared_ptr<Request> request;
+    Request::shared request;
     std::shared_ptr<Session> session;
 
     void ensure_session();

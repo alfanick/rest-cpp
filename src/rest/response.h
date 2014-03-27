@@ -38,8 +38,8 @@ class Response {
   private:
     static Json::FastWriter json_writer;
 
-    Response(std::shared_ptr<Request> request);
-    Response(std::shared_ptr<Request> request, HTTP::Error &error);
+    Response(Request::shared request);
+    Response(Request::shared request, HTTP::Error &error);
     size_t send();
 
     std::chrono::high_resolution_clock::time_point start_time;

@@ -8,7 +8,7 @@ namespace REST {
 
 int Worker::POOL_SIZE = 256;
 
-Worker::Worker(int i, std::queue< std::shared_ptr<Request> >* rq, std::mutex* re, std::mutex* rl, size_t* rc) :
+Worker::Worker(int i, std::queue< Request::shared >* rq, std::mutex* re, std::mutex* rl, size_t* rc) :
  id(i), requests_queue(rq), requests_empty(re), requests_lock(rl), requests_count(rc) {
   run();
   server_header = "rest-cpp, worker " + std::to_string(id);
@@ -34,7 +34,7 @@ void Worker::run() {
       }
 
       // get request
-      std::shared_ptr<Request> request = requests_queue->front();
+      Request::shared request = requests_queue->front();
       requests_queue->pop();
 
       // ready
@@ -64,7 +64,7 @@ void Worker::run() {
   });
 }
 
-void Worker::make_action(std::shared_ptr<Request> request, std::shared_ptr<Response> response) {
+void Worker::make_action(Request::shared request, std::shared_ptr<Response> response) {
   std::shared_ptr<Service> service = Router::find(request, id);
 
   if (service == NULL)

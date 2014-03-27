@@ -4,14 +4,14 @@ namespace REST {
 
 Json::FastWriter Response::json_writer;
 
-Response::Response(std::shared_ptr<Request> request) {
+Response::Response(Request::shared request) {
   handle = request->handle;
   start_time = request->time;
   headers["Content-Type"] = "text/plain; charset=utf-8";
   headers["Connection"] = "close";
 }
 
-Response::Response(std::shared_ptr<Request> request, HTTP::Error &error) : Response(request) {
+Response::Response(Request::shared request, HTTP::Error &error) : Response(request) {
   status = error.code();
   status_message = error.what();
   use_json();
