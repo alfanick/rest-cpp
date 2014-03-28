@@ -4,14 +4,15 @@
 #include <functional>
 #include <iostream>
 #include "service.h"
-
+#include "features/authorization.h"
 
 namespace REST {
 
 /**
  * @private
  */
-class LambdaService : public Service {
+class LambdaService : public virtual Service,
+  public Features::Authorization {
   public:
     typedef std::function<void(LambdaService *)> function;
 

@@ -140,6 +140,18 @@ namespace REST {
       } else {
         std::cout << " - service";
       }
+
+      if (service[0]->features.size() > 0) {
+        std::cout << " (";
+        int s = service[0]->features.size();
+
+        for (auto feature : service[0]->features) {
+          std::cout << feature->feature_name();
+          if (--s)
+            std::cout << ", ";
+        }
+        std::cout << ")";
+      }
     }
     std::cout << std::endl;
     for (auto next : children)

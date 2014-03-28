@@ -21,6 +21,7 @@ class Feature;
  */
 class Service {
   friend class Worker;
+  friend class Router;
 
   public:
     Service();

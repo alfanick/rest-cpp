@@ -6,5 +6,8 @@ void routes(REST::Router* r) {
   r->resource<List>("/");
   r->resource<List>("/:list_id");
   r->resources<Task>("/:list_id/task");
+  r->match("/foo", [](REST::Service* s) {
+
+      });
 }
 

@@ -11,6 +11,7 @@ class Feature : public virtual Service {
   public:
     Feature();
 
+    virtual std::string feature_name() const = 0;
     virtual void feature_push();
     virtual void feature_pop();
 };

@@ -9,11 +9,18 @@ namespace Features {
 
 class Authorization : public Feature {
   public:
+    virtual std::string feature_name() const { return "authorization"; }
+
     std::pair< std::string, std::string > authorization;
     void ensure_authorization(std::string const& realm, std::function<bool(std::string, std::string)> handler);
 
     void feature_push();
     void feature_pop();
+};
+
+class Foo : public Feature {
+  public:
+    virtual std::string feature_name() const { return "session"; }
 };
 
 }
