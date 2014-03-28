@@ -30,9 +30,6 @@ class Service {
 
     Response::shared response;
     Request::shared request;
-    std::shared_ptr<Session> session;
-
-    void ensure_session();
 
   protected:
     std::vector< Feature* > features;

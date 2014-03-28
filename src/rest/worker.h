@@ -9,7 +9,6 @@
 #include "exceptions.h"
 #include "response.h"
 #include "request.h"
-#include "session.h"
 
 namespace REST {
 

@@ -18,11 +18,6 @@ class Authorization : public Feature {
     void feature_pop();
 };
 
-class Foo : public Feature {
-  public:
-    virtual std::string feature_name() const { return "session"; }
-};
-
 }
 }
 

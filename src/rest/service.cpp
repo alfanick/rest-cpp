@@ -30,10 +30,4 @@ namespace REST {
       (*feature)->feature_pop();
     }
   }
-
-  void Service::ensure_session() {
-    if (session == nullptr) {
-      session = Session::getSession(Utils::random_uuid());
-    }
-  }
 }

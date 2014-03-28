@@ -70,22 +70,11 @@ void Worker::make_action(Request::shared request, Response::shared response) {
   if (service == NULL)
     throw HTTP::NotFound();
 
-
-  service->session = nullptr;
-  auto session_header = request->headers.find("Session");
-  if (session_header != request->headers.end()) {
-    service->session = Session::getSession(session_header->second);
-  }
-
   service->request = request;
   service->response = response;
 
   service->make_action();
-
-  if (service->session != nullptr) {
-    service->response->headers.insert(std::make_pair("Session", service->session->id));
-  }
- }
+}
 
 void Worker::stop() {
   should_run.store(false);

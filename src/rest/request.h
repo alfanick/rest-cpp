@@ -10,7 +10,6 @@
 #include <sstream>
 #include "utils.h"
 #include "json/json.h"
-#include "session.h"
 
 namespace REST {
 
@@ -61,7 +60,6 @@ class Request {
     }
 
     std::shared_ptr<Json::Value> data = nullptr;
-    std::shared_ptr<Session> session = nullptr;
 
   private:
     Request(int client, struct sockaddr_storage client_addr);

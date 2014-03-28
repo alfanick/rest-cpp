@@ -2,6 +2,29 @@
 
 namespace REST {
 
+namespace Features {
+
+void Session::ensure_session() {
+  if (session == nullptr)
+    session = REST::Session::getSession(Utils::random_uuid());
+}
+
+void Session::feature_push() {
+  session = nullptr;
+  std::cout << "session ok\n";
+  auto session_header = request->headers.find("Session");
+  if (session_header != request->headers.end())
+    session = REST::Session::getSession(session_header->second);
+}
+
+void Session::feature_pop() {
+  if (session != nullptr)
+    response->headers.insert(std::make_pair("Session", session->id));
+  session.reset();
+}
+
+}
+
   std::map<std::string, std::shared_ptr<Session> >* Session::sessions = new std::map<std::string, std::shared_ptr<Session> >;
 
   // 24 hours
