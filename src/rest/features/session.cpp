@@ -11,7 +11,6 @@ void Session::ensure_session() {
 
 void Session::feature_push() {
   session = nullptr;
-  std::cout << "session ok\n";
   auto session_header = request->headers.find("Session");
   if (session_header != request->headers.end())
     session = REST::Session::getSession(session_header->second);
@@ -20,7 +19,6 @@ void Session::feature_push() {
 void Session::feature_pop() {
   if (session != nullptr)
     response->headers.insert(std::make_pair("Session", session->id));
-  session.reset();
 }
 
 }
