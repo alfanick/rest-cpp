@@ -25,7 +25,7 @@ class Worker final {
   public:
     Worker(int id, std::queue< Request::shared >* requests_queue, std::mutex* requests_empty, std::mutex* requests_lock, size_t* requests_count);
 
-    void make_action(Request::shared request, std::shared_ptr<Response> response);
+    void make_action(Request::shared request, Response::shared response);
 
     void stop();
 

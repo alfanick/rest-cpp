@@ -40,7 +40,7 @@ void Worker::run() {
       // ready
       requests_lock->unlock();
 
-      std::shared_ptr<Response> response(new Response(request));
+      Response::shared response(new Response(request));
       response->headers["Server"] = server_header;
 
       try {
@@ -51,7 +51,7 @@ void Worker::run() {
         response->send();
 
       } catch (HTTP::Error &e) {
-        std::unique_ptr<Response> error_response(new Response(request, e));
+        Response::unique error_response(new Response(request, e));
         error_response->headers.insert(response->headers.begin(), response->headers.end());
         error_response->send();
       }
@@ -64,7 +64,7 @@ void Worker::run() {
   });
 }
 
-void Worker::make_action(Request::shared request, std::shared_ptr<Response> response) {
+void Worker::make_action(Request::shared request, Response::shared response) {
   std::shared_ptr<Service> service = Router::find(request, id);
 
   if (service == NULL)

@@ -21,6 +21,8 @@ class Response {
   friend class Worker;
 
   public:
+    typedef std::shared_ptr<Response> shared;
+    typedef std::unique_ptr<Response> unique;
     ~Response();
 
 

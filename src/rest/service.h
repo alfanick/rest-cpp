@@ -26,7 +26,7 @@ class Service {
     //! \private
     virtual ~Service() = 0;
 
-    std::shared_ptr<Response> response;
+    Response::shared response;
     Request::shared request;
     std::shared_ptr<Session> session;
 
