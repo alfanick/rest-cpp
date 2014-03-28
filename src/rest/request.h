@@ -39,7 +39,6 @@ class Request {
     std::string path;
     std::multimap< std::string, std::string > headers;
     std::map< std::string, std::string > parameters;
-    std::pair< std::string, std::string > authorization;
 
     std::string raw;
     size_t length = 0;

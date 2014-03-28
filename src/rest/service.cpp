@@ -1,4 +1,5 @@
 #include "service.h"
+#include "feature.h"
 
 namespace REST {
 
@@ -13,21 +14,26 @@ namespace REST {
   }
 
   void Service::make_action() {
+    for (auto feature : features) {
+      feature->request = request;
+      feature->response = response;
+      feature->feature_push();
+    }
+
     before();
 
     method(request->method);
 
     after();
+
+    for (auto feature = features.rbegin(); feature != features.rend(); ++feature) {
+      (*feature)->feature_pop();
+    }
   }
 
   void Service::ensure_session() {
     if (session == nullptr) {
       session = Session::getSession(Utils::random_uuid());
     }
-  }
-
-  void Service::ensure_authorization(std::string const& realm, std::function<bool(std::string, std::string)> handler) {
-    if (request->authorization.first.empty() || !handler(request->authorization.first, request->authorization.second))
-      response->authorization(realm);
   }
 }

@@ -70,18 +70,6 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
 
   time = std::chrono::high_resolution_clock::now();
 
-  auto auth_header = headers.find("Authorization");
-  if (auth_header != headers.end()) {
-    if (auth_header->second.find("Basic") == 0) {
-      std::string decoded = Utils::base64_decode(auth_header->second.substr(auth_header->second.find(" ")+1));
-      size_t colon = decoded.find(":");
-      authorization = std::make_pair(decoded.substr(0, colon), decoded.substr(colon+1));
-
-      //std::cout <<"username: '"<<authorization.first<<"' password: '"<<authorization.second<<"'\n";
-      //auth_header = Utils::base64_decode(auth_header);
-    }
-  }
-
   // if has some content
   if (!raw.empty()) {
     // try to parse it

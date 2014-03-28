@@ -5,7 +5,7 @@
 
 namespace REST {
 
-class Resource : public Service {
+class Resource : public virtual Service {
   public:
     virtual void create();
     virtual void read();

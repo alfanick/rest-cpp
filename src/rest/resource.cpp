@@ -1,4 +1,5 @@
 #include "resource.h"
+#include "feature.h"
 
 namespace REST {
 
@@ -23,6 +24,12 @@ void Resource::destroy() {
 }
 
 void Resource::make_action() {
+  for (auto feature : features) {
+    feature->request = request;
+    feature->response = response;
+    feature->feature_push();
+  }
+
   before();
   switch (request->method) {
     case Request::Method::POST:
@@ -42,6 +49,10 @@ void Resource::make_action() {
       method(request->method);
   }
   after();
+
+  for (auto feature = features.rbegin(); feature != features.rend(); ++feature) {
+    (*feature)->feature_pop();
+  }
 }
 
 }

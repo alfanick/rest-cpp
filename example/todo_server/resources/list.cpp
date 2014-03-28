@@ -1,13 +1,14 @@
 #include "_base.h"
 #include <dirent.h>
 
+
 class List : public BaseResource {
   /**
    * Send names and ids of todo lists
    */
   void read() {
     auto& object = response->data["folder"];
-    object["owner"] = request->authorization.first;
+    object["owner"] = authorization.first;
 
     auto dir = opendir(data_path.c_str());
 

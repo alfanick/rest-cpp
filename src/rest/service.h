@@ -12,6 +12,7 @@
 namespace REST {
 
 class Worker;
+class Feature;
 
 /**
  * Service provice RESTful stuff to other classes.
@@ -31,9 +32,9 @@ class Service {
     std::shared_ptr<Session> session;
 
     void ensure_session();
-    void ensure_authorization(std::string const& realm, std::function<bool(std::string, std::string)> handler);
 
   protected:
+    std::vector< Feature* > features;
 
     virtual void make_action();
 

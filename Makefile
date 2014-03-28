@@ -39,6 +39,10 @@ obj/%.o: src/rest/dispatchers/%.cpp
 	@echo "  compiling $<"
 	@$(CXX) $(INCLUDES) -c -o $@ $<
 
+obj/%.o: src/rest/features/%.cpp
+	@echo "  compiling $<"
+	@$(CXX) $(INCLUDES) -c -o $@ $<
+
 docs:
 	@doxygen docs/doxygen.conf
 

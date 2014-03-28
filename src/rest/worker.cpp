@@ -80,24 +80,11 @@ void Worker::make_action(Request::shared request, Response::shared response) {
   service->request = request;
   service->response = response;
 
-  /*
-  for (auto middleware : Middleware::stack(id))
-    middleware(service)->before();
-  */
-
-
   service->make_action();
 
   if (service->session != nullptr) {
     service->response->headers.insert(std::make_pair("Session", service->session->id));
   }
-
-  /*
-  for (auto middleware : Middleware::rstack(id))
-    middleware(service)->after();
-  */
-
-
  }
 
 void Worker::stop() {

@@ -2,11 +2,14 @@
 #define _BASE_H
 
 #include <rest/resource.h>
+#include <rest/features/authorization.h>
 #include <fstream>
 #include <sys/types.h>
 #include <sys/stat.h>
 
-class BaseResource : public REST::Resource {
+
+class BaseResource : public REST::Resource,
+  public REST::Features::Authorization {
   void before() {
     response->use_json();
     ensure_authorization("Need to authorize", [this](std::string username, std::string password) {
