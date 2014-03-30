@@ -64,7 +64,7 @@ void Server::run() {
 
   router()->print();
 
-  status = listen(handle, SOMAXCONN);
+  status = listen(handle, 2048);//SOMAXCONN);
   if (status == -1)
     throw ServerError();
 

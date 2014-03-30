@@ -36,9 +36,9 @@ namespace REST {
     if (a == nullptr || b == nullptr)
       return false;
 
-    if (b->path.size() > 0 && (b->path[0] == '*' || b->path[0] == ':'))
+    if (!b->path.empty() && (b->path[0] == '*' || b->path[0] == ':'))
       return false;
-    if (a->path.size() > 0 && (a->path[0] == '*' || a->path[0] == ':'))
+    if (!a->path.empty() && (a->path[0] == '*' || a->path[0] == ':'))
       return true;
 
     return a->path == b->path;

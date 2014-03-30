@@ -67,7 +67,7 @@ void Worker::run() {
 void Worker::make_action(Request::shared request, Response::shared response) {
   std::shared_ptr<Service> service = Router::find(request, id);
 
-  if (service == NULL)
+  if (service == nullptr)
     throw HTTP::NotFound();
 
   service->request = request;

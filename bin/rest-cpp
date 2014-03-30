@@ -89,7 +89,7 @@ class %name : public REST::Resource {
 
 service_cpp = """#include <rest/service.h>
 
-class %name : public REST::Service {
+class %name : public virtual REST::Service {
   void method(REST::Request::Method type) {
     throw REST::HTTP::NotImplemented();
   }

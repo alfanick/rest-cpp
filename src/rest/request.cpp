@@ -66,7 +66,7 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
     //std::cout << "content o "<<content_length<<" == "<<length<<" == " <<raw.size()<<"\n";
   }
 
-  delete buffer;
+  delete [] buffer;
 
   time = std::chrono::high_resolution_clock::now();
 

@@ -20,6 +20,7 @@ class Session : public Feature {
   public:
     virtual std::string feature_name() const { return "session"; }
 
+    // Json::Value &jsession;
     std::shared_ptr<REST::Session> session = nullptr;
     void ensure_session();
 
