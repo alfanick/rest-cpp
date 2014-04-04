@@ -9,6 +9,14 @@
 #include "exceptions.h"
 #include "response.h"
 #include "request.h"
+#include "json/json.h"
+
+#include <pthread.h>
+#ifdef __APPLE__
+#define THREAD_NAME(x) pthread_setname_np((x))
+#else
+#define THREAD_NAME(x) pthread_setname_np(pthread_self(), (x))
+#endif
 
 namespace REST {
 
@@ -30,6 +38,7 @@ class Worker final {
 
     static int POOL_SIZE;
   private:
+    Json::FastWriter json_writer;
     void run();
     std::string server_header;
 

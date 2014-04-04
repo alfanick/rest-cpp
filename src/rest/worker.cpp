@@ -10,14 +10,16 @@ int Worker::POOL_SIZE = 256;
 
 Worker::Worker(int i, std::queue< Request::shared >* rq, std::mutex* re, std::mutex* rl, size_t* rc) :
  id(i), requests_queue(rq), requests_empty(re), requests_lock(rl), requests_count(rc) {
-  run();
+  THREAD_NAME("rest-cpp - main thread");
   server_header = "rest-cpp, worker " + std::to_string(id);
+  run();
 }
 
 void Worker::run() {
   should_run.store(true);
 
   thread = std::thread([this] () {
+    THREAD_NAME(server_header.c_str());
     // while worker is alive
     while (should_run.load()) {
       // wait for new requests
@@ -48,12 +50,12 @@ void Worker::run() {
 
         make_action(request, response);
 
-        response->send();
+        response->send(json_writer);
 
       } catch (HTTP::Error &e) {
         Response::unique error_response(new Response(request, e));
         error_response->headers.insert(response->headers.begin(), response->headers.end());
-        error_response->send();
+        error_response->send(json_writer);
       }
 
       if ((*requests_count) > 0)

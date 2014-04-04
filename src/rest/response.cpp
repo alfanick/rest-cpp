@@ -2,8 +2,6 @@
 
 namespace REST {
 
-Json::FastWriter Response::json_writer;
-
 Response::Response(Request::shared request) {
   handle = request->handle;
   start_time = request->time;
@@ -24,7 +22,7 @@ void Response::use_json() {
   is_json = true;
 }
 
-size_t Response::send() {
+size_t Response::send(Json::FastWriter &json_writer) {
   size_t bytes_sent = 0;
 
   std::string payload = is_json ? json_writer.write(data) : raw;
