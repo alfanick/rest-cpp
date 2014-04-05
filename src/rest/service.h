@@ -5,7 +5,7 @@
 #include <iostream>
 #include <map>
 #include <algorithm>
-#include <list>
+#include <vector>
 #include "request.h"
 #include "response.h"
 #include "exceptions.h"
@@ -33,7 +33,7 @@ class Service {
     Request::shared request;
 
   protected:
-    std::list< Feature* > features;
+    std::vector< Feature* > features;
 
     virtual void make_action() final;
 
