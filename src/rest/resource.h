@@ -16,7 +16,7 @@ class Resource : public virtual Service {
     virtual ~Resource() = 0;
 
   private:
-    void make_action() final;
+    void method(Request::Method method) final;
 };
 
 }

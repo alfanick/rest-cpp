@@ -23,15 +23,8 @@ void Resource::destroy() {
   throw HTTP::MethodNotAllowed();
 }
 
-void Resource::make_action() {
-  for (auto feature : features) {
-    feature->request = request;
-    feature->response = response;
-    feature->feature_push();
-  }
-
-  before();
-  switch (request->method) {
+void Resource::method(Request::Method method) {
+  switch (method) {
     case Request::Method::POST:
       create();
       break;
@@ -46,12 +39,7 @@ void Resource::make_action() {
       destroy();
       break;
     default:
-      method(request->method);
-  }
-  after();
-
-  for (auto feature = features.rbegin(); feature != features.rend(); ++feature) {
-    (*feature)->feature_pop();
+      throw HTTP::MethodNotAllowed();
   }
 }
 
