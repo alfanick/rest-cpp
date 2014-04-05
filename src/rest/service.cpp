@@ -14,10 +14,8 @@ namespace REST {
   }
 
   void Service::make_action() {
-    for (auto feature : features) {
-      feature->request = request;
-      feature->response = response;
-      feature->feature_push();
+    for (auto feature = features.cbegin(); feature != features.cend(); ++feature) {
+      (*feature)->feature_push();
     }
 
     before();
@@ -26,8 +24,8 @@ namespace REST {
 
     after();
 
-    for (auto feature = features.rbegin(); feature != features.rend(); ++feature) {
-      (*feature)->feature_pop();
+    for (auto feature = features.crbegin(); feature != features.crend(); ++feature) {
+        (*feature)->feature_pop();
     }
   }
 }
