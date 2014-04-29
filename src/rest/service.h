@@ -25,6 +25,9 @@ class Service {
   friend class Router;
 
   public:
+    typedef std::unique_ptr<Service> unique;
+    typedef std::shared_ptr<Service> shared;
+
     Service();
     //! \private
     virtual ~Service() = 0;

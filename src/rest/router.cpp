@@ -55,13 +55,13 @@ namespace REST {
   }
 
 
-  std::shared_ptr<Service> Router::find(Request::shared request, int worker_id) {
+  Service::shared Router::find(Request::shared request, int worker_id) {
     Node* node = unify(request->path, request->parameters);
 
     if (node == nullptr)
       return nullptr;
 
-    std::shared_ptr<Service> service = node->find_service(worker_id);
+    Service::shared service = node->find_service(worker_id);
 
     return service;
   }
@@ -82,7 +82,7 @@ namespace REST {
     children.clear();
   }
 
-  std::shared_ptr<Service> Router::Node::find_service(int worker_id) {
+  Service::shared Router::Node::find_service(int worker_id) {
     if (service.empty())
       return nullptr;
     return service[worker_id];

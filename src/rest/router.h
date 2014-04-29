@@ -51,7 +51,7 @@ class Router {
           for (int i = 0; i < Worker::POOL_SIZE; i++)
             service[i] = std::make_shared<T>();
         };
-        std::shared_ptr<Service> find_service(int worker_id);
+        Service::shared find_service(int worker_id);
 
         bool is_root();
         bool is_last();
@@ -84,12 +84,12 @@ class Router {
         Node* parent = nullptr;
         std::set<Node*, Less> children;
 
-        std::vector< std::shared_ptr<Service> > service;
+        std::vector< Service::shared > service;
     };
 
   public:
     static Router* instance();
-    static std::shared_ptr<Service> find(Request::shared, int);
+    static Service::shared find(Request::shared, int);
 
 
     void match(std::string const &, LambdaService::function);
