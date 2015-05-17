@@ -66,11 +66,35 @@ class Router {
 
       public:
         static struct Less {
-          bool operator()(const Node* a, const Node* b) const;
+          bool operator()(const Node* a, const Node* b) const {
+            if (a->path[0] == '*')
+              return false;
+            if (b->path[0] == '*')
+              return true;
+
+            if (a->path[0] == ':')
+              if (b->path[0] != ':')
+                return false;
+            if (b->path[0] == ':')
+              if (a->path[0] != ':')
+                return true;
+
+            return a->path < b->path;
+          }
         } less;
 
         static struct Unifiable {
-          bool operator()(const Node* a, const Node* b) const;
+          bool operator()(const Node* a, const Node* b) const {
+            if (a == nullptr || b == nullptr)
+              return false;
+
+            if (!b->path.empty() && (b->path[0] == '*' || b->path[0] == ':'))
+              return false;
+            if (!a->path.empty() && (a->path[0] == '*' || a->path[0] == ':'))
+              return true;
+
+            return a->path == b->path;
+          }
         } unifiable;
 
         static struct Equal {

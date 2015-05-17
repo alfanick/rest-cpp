@@ -10,7 +10,7 @@ Response::Response(Request::shared request) {
 }
 
 Response::Response(Request::shared request, HTTP::Error &error) : Response(request) {
-  status = error.code();
+  status = (HTTP_STATUS::Code) error.code();
   status_message = error.what();
   use_json();
   data["error"]["code"] = status;
@@ -50,6 +50,11 @@ size_t Response::send(Json::FastWriter &json_writer) {
   close(handle);
 
   return bytes_sent;
+}
+
+void Response::set_status(HTTP_STATUS::Code code) {
+  status = code;
+  status_message = HTTP_STATUS::messages.at(code);
 }
 
 Response::~Response() {

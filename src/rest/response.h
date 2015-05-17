@@ -4,6 +4,7 @@
 #include "exceptions.h"
 #include "request.h"
 #include "json/json.h"
+#include "http.h"
 
 #include <chrono>
 #include <string>
@@ -25,16 +26,13 @@ class Response {
     typedef std::unique_ptr<Response> unique;
     ~Response();
 
-
-    int status = 200;
-    std::string status_message = "OK";
     std::string raw;
     std::map< std::string, std::string > headers;
 
     void use_json();
 
     Json::Value data;
-
+    void set_status(HTTP_STATUS::Code);
 
   private:
     Response(Request::shared request);
@@ -42,6 +40,8 @@ class Response {
     size_t send(Json::FastWriter &json_writer);
 
     std::chrono::high_resolution_clock::time_point start_time;
+    HTTP_STATUS::Code status = HTTP_STATUS::Code::OK;
+    std::string status_message = HTTP_STATUS::messages.at(status);
 
     int handle;
     bool is_json = false;
