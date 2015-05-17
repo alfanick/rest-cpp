@@ -5,7 +5,8 @@
 #include <map>
 
 namespace REST {
-namespace HTTP_STATUS {
+namespace HTTP {
+namespace STATUS {
   enum Code {
     Continue=100,
     SwitchingProtocols=101,
@@ -141,6 +142,7 @@ namespace HTTP_STATUS {
     {(Code) 598, "Network read timeout error"},
     {(Code) 599, "Network connect timeout error"}
   };
+}
 }
 }
 

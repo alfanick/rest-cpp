@@ -32,7 +32,7 @@ class Response {
     void use_json();
 
     Json::Value data;
-    void set_status(HTTP_STATUS::Code);
+    void set_status(HTTP::STATUS::Code);
 
   private:
     Response(Request::shared request);
@@ -40,8 +40,8 @@ class Response {
     size_t send(Json::FastWriter &json_writer);
 
     std::chrono::high_resolution_clock::time_point start_time;
-    HTTP_STATUS::Code status = HTTP_STATUS::Code::OK;
-    std::string status_message = HTTP_STATUS::messages.at(status);
+    HTTP::STATUS::Code status = HTTP::STATUS::Code::OK;
+    std::string status_message = HTTP::STATUS::messages.at(status);
 
     int handle;
     bool is_json = false;
