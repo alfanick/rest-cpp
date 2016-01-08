@@ -64,7 +64,7 @@ class Request {
   private:
     Request(int client, struct sockaddr_storage client_addr);
 
-    static size_t BUFFER_SIZE;
+    const static size_t BUFFER_SIZE;
 
     static Request::shared make(int client, struct sockaddr_storage client_addr) {
       Request::shared instance(new Request(client, client_addr));

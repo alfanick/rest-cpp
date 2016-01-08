@@ -3,15 +3,14 @@
 
 namespace REST {
 
-size_t Request::BUFFER_SIZE = getpagesize();
+const size_t Request::BUFFER_SIZE = 4096;
 
 Request::Request(int client, struct sockaddr_storage client_addr) : handle(client), addr(client_addr) {
   static Json::Reader json_reader;
 
   std::string line;
   bool is_header = true;
-  char* buffer = new char[BUFFER_SIZE];
-
+  char buffer[BUFFER_SIZE];
 
   // receive data from client
   recv(client, buffer, BUFFER_SIZE, 0);
@@ -66,7 +65,7 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
     //std::cout << "content o "<<content_length<<" == "<<length<<" == " <<raw.size()<<"\n";
   }
 
-  delete [] buffer;
+  // delete [] buffer;
 
   time = std::chrono::high_resolution_clock::now();
 
