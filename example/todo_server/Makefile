@@ -6,7 +6,7 @@ path?=NONE
 size?=0
 name?=todo_server
 
-CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2
+CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O3
 INCLUDES=
 LIBRARY=-lrestcpp -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
 

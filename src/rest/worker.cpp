@@ -26,7 +26,10 @@ void Worker::run() {
       std::unique_lock<std::mutex> queue_lock(requests_queue_lock);
 
       // wait for new request
-      requests_queue_ready.wait(queue_lock, [this] { return !requests_queue.empty(); });
+      requests_queue_ready.wait(queue_lock, [this] { return !should_run || !requests_queue.empty(); });
+
+      if (!should_run)
+        break;
 
       // get request
       Request::shared request = requests_queue.front();
@@ -36,7 +39,7 @@ void Worker::run() {
       response->headers["Server"] = server_header;
 
       try {
-        std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
+        // std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
 
         make_action(request, response);
 
@@ -70,6 +73,7 @@ void Worker::make_action(Request::shared request, Response::shared response) {
 
 void Worker::stop() {
   should_run = false;
+  requests_queue_ready.notify_one();
   thread.join();
 }
 
