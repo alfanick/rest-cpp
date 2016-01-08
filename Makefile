@@ -1,4 +1,4 @@
-CXX=/usr/bin/clang++ -Wall -Wextra -Wno-unused-parameter -std=c++11 -stdlib=libc++ -O2 -g
+CXX=/usr/bin/clang++ -Wall -Wextra -Wno-unused-parameter -std=c++11 -stdlib=libc++ -O2
 INCLUDES=
 LIBRARY=
 

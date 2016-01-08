@@ -1,7 +1,7 @@
 address?=0.0.0.0
 port?=8080
-workers?=4
-dispatcher?=lc
+workers?=1
+dispatcher?=rr
 path?=NONE
 size?=0
 name?=todo_server
