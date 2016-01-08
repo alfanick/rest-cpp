@@ -240,6 +240,10 @@ namespace REST {
 
   Router::Node* Router::Node::from_path(std::string const& p) {
     std::string path = ((!p.empty()) && (p[0] != '/')) ? "/" + p : p;
+    size_t position_of_dot = path.find_last_of(".");
+    if (position_of_dot != std::string::npos) {
+      path[position_of_dot] = '/';
+    }
 
     Node* root = new Node();
     Node* current = root;
