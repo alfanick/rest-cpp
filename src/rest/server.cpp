@@ -1,4 +1,5 @@
 #include "server.h"
+#include <csignal>
 
 namespace REST {
 
@@ -8,6 +9,7 @@ Router* Server::router() {
 
 Server::Server(std::string path, Dispatcher* d) : dispatcher(d) {
   srand(time(0));
+  signal(SIGPIPE, SIG_IGN);
   Router::instance();
 
   unlink(path.c_str());
