@@ -46,7 +46,7 @@ void Worker::run() {
       response->headers["Server"] = server_header;
 
       try {
-        std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
+        // std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
 
         make_action(request, response);
 
