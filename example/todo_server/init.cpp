@@ -14,9 +14,9 @@ void routes(REST::Router* r) {
     //
     // s->session->data["counter"] = s->session->data["counter"].asLargestUInt() + 1;
 
-    s->response->raw = "Hello, world!";
-    // s->response->use_json();
-    // s->response->data = s->session->data;
+    // s->response->raw = "Hello, world!";
+    s->response->use_json();
+    s->response->data["counter"] = 0;
   });
 }
 
