@@ -4,39 +4,29 @@ namespace REST {
 
 Dispatcher::Dispatcher(int wc) : workers_count(wc) {
   Worker::POOL_SIZE = workers_count;
-  requests_empty = new std::mutex[workers_count];
-  requests_lock = new std::mutex[workers_count];
   requests_count = new size_t[workers_count];
   workers.resize(workers_count);
-  requests.resize(workers_count);
 
   for (int i = 0; i < workers_count; i++) {
-    requests_empty[i].lock(); // empty by default
-    workers[i] = std::make_shared<Worker>(i, &requests[i], &requests_empty[i], &requests_lock[i], &requests_count[i]);
+    workers[i] = std::make_shared<Worker>(i, &requests_count[i]);
   }
 }
 
 
 Dispatcher::~Dispatcher() {
   for (int i = 0; i < workers_count; i++) {
-    requests_empty[i].try_lock();
-    requests_empty[i].unlock();
     workers[i]->stop();
   }
-
-  delete[] requests_empty;
-  delete[] requests_lock;
-  delete[] requests_count;
 }
 
 void Dispatcher::dispatch(int worker_id, Request::shared request) {
-  requests_lock[worker_id].lock();
-  requests[worker_id].push(request);
-  requests_count[worker_id]++;
-  requests_lock[worker_id].unlock();
+  std::unique_lock<std::mutex> lock(workers[worker_id]->requests_queue_lock);
 
-  requests_empty[worker_id].try_lock();
-  requests_empty[worker_id].unlock();
+  workers[worker_id]->requests_queue.push(request);
+  requests_count[worker_id]++;
+
+  workers[worker_id]->requests_queue_ready.notify_one();
+
 }
 
 void Dispatcher::next(int client, struct sockaddr_storage client_addr) {

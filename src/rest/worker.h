@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <mutex>
+#include <condition_variable>
 #include <thread>
 #include <atomic>
 
@@ -30,24 +31,25 @@ namespace REST {
 class Worker final {
 
   public:
-    Worker(int id, std::queue< Request::shared >* requests_queue, std::mutex* requests_empty, std::mutex* requests_lock, size_t* requests_count);
+    Worker(int id, size_t* requests_count);
 
     void make_action(Request::shared request, Response::shared response);
 
     void stop();
 
     static int POOL_SIZE;
+
+    std::queue<Request::shared> requests_queue;
+    std::mutex requests_queue_lock;
+    std::condition_variable requests_queue_ready;
   private:
     Json::FastWriter json_writer;
     void run();
     std::string server_header;
 
     int id;
-    std::atomic_bool should_run;
+    bool should_run;
 
-    std::queue< Request::shared > *requests_queue;
-    std::mutex* requests_empty;
-    std::mutex* requests_lock;
     size_t* requests_count;
 
     std::thread thread;

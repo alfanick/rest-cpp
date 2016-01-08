@@ -8,45 +8,35 @@ namespace REST {
 
 int Worker::POOL_SIZE = 256;
 
-Worker::Worker(int i, std::queue< Request::shared >* rq, std::mutex* re, std::mutex* rl, size_t* rc) :
- id(i), requests_queue(rq), requests_empty(re), requests_lock(rl), requests_count(rc) {
+Worker::Worker(int i, size_t* rc) :
+ id(i), requests_count(rc) {
   THREAD_NAME("rest-cpp - main thread");
   server_header = "rest-cpp, worker " + std::to_string(id);
   run();
 }
 
 void Worker::run() {
-  should_run.store(true);
+  should_run = true;
 
   thread = std::thread([this] () {
     THREAD_NAME(server_header.c_str());
+
     // while worker is alive
-    while (should_run.load()) {
-      // wait for new requests
-      if (requests_queue->empty())
-        requests_empty->lock();
+    while (should_run) {
+      std::unique_lock<std::mutex> queue_lock(requests_queue_lock);
 
-      // lock requests queue
-      requests_lock->lock();
-
-      // maybe empty even after unlocking, wait some more
-      if (requests_queue->empty()) {
-        requests_lock->unlock();
-        continue;
-      }
+      // wait for new request
+      requests_queue_ready.wait(queue_lock, [this] { return !requests_queue.empty(); });
 
       // get request
-      Request::shared request = requests_queue->front();
-      requests_queue->pop();
-
-      // ready
-      requests_lock->unlock();
+      Request::shared request = requests_queue.front();
+      requests_queue.pop();
 
       Response::shared response(new Response(request));
       response->headers["Server"] = server_header;
 
       try {
-        // std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
+        std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
 
         make_action(request, response);
 
@@ -79,7 +69,7 @@ void Worker::make_action(Request::shared request, Response::shared response) {
 }
 
 void Worker::stop() {
-  should_run.store(false);
+  should_run = false;
   thread.join();
 }
 
