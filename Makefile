@@ -18,7 +18,7 @@ infolib:
 ifeq ($(shell uname),Darwin)
 librestcpp: infolib | lib/librestcpp.dylib
 else
-CXX=g++ -std=gnu++11 -Wall -pthread -O2
+CXX=g++ -std=gnu++11 -Wall -pthread -O3
 INCLUDES=-fPIC
 librestcpp: infolib | lib/librestcpp.so
 endif
