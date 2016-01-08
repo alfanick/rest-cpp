@@ -35,7 +35,7 @@ void Response::stream(std::function<void(int)> streamer) {
   content += "\r\n";
 
   // send every byte
-  ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT);
+  ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 
   // use external streamer on the handle
   streamer(handle);
@@ -70,7 +70,7 @@ size_t Response::send(Json::FastWriter &json_writer) {
   content += payload;
 
   // send every byte
-  bytes_sent = ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT);
+  bytes_sent = ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 
   // close connection with client
   close(handle);
