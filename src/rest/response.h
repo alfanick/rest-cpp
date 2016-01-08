@@ -32,6 +32,7 @@ class Response {
     std::map< std::string, std::string > headers;
 
     void use_json();
+    void stream(std::function<void(int)> streamer);
 
     Json::Value data;
 
@@ -45,6 +46,7 @@ class Response {
 
     int handle;
     bool is_json = false;
+    bool is_streamed = false;
 };
 
 }
