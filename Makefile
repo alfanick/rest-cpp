@@ -1,4 +1,4 @@
-CXX=/usr/bin/clang++ -Wall -Wextra -Wno-unused-parameter -std=c++11 -stdlib=libc++ -Os -march=native
+CXX=/usr/bin/clang++ -Wall -Wextra -Wno-unused-parameter -std=c++11 -stdlib=libc++ -O2 -march=native
 INCLUDES=
 LIBRARY=
 
@@ -18,7 +18,7 @@ infolib:
 ifeq ($(shell uname),Darwin)
 librestcpp: infolib | lib/librestcpp.dylib
 else
-CXX=g++ -std=gnu++11 -Wall -pthread -Os -march=native
+CXX=g++ -std=gnu++11 -Wall -pthread -O2 -march=native
 INCLUDES=-fPIC
 librestcpp: infolib | lib/librestcpp.so
 endif
