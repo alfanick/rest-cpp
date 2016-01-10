@@ -39,14 +39,11 @@ void Response::stream(std::function<void(int)> streamer) {
   // send every byte
   ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 
-  auto thread = std::thread([this, streamer]() {
-    // use external streamer on the handle
-    streamer(handle);
+  // use external streamer on the handle
+  streamer(handle);
 
-    // close connection with client
-    close(handle);
-  });
-
+  // close connection with client
+  close(handle);
 }
 
 size_t Response::send(Json::FastWriter &json_writer) {
