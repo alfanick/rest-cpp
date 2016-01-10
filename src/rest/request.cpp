@@ -47,6 +47,10 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
   if (!is_header) {
     // assume proper content length
     size_t content_length = header("Content-Length", 0);
+
+    if (content_length == 0)
+      content_length = header("Content-length", 0);
+
     raw.reserve(content_length);
 
     if (content_length > 0) {
@@ -73,6 +77,10 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
   if (!raw.empty()) {
     // try to parse it
     auto ct = headers.find("Content-Type");
+
+    if (ct == headers.end())
+      ct = headers.find("Content-type");
+
     if (ct != headers.end()) {
       if (ct->second == "application/x-www-form-urlencoded") {
         parse_query_string(raw);
