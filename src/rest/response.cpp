@@ -13,6 +13,7 @@ Response::Response(Request::shared request, HTTP::Error &error) : Response(reque
   status = error.code();
   status_message = error.what();
   use_json();
+  data["status"] = "error";
   data["error"]["code"] = status;
   data["error"]["message"] = status_message;
 }
