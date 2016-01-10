@@ -79,7 +79,8 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
       } else
       if (ct->second == "application/json" || ct->second == "text/json") {
         data = std::make_shared<Json::Value>();
-        json_reader.parse(raw, *data.get(), false);
+        std::string raw_copy(raw);
+        json_reader.parse(raw_copy, *data.get(), false);
       }
     }
   }
