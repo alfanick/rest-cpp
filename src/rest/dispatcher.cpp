@@ -29,7 +29,7 @@ void Dispatcher::dispatch(int worker_id, Request::client client) {
 
 }
 
-inline void Dispatcher::next(Request::client client) {
+void Dispatcher::next(Request::client client) {
   dispatch(next_worker_id(), client);
 }
 
