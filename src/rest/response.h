@@ -40,7 +40,7 @@ class Response {
   private:
     Response(Request::shared request);
     Response(Request::shared request, HTTP::Error &error);
-    size_t send(Json::FastWriter &json_writer);
+    size_t send();
 
     std::chrono::high_resolution_clock::time_point start_time;
 

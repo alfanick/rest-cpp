@@ -46,13 +46,20 @@ void Response::stream(std::function<void(int)> streamer) {
   close(handle);
 }
 
-size_t Response::send(Json::FastWriter &json_writer) {
+size_t Response::send() {
   if (is_streamed)
     return 0;
 
   size_t bytes_sent = 0;
 
-  std::string payload = is_json ? json_writer.write(data) : raw;
+  std::string payload;
+
+  if (is_json) {
+    Json::FastWriter json_writer;
+    payload = json_writer.write(data);
+  } else {
+    payload = raw;
+  }
 
   // start http
   std::string content = "HTTP/1.1 " + std::to_string(status) + " " + status_message + "\r\n";

@@ -43,7 +43,7 @@ class Worker final {
     std::mutex clients_queue_lock;
     std::condition_variable clients_queue_ready;
   private:
-    Json::FastWriter json_writer;
+    // Json::FastWriter json_writer;
     void run();
     std::string server_header;
 

@@ -47,12 +47,12 @@ void Worker::run() {
 
         make_action(request, response);
 
-        response->send(json_writer);
+        response->send();
 
       } catch (HTTP::Error &e) {
         Response::unique error_response(new Response(request, e));
         error_response->headers.insert(response->headers.begin(), response->headers.end());
-        error_response->send(json_writer);
+        error_response->send();
       }
 
       if ((*clients_count) > 0)
