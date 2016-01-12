@@ -30,13 +30,14 @@ void Worker::run() {
 
       // wait for new request
       clients_queue_ready.wait(queue_lock, [this] { return !should_run || !clients_queue.empty(); });
+      auto client = clients_queue.front();
+      clients_queue.pop();
 
       if (!should_run)
         break;
 
-      // get request
-      Request::shared request = Request::make(clients_queue.front());
-      clients_queue.pop();
+      // make request
+      Request::shared request = Request::make(client);
 
       Response::shared response(new Response(request));
       response->headers["Server"] = server_header;
