@@ -30,8 +30,8 @@ class Dispatcher {
     Dispatcher(int workers_count);
     virtual ~Dispatcher();
 
-    void dispatch(int worker_id, Request::shared request);
-    void next(int client, struct sockaddr_storage client_addr);
+    void dispatch(int worker_id, Request::client client);
+    void next(Request::client client);
 
   protected:
     virtual int next_worker_id() = 0;

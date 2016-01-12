@@ -71,19 +71,19 @@ void Server::run() {
     throw ServerError();
 
   while (is_running) {
-    struct sockaddr_storage client_addr;
-    socklen_t addr_size = sizeof(client_addr);
-    int client = accept(handle, (struct sockaddr *)&client_addr, &addr_size);
+    Request::client client;
+    socklen_t addr_size = sizeof(client.address);
+    client.handle = accept(handle, (struct sockaddr *)&(client.address), &addr_size);
 
     try {
-      if (client == -1)
+      if (client.handle == -1)
         throw ServerError();
 
-      dispatcher->next(client, client_addr);
+      dispatcher->next(client);
     } catch (Exception &e) {
       if (is_running)
         std::cerr << "!!! " << e.what() << std::endl;
-      close(client);
+      close(client.handle);
     }
   }
 }

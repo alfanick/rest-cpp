@@ -19,18 +19,18 @@ Dispatcher::~Dispatcher() {
   }
 }
 
-void Dispatcher::dispatch(int worker_id, Request::shared request) {
+void Dispatcher::dispatch(int worker_id, Request::client client) {
   std::unique_lock<std::mutex> lock(workers[worker_id]->requests_queue_lock);
 
-  workers[worker_id]->requests_queue.push(request);
+  workers[worker_id]->requests_queue.push(Request::make(client));
   requests_count[worker_id]++;
 
   workers[worker_id]->requests_queue_ready.notify_one();
 
 }
 
-void Dispatcher::next(int client, struct sockaddr_storage client_addr) {
-  dispatch(next_worker_id(), Request::make(client, client_addr));
+inline void Dispatcher::next(Request::client client) {
+  dispatch(next_worker_id(), client);
 }
 
 }
