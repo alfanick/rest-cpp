@@ -9,8 +9,8 @@ namespace REST {
 
 int Worker::POOL_SIZE = 256;
 
-Worker::Worker(int i, size_t* rc) :
- id(i), requests_count(rc) {
+Worker::Worker(int i, size_t* cc) :
+ id(i), clients_count(cc) {
   THREAD_NAME("rest-cpp - main thread");
   server_header = "rest-cpp, worker " + std::to_string(id);
   run();
@@ -26,17 +26,17 @@ void Worker::run() {
 
     // while worker is alive
     while (should_run) {
-      std::unique_lock<std::mutex> queue_lock(requests_queue_lock);
+      std::unique_lock<std::mutex> queue_lock(clients_queue_lock);
 
       // wait for new request
-      requests_queue_ready.wait(queue_lock, [this] { return !should_run || !requests_queue.empty(); });
+      clients_queue_ready.wait(queue_lock, [this] { return !should_run || !clients_queue.empty(); });
 
       if (!should_run)
         break;
 
       // get request
-      Request::shared request = requests_queue.front();
-      requests_queue.pop();
+      Request::shared request = Request::make(clients_queue.front());
+      clients_queue.pop();
 
       Response::shared response(new Response(request));
       response->headers["Server"] = server_header;
@@ -54,8 +54,8 @@ void Worker::run() {
         error_response->send(json_writer);
       }
 
-      if ((*requests_count) > 0)
-        (*requests_count)--;
+      if ((*clients_count) > 0)
+        (*clients_count)--;
     }
 
     std::cout << "Stopped worker #" << id << std::endl;
@@ -76,7 +76,7 @@ void Worker::make_action(Request::shared request, Response::shared response) {
 
 void Worker::stop() {
   should_run = false;
-  requests_queue_ready.notify_one();
+  clients_queue_ready.notify_one();
   thread.join();
 }
 

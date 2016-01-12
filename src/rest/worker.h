@@ -31,7 +31,7 @@ namespace REST {
 class Worker final {
 
   public:
-    Worker(int id, size_t* requests_count);
+    Worker(int id, size_t* clients_count);
 
     void make_action(Request::shared request, Response::shared response);
 
@@ -39,9 +39,9 @@ class Worker final {
 
     static int POOL_SIZE;
 
-    std::queue<Request::shared> requests_queue;
-    std::mutex requests_queue_lock;
-    std::condition_variable requests_queue_ready;
+    std::queue<Request::client> clients_queue;
+    std::mutex clients_queue_lock;
+    std::condition_variable clients_queue_ready;
   private:
     Json::FastWriter json_writer;
     void run();
@@ -50,7 +50,7 @@ class Worker final {
     int id;
     bool should_run;
 
-    size_t* requests_count;
+    size_t* clients_count;
 
     std::thread thread;
 };

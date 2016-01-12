@@ -38,7 +38,7 @@ class Dispatcher {
 
     int workers_count;
     std::vector< std::shared_ptr<Worker> > workers;
-    size_t* requests_count;
+    size_t* clients_count;
 };
 
 }
