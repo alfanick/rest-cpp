@@ -63,7 +63,7 @@ class Request {
         return Utils::parse_string<T>(parameters[key]);
     }
 
-    std::shared_ptr<Json::Value> data = nullptr;
+    Json::Value data;
 
   private:
     Request(int client, struct sockaddr_storage client_addr);
