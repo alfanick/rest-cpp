@@ -29,7 +29,7 @@ class Response {
     int status = 200;
     std::string status_message = "OK";
     std::string raw;
-    std::map< std::string, std::string > headers;
+    std::unordered_map< std::string, std::string > headers;
 
     void use_json();
     void stream(std::function<void(int)> streamer);

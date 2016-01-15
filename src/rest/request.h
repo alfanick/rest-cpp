@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <string>
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <sstream>
 #include "utils.h"
 #include "json/json.h"
@@ -40,8 +40,8 @@ class Request {
 
     Method method = Method::UNDEFINED;
     std::string path;
-    std::multimap< std::string, std::string > headers;
-    std::map< std::string, std::string > parameters;
+    std::unordered_multimap< std::string, std::string > headers;
+    std::unordered_map< std::string, std::string > parameters;
 
     std::string raw;
     size_t length = 0;

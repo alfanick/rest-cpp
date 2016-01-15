@@ -29,12 +29,12 @@ class Router {
         Node(std::string p, Node* const& pr);
         ~Node();
 
-        Node* unify(Node* const& root, std::string const& path, std::map<std::string, std::string>& params);
-        Node* unify(Node* const& root, Node* const path, std::map<std::string, std::string>& params);
+        Node* unify(Node* const& root, std::string const& path, std::unordered_map<std::string, std::string>& params);
+        Node* unify(Node* const& root, Node* const path, std::unordered_map<std::string, std::string>& params);
         bool merge(Node* const path);
         static Node* from_path(std::string const& path);
 
-        void inject(Node* const& rhs, std::map<std::string, std::string>& params);
+        void inject(Node* const& rhs, std::unordered_map<std::string, std::string>& params);
 
         void add_service(std::shared_ptr<LambdaService> srv) {
           service.clear();
@@ -173,7 +173,7 @@ class Router {
     ~Router();
 
   private:
-    static Node* unify(std::string const&, std::map<std::string, std::string>&);
+    static Node* unify(std::string const&, std::unordered_map<std::string, std::string>&);
 
     template <class R, int N>
     static std::string to_path() {
