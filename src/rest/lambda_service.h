@@ -5,7 +5,6 @@
 #include <iostream>
 #include "service.h"
 #include "features/authorization.h"
-#include "features/session.h"
 
 namespace REST {
 
@@ -13,7 +12,6 @@ namespace REST {
  * @private
  */
 class LambdaService : public virtual Service,
-  public Features::Session,
   public Features::Authorization {
   public:
     typedef std::function<void(LambdaService *)> function;
