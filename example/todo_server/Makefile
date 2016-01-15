@@ -1,12 +1,12 @@
 address?=0.0.0.0
 port?=8080
-workers?=1
-dispatcher?=rr
+workers?=4
+dispatcher?=lc
 path?=NONE
 size?=0
 name?=todo_server
 
-CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O3
+CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2 -march=native
 INCLUDES=
 LIBRARY=-lrestcpp -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
 
