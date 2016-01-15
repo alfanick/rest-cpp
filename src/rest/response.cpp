@@ -40,7 +40,7 @@ void Response::stream(std::function<void(int)> streamer) {
   ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 
   // low priority - let other threads execute
-  std::this_thread::yield();
+  // std::this_thread::yield();
 
   // use external streamer on the handle
   streamer(handle);
