@@ -36,7 +36,7 @@ class Dispatcher {
   protected:
     virtual int next_worker_id() = 0;
 
-    int workers_count;
+    int workers_count = 0;
     std::vector< std::shared_ptr<Worker> > workers;
     size_t* clients_count;
 };
