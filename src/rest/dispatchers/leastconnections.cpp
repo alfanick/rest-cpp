@@ -5,7 +5,7 @@ namespace REST {
 namespace Dispatchers {
 
 int LeastConnections::next_worker_id() {
-  // std::lock_guard<std::mutex> guard(best_worker_lock);
+  std::lock_guard<std::mutex> guard(best_worker_lock);
 
   // std::cout << "Workers: ";
 
