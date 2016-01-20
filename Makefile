@@ -18,7 +18,7 @@ infolib:
 ifeq ($(shell uname),Darwin)
 librestcpp: infolib | lib/librestcpp.dylib
 else
-CXX=/usr/local/bin/clang++ -std=gnu++11 -Wall -pthread -O2 -march=native
+CXX=/usr/bin/g++ -std=gnu++11 -Wall -pthread -O2 -march=native
 INCLUDES=-fPIC
 librestcpp: infolib | lib/librestcpp.so
 endif
