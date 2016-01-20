@@ -18,7 +18,7 @@ pe=$(shell seq $(port) $$(( $(port) + $(size) - 1 )) )
 endif
 
 ifneq ($(shell uname),Darwin)
-CXX=g++ -std=gnu++11 -Wall -pthread -O2
+CXX=g++-5 -std=gnu++11 -Wall -pthread -O2
 endif
 
 .PHONY: server build pool
