@@ -1,4 +1,4 @@
-CXX=/usr/bin/clang++ -Wall -Wextra -Wno-unused-parameter -std=c++11 -stdlib=libc++ -O2 -march=native -Ofast -flto -march=native -funroll-loops
+CXX=/usr/bin/clang++ -Wall -Wextra -Wno-unused-parameter -std=c++11 -stdlib=libc++ -O2 -march=native -Ofast
 INCLUDES=
 LIBRARY=
 
