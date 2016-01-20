@@ -20,7 +20,7 @@ librestcpp: infolib | lib/librestcpp.dylib
 else
 CXX=/usr/bin/g++-5 -std=gnu++11 -Wall -pthread -O2 -march=native
 INCLUDES=-fPIC
-librestcpp: infolib | lib/librestcpp.so
+librestcpp: infolib | lib/librestcpp.so lib/librestcpp.a
 endif
 
 lib/librestcpp.dylib: $(OBJ_FILES)
@@ -30,6 +30,10 @@ lib/librestcpp.dylib: $(OBJ_FILES)
 lib/librestcpp.so: $(OBJ_FILES)
 	@echo "  building lib/librestcpp.so"
 	@$(CXX) -fPIC -shared -o lib/librestcpp.so $^ 
+
+lib/librestcpp.a: $(OBJ_FILES)
+	@echo "  building lib/librestcpp.a"
+	@ar rcs lib/librestcpp.a $^
 
 obj/%.o: src/rest/%.cpp
 	@echo "  compiling $<"
