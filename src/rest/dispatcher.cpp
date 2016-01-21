@@ -20,11 +20,12 @@ Dispatcher::~Dispatcher() {
 }
 
 void Dispatcher::dispatch(int worker_id, Request::client client) {
-  std::unique_lock<std::mutex> guard(workers[worker_id]->clients_queue_lock);
+  std::unique_lock<std::mutex> lock(workers[worker_id]->clients_queue_lock);
 
   workers[worker_id]->clients_queue.push(client);
   clients_count[worker_id]++;
 
+  lock.unlock();
   workers[worker_id]->clients_queue_ready.notify_one();
 
 }
