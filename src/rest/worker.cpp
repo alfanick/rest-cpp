@@ -55,14 +55,14 @@ void Worker::run() {
         error_response->send();
       }
 
-      if ((*clients_count) > 0)
-        (*clients_count)--;
-
       if (streamers.size() >= streamers_count) {
         for (auto& s : streamers)
           s.join();
         streamers.clear();
       }
+
+      if ((*clients_count) > 0)
+        (*clients_count)--;
     }
 
     std::cout << "Stopped worker #" << id << std::endl;
