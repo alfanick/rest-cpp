@@ -6,6 +6,7 @@
 #include "json/json.h"
 
 #include <chrono>
+#include <thread>
 #include <string>
 #include <map>
 #include <unistd.h>
@@ -38,6 +39,7 @@ class Response {
 
 
   private:
+    std::vector<std::thread> streamers;
     Response(Request::shared request);
     Response(Request::shared request, HTTP::Error &error);
     size_t send();

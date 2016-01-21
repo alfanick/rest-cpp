@@ -43,7 +43,7 @@ void Response::stream(std::function<void(int)> streamer) {
   // low priority - let other threads execute
   // std::this_thread::yield();
 
-  auto t = std::thread([streamer, this]() {
+  streamers.emplace_back([streamer, this] {
     // use external streamer on the handle
     streamer(handle);
 
