@@ -45,7 +45,7 @@ void Response::stream(std::function<void(int)> streamer) {
   // std::this_thread::yield();
 
   int h = handle;
-  streamers->emplace_back([streamer, h] {
+  streamers->emplace_back([streamer, h]() {
     // use external streamer on the handle
     streamer(h);
 
