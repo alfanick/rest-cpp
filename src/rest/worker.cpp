@@ -14,6 +14,7 @@ Worker::Worker(int i, int sc, size_t* cc) :
   THREAD_NAME("rest-cpp - main thread");
   *cc = 0;
   server_header = "rest-cpp, worker " + std::to_string(id);
+  streamers.reserve(sc);
   run();
 }
 
