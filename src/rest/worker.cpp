@@ -32,7 +32,7 @@ void Worker::run() {
         std::unique_lock<std::mutex> queue_lock(clients_queue_lock);
 
         // wait for new request
-        clients_queue_ready.wait(queue_lock, [this] { return !should_run || !clients_queue.empty(); });
+        clients_queue_ready.wait(queue_lock/*, [this] { return !should_run || !clients_queue.empty(); }*/);
         client = clients_queue.front();
         clients_queue.pop();
       }
