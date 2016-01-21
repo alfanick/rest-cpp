@@ -43,12 +43,13 @@ void Response::stream(std::function<void(int)> streamer) {
   // low priority - let other threads execute
   // std::this_thread::yield();
 
-  streamers.emplace_back([streamer, this] {
+  int h = handle;
+  streamers.emplace_back([streamer, h] {
     // use external streamer on the handle
-    streamer(handle);
+    streamer(h);
 
     // close connection with client
-    close(handle);
+    close(h);
   });
 }
 
