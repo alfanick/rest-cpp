@@ -12,6 +12,7 @@ int Worker::POOL_SIZE = 256;
 Worker::Worker(int i, int sc, size_t* cc) :
  id(i), streamers_count(sc), clients_count(cc) {
   THREAD_NAME("rest-cpp - main thread");
+  *cc = 0;
   server_header = "rest-cpp, worker " + std::to_string(id);
   run();
 }
