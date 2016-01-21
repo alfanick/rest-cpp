@@ -51,6 +51,7 @@ void Response::stream(std::function<void(int)> streamer, bool async) {
     streamers->emplace_back([streamer, h]() {
       signal(SIGPIPE, SIG_IGN);
       try {
+        std::this_thread::yield();
         streamer(h);
         close(h);
       } catch (...) {
