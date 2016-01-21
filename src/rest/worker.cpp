@@ -27,12 +27,15 @@ void Worker::run() {
 
     // while worker is alive
     while (should_run) {
-      std::unique_lock<std::mutex> queue_lock(clients_queue_lock);
+      Request::client client;
+      {
+        std::unique_lock<std::mutex> queue_lock(clients_queue_lock);
 
-      // wait for new request
-      clients_queue_ready.wait(queue_lock, [this] { return !should_run || !clients_queue.empty(); });
-      auto client = clients_queue.front();
-      clients_queue.pop();
+        // wait for new request
+        clients_queue_ready.wait(queue_lock, [this] { return !should_run || !clients_queue.empty(); });
+        client = clients_queue.front();
+        clients_queue.pop();
+      }
 
       if (!should_run)
         break;
