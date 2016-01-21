@@ -39,13 +39,13 @@ class Response {
 
 
   private:
-    std::vector<std::thread> streamers;
-    Response(Request::shared request);
+    Response(Request::shared request, std::vector<std::thread>* streamers);
     Response(Request::shared request, HTTP::Error &error);
     size_t send();
 
     std::chrono::high_resolution_clock::time_point start_time;
 
+    std::vector<std::thread>* streamers;
     int handle;
     bool is_json = false;
     bool is_streamed = false;

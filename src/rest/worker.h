@@ -53,6 +53,7 @@ class Worker final {
     size_t* clients_count;
 
     std::thread thread;
+    std::vector<std::thread> streamers;
 };
 
 }

@@ -4,14 +4,15 @@
 
 namespace REST {
 
-Response::Response(Request::shared request) {
+Response::Response(Request::shared request, std::vector<std::thread>* s) {
+  streamers = s;
   handle = request->handle;
   start_time = request->time;
   headers["Content-Type"] = "text/plain; charset=utf-8";
   headers["Connection"] = "close";
 }
 
-Response::Response(Request::shared request, HTTP::Error &error) : Response(request) {
+Response::Response(Request::shared request, HTTP::Error &error) : Response(request, nullptr) {
   status = error.code();
   status_message = error.what();
   use_json();
@@ -44,7 +45,7 @@ void Response::stream(std::function<void(int)> streamer) {
   // std::this_thread::yield();
 
   int h = handle;
-  streamers.emplace_back([streamer, h] {
+  streamers->emplace_back([streamer, h] {
     // use external streamer on the handle
     streamer(h);
 

@@ -39,7 +39,7 @@ void Worker::run() {
       // make request
       Request::shared request = Request::make(client);
 
-      Response::shared response(new Response(request));
+      Response::shared response(new Response(request, &streamers));
       response->headers["Server"] = server_header;
 
       try {
