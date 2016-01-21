@@ -26,7 +26,11 @@ void Response::use_json() {
   is_json = true;
 }
 
-void Response::stream(std::function<void(int)> streamer) {
+void Response::stream_async(std::function<void(int)> streamer) {
+  stream(streamer, true);
+}
+
+void Response::stream(std::function<void(int)> streamer, bool async) {
   is_streamed = true;
 
   std::string content = "HTTP/1.1 " + std::to_string(status) + " " + status_message + "\r\n";
@@ -41,17 +45,17 @@ void Response::stream(std::function<void(int)> streamer) {
   // send every byte
   ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 
-  // low priority - let other threads execute
-  // std::this_thread::yield();
-
-  int h = handle;
-  streamers->emplace_back([streamer, h]() {
-    // use external streamer on the handle
-    streamer(h);
-
-    // close connection with client
-    close(h);
-  });
+  if (async) {
+    int h = handle;
+    streamers->emplace_back([streamer, h]() {
+      streamer(h);
+      close(h);
+    });
+  } else {
+    std::this_thread::yield();
+    streamer(handle);
+    close(handle);
+  }
 }
 
 size_t Response::send() {

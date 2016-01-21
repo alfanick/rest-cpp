@@ -83,6 +83,9 @@ void Worker::make_action(Request::shared request, Response::shared response) {
 
 void Worker::stop() {
   should_run = false;
+  for (auto& s : streamers)
+    s.join();
+  streamers.clear();
   clients_queue_ready.notify_one();
   thread.join();
 }

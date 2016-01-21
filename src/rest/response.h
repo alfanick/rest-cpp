@@ -33,7 +33,8 @@ class Response {
     std::unordered_map< std::string, std::string > headers;
 
     void use_json();
-    void stream(std::function<void(int)> streamer);
+    void stream(std::function<void(int)> streamer, bool async);
+    void stream_async(std::function<void(int)> streamer);
 
     Json::Value data;
 
