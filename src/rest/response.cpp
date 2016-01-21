@@ -1,6 +1,7 @@
 #include "response.h"
 #include <thread>
 #include <future>
+#include <csignal>
 
 namespace REST {
 
@@ -48,8 +49,12 @@ void Response::stream(std::function<void(int)> streamer, bool async) {
   if (async) {
     int h = handle;
     streamers->emplace_back([streamer, h]() {
-      streamer(h);
-      close(h);
+      signal(SIGPIPE, SIG_IGN);
+      try {
+        streamer(h);
+        close(h);
+      } catch (...) {
+      }
     });
   } else {
     std::this_thread::yield();
