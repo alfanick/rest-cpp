@@ -27,7 +27,7 @@ namespace REST {
 class Dispatcher {
 
   public:
-    Dispatcher(int workers_count);
+    Dispatcher(int workers_count, int streamers_count);
     virtual ~Dispatcher();
 
     void dispatch(int worker_id, Request::client client);
@@ -37,6 +37,7 @@ class Dispatcher {
     virtual int next_worker_id() = 0;
 
     int workers_count = 0;
+    int streamers_count = 0;
     std::vector< std::shared_ptr<Worker> > workers;
     size_t* clients_count;
 };

@@ -31,7 +31,7 @@ namespace REST {
 class Worker final {
 
   public:
-    Worker(int id, size_t* clients_count);
+    Worker(int id, int sc, size_t* clients_count);
 
     void make_action(Request::shared request, Response::shared response);
 
@@ -50,6 +50,7 @@ class Worker final {
     int id;
     bool should_run;
 
+    unsigned int streamers_count;
     size_t* clients_count;
 
     std::thread thread;

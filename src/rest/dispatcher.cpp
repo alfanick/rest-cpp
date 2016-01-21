@@ -2,13 +2,13 @@
 
 namespace REST {
 
-Dispatcher::Dispatcher(int wc) : workers_count(wc) {
+Dispatcher::Dispatcher(int wc, int sc) : workers_count(wc), streamers_count(sc) {
   Worker::POOL_SIZE = workers_count;
   clients_count = new size_t[workers_count];
   workers.resize(workers_count);
 
   for (int i = 0; i < workers_count; i++) {
-    workers[i] = std::make_shared<Worker>(i, &clients_count[i]);
+    workers[i] = std::make_shared<Worker>(i, sc, &clients_count[i]);
   }
 }
 

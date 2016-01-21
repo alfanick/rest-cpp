@@ -13,7 +13,7 @@ namespace Dispatchers {
  */
 class Uniform final : public Dispatcher {
   public:
-    Uniform(int workers_count) : Dispatcher(workers_count) {};
+    Uniform(int workers_count, int sc) : Dispatcher(workers_count, sc) {};
 
   private:
     int next_worker_id();

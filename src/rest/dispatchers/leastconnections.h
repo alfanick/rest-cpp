@@ -12,7 +12,7 @@ namespace Dispatchers {
  */
 class LeastConnections final : public Dispatcher {
   public:
-    LeastConnections(int workers_count) : Dispatcher(workers_count) { };
+    LeastConnections(int workers_count, int sc) : Dispatcher(workers_count, sc) { };
 
   private:
     int next_worker_id();

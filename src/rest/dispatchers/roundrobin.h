@@ -13,7 +13,7 @@ namespace Dispatchers {
  */
 class RoundRobin final : public Dispatcher {
   public:
-    RoundRobin(int workers_count) : Dispatcher(workers_count) {};
+    RoundRobin(int workers_count, int sc) : Dispatcher(workers_count, sc) {};
 
   private:
     int next_worker_id();

@@ -16,6 +16,10 @@
 #define SERVER_WORKERS 4
 #endif
 
+#ifndef WORKER_STREAMERS
+#define WORKER_STREAMERS 4
+#endif
+
 #ifdef SERVER_DISPATCHER_lc
 #define SERVER_DISPATCHER Dispatchers::LeastConnections
 #endif
@@ -63,11 +67,11 @@ int main(int argc, char **argv) {
   signal(SIGINT, main_stop_server);
 
 #ifndef SERVER_PATH
-  std::cout << "Listening on " << STR(SERVER_BIND) << ":" << SERVER_PORT << ", " << SERVER_WORKERS << " workers, " << STR(SERVER_DISPATCHER) << "\n";
-  server_instance = new REST::Server(STR(SERVER_BIND), SERVER_PORT, new REST::SERVER_DISPATCHER(SERVER_WORKERS));
+  std::cout << "Listening on " << STR(SERVER_BIND) << ":" << SERVER_PORT << ", " << SERVER_WORKERS << " workers (" << SERVER_WORKERS * WORKER_STREAMERS << "streamers), " << STR(SERVER_DISPATCHER) << "\n";
+  server_instance = new REST::Server(STR(SERVER_BIND), SERVER_PORT, new REST::SERVER_DISPATCHER(SERVER_WORKERS, WORKER_STREAMERS));
 #else
-  std::cout << "Listening on Unix socket " << STR(SERVER_PATH) << ", " << SERVER_WORKERS << " workers, " << STR(SERVER_DISPATCHER) << "\n";
-  server_instance = new REST::Server(STR(SERVER_PATH), new REST::SERVER_DISPATCHER(SERVER_WORKERS));
+  std::cout << "Listening on Unix socket " << STR(SERVER_PATH) << ", " << SERVER_WORKERS << " workers (" << SERVER_WORKERS * WORKER_STREAMERS <<" streamers), " << STR(SERVER_DISPATCHER) << "\n";
+  server_instance = new REST::Server(STR(SERVER_PATH), new REST::SERVER_DISPATCHER(SERVER_WORKERS, WORKER_STREAMERS));
 #endif
 
   ::routes(server_instance->router());
