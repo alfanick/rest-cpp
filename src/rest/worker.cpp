@@ -41,7 +41,7 @@ void Worker::run() {
       Request::shared request = Request::make(client);
 
       Response::shared response(new Response(request, &streamers));
-      response->headers["Server"] = server_header;
+      response->headers["Server"] = server_header + ", waiting " + std::to_string(*clients_count);
 
       try {
         // std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
