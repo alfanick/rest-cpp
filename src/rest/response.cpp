@@ -1,5 +1,6 @@
 #include "response.h"
 #include <thread>
+#include <future>
 
 namespace REST {
 
@@ -40,13 +41,15 @@ void Response::stream(std::function<void(int)> streamer) {
   ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 
   // low priority - let other threads execute
-  std::this_thread::yield();
+  // std::this_thread::yield();
 
-  // use external streamer on the handle
-  streamer(handle);
+  std::async(std::launch::async, [streamer, this]() {
+    // use external streamer on the handle
+    streamer(handle);
 
-  // close connection with client
-  close(handle);
+    // close connection with client
+    close(handle);
+  });
 }
 
 size_t Response::send() {
