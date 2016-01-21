@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
   signal(SIGINT, main_stop_server);
 
 #ifndef SERVER_PATH
-  std::cout << "Listening on " << STR(SERVER_BIND) << ":" << SERVER_PORT << ", " << SERVER_WORKERS << " workers (" << SERVER_WORKERS * WORKER_STREAMERS << "streamers), " << STR(SERVER_DISPATCHER) << "\n";
+  std::cout << "Listening on " << STR(SERVER_BIND) << ":" << SERVER_PORT << ", " << SERVER_WORKERS << " workers (" << SERVER_WORKERS * WORKER_STREAMERS << " streamers), " << STR(SERVER_DISPATCHER) << "\n";
   server_instance = new REST::Server(STR(SERVER_BIND), SERVER_PORT, new REST::SERVER_DISPATCHER(SERVER_WORKERS, WORKER_STREAMERS));
 #else
   std::cout << "Listening on Unix socket " << STR(SERVER_PATH) << ", " << SERVER_WORKERS << " workers (" << SERVER_WORKERS * WORKER_STREAMERS <<" streamers), " << STR(SERVER_DISPATCHER) << "\n";
