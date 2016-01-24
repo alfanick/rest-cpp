@@ -18,6 +18,30 @@ Worker::Worker(int i, int sc) :
   run();
 }
 
+void Worker::enqueue(Request::client const &client) {
+  clients_count++;
+
+  std::unique_lock<std::mutex> lock(clients_queue_lock);
+
+  clients_queue.emplace(client);
+
+  lock.unlock();
+  clients_queue_ready.notify_one();
+}
+
+Request::client Worker::dequeue() {
+  Request::client client;
+
+  std::unique_lock<std::mutex> queue_lock(clients_queue_lock);
+
+  clients_queue_ready.wait(queue_lock, [this] { return !clients_queue.empty() || !should_run; });
+
+  client = clients_queue.front();
+  clients_queue.pop();
+
+  return client;
+}
+
 void Worker::run() {
   should_run = true;
 
@@ -28,42 +52,26 @@ void Worker::run() {
 
     // while worker is alive
     while (should_run) {
-      Request::client client;
-      {
-        std::unique_lock<std::mutex> queue_lock(clients_queue_lock);
-
-        // wait for new request
-        clients_queue_ready.wait(queue_lock, [this] { return !clients_queue.empty() || !should_run; });
-        client = clients_queue.front();
-        clients_queue.pop();
-      }
+      // make request
+      Request::shared request = Request::make(dequeue());
 
       if (!should_run)
         break;
 
-      // make request
-      Request::shared request = Request::make(client);
-
       Response::shared response(new Response(request, &streamers));
-      unsigned int waiting = clients_count;
+      response->headers["Server"] = server_header + ", waiting " + std::to_string(clients_count);
 
       try {
         make_action(request, response);
 
-        response->headers["Server"] = server_header + ", waiting " + std::to_string(waiting) + " (" + std::to_string(clients_count.load()) + ")";
         response->send();
-
       } catch (HTTP::Error &e) {
         Response::unique error_response(new Response(request, e));
         error_response->headers.insert(response->headers.begin(), response->headers.end());
         error_response->send();
       }
 
-      if (streamers.size() >= streamers_count) {
-        for (auto& s : streamers)
-          s.join();
-        streamers.clear();
-      }
+      clear_streamers();
 
       clients_count--;
     }
@@ -71,6 +79,15 @@ void Worker::run() {
     std::cout << "Stopped worker #" << id << " with " << clients_count << " clients" << std::endl;
   });
 }
+
+void Worker::clear_streamers(bool force) {
+  if (streamers.size() >= streamers_count || force)  {
+    for (auto& s : streamers)
+      s.join();
+    streamers.clear();
+  }
+}
+
 
 void Worker::make_action(Request::shared request, Response::shared response) {
   std::shared_ptr<Service> service = Router::find(request, id);
@@ -86,9 +103,7 @@ void Worker::make_action(Request::shared request, Response::shared response) {
 
 void Worker::stop() {
   should_run = false;
-  for (auto& s : streamers)
-    s.join();
-  streamers.clear();
+  clear_streamers();
   clients_queue_ready.notify_one();
   thread.join();
 }

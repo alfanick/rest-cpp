@@ -30,7 +30,6 @@ class Dispatcher {
     Dispatcher(int workers_count, int streamers_count);
     virtual ~Dispatcher();
 
-    inline void dispatch(int worker_id, Request::client const &client);
     void next(Request::client const &client);
 
   protected:

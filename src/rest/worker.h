@@ -38,11 +38,15 @@ class Worker final {
     void make_action(Request::shared request, Response::shared response);
     void stop();
 
-    static int POOL_SIZE;
     std::atomic_uint clients_count;
 
+    void enqueue(Request::client const &client);
+    Request::client dequeue();
+
+    static int POOL_SIZE;
   private:
     void run();
+    void clear_streamers(bool force = false);
     std::string server_header;
 
     int id;
