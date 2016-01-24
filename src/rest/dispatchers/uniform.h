@@ -13,9 +13,12 @@ namespace Dispatchers {
  */
 class Uniform final : public Dispatcher {
   public:
-    Uniform(int workers_count, int sc) : Dispatcher(workers_count, sc) {};
+    Uniform(int workers_count, int sc) : Dispatcher(workers_count, sc), distribution(0, workers_count-1) {};
 
   private:
+    std::uniform_int_distribution<int> distribution;
+    std::linear_congruential_engine<unsigned int, 48271, 397, 0> engine;
+
     int next_worker_id();
 };
 
