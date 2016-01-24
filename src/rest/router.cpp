@@ -112,7 +112,7 @@ namespace REST {
     std::smatch matches;
 
     for (const auto &route : instance()->routes) {
-      std::regex_search(path, matches, std::get<0>(route).first);
+      std::regex_match(path, matches, std::get<0>(route).first);
 
       if (!matches.empty()) {
         auto &params = std::get<0>(route).second;
