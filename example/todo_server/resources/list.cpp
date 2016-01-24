@@ -15,7 +15,7 @@ class List : public BaseResource {
     struct dirent* entry;
     while ((entry = readdir(dir)) != NULL)
       if (entry->d_name[0] != '.')
-        object["lists"].append(entry->d_name);
+        object["lists"].push_back(entry->d_name);
 
     closedir(dir);
   }

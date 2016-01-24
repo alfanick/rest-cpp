@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <sstream>
 #include "utils.h"
-#include "json/json.h"
+#include "json.hpp"
 
 namespace REST {
 
@@ -63,7 +63,7 @@ class Request {
         return Utils::parse_string<T>(parameters[key]);
     }
 
-    Json::Value data;
+    nlohmann::json data;
 
   private:
     Request(int client, struct sockaddr_storage client_addr);

@@ -10,7 +10,6 @@
 #include "exceptions.h"
 #include "response.h"
 #include "request.h"
-#include "json/json.h"
 
 #include <pthread.h>
 #ifdef __APPLE__

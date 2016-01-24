@@ -3,7 +3,7 @@
 
 #include "exceptions.h"
 #include "request.h"
-#include "json/json.h"
+#include "json.hpp"
 
 #include <chrono>
 #include <thread>
@@ -36,7 +36,7 @@ class Response {
     void stream(std::function<void(int)> streamer, bool async=false);
     void stream_async(std::function<void(int)> streamer);
 
-    Json::Value data;
+    nlohmann::json data;
 
 
   private:

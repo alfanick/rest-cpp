@@ -73,8 +73,7 @@ size_t Response::send() {
   std::string payload;
 
   if (is_json) {
-    Json::FastWriter json_writer;
-    payload = json_writer.write(data);
+    payload = data.dump();
   } else {
     payload = raw;
   }
