@@ -7,17 +7,11 @@ namespace REST {
 namespace Dispatchers {
 
 int LeastConnections::next_worker_id() {
-  unsigned int min_count = std::numeric_limits<unsigned int>::max();
-  int min_id = 0;
-
-  for (int i = 0; i < Worker::POOL_SIZE; i++) {
-    if (workers[i]->clients_count < min_count) {
-      min_count = workers[i]->clients_count;
-      min_id = i;
+  return std::distance(workers.begin(), std::min_element(workers.begin(), workers.end(),
+    [](Worker::shared const& a, Worker::shared const& b) {
+      return a->clients_count < b->clients_count;
     }
-  }
-
-  return min_id;
+  ));
 }
 
 }

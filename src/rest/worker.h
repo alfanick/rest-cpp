@@ -31,6 +31,8 @@ namespace REST {
 class Worker final {
   friend class Dispatcher;
   public:
+    typedef std::shared_ptr<Worker> shared;
+
     Worker(int id, int sc);
 
     void make_action(Request::shared request, Response::shared response);
