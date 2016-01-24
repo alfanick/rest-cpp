@@ -10,5 +10,6 @@ void routes(REST::Router* r) {
     s->response->use_json();
     s->response->data["foo"] = 0;
   });
+  r->resource<Task>("/:type/*/:name.jpg");
 }
 

@@ -8,7 +8,7 @@ name?=todo_server
 
 CXX=/usr/bin/clang++ -Wall -std=c++11 -stdlib=libc++ -O2 -march=native
 INCLUDES=
-LIBRARY=-lrestcpp -DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
+LIBRARY=-DSERVER_BIND=$(address) -DSERVER_PORT=$(port) -DSERVER_WORKERS=$(workers) -DSERVER_DISPATCHER_$(dispatcher)
 
 ifneq ($(path),NONE)
 LIBRARY+= -DSERVER_PATH=$(path)
@@ -18,14 +18,14 @@ pe=$(shell seq $(port) $$(( $(port) + $(size) - 1 )) )
 endif
 
 ifneq ($(shell uname),Darwin)
-CXX=g++-5 -std=gnu++11 -Wall -pthread -O2
+CXX=g++-5 -std=gnu++11 -Wall -pthread -O2 -march=native -I../../src
 endif
 
 .PHONY: server build pool
 default: server
 
 server: build
-	@DYLD_LIBRARY_PATH=/usr/local/lib LD_LIBRARY_PATH=/usr/local/lib ./todo_server
+	@./todo_server
 
 
 pool:
@@ -42,5 +42,5 @@ endif
 endif
 
 build:
-	@$(CXX) $(INCLUDES) *.cpp -o $(name) $(LIBRARY)
+	@$(CXX) $(INCLUDES) *.cpp -o $(name) $(LIBRARY) ../../lib/librestcpp.a
 
