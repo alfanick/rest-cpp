@@ -88,7 +88,7 @@ class Router {
             if (a == nullptr || b == nullptr)
               return false;
 
-            if (!b->path.empty() && (b->path[0] == ':'))
+            if (!b->path.empty() && (b->path[0] == '*' || b->path[0] == ':'))
               return false;
             if (!a->path.empty() && (a->path[0] == '*' || a->path[0] == ':'))
               return true;
