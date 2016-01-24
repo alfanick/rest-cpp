@@ -29,21 +29,17 @@ namespace REST {
  * @see Dispatcher
  */
 class Worker final {
-
+  friend class Dispatcher;
   public:
-    Worker(int id, int sc, size_t* clients_count);
+    Worker(int id, int sc);
 
     void make_action(Request::shared request, Response::shared response);
-
     void stop();
 
     static int POOL_SIZE;
+    std::atomic_uint clients_count;
 
-    std::queue<Request::client> clients_queue;
-    std::mutex clients_queue_lock;
-    std::condition_variable clients_queue_ready;
   private:
-    // Json::FastWriter json_writer;
     void run();
     std::string server_header;
 
@@ -51,10 +47,13 @@ class Worker final {
     bool should_run;
 
     unsigned int streamers_count;
-    size_t* clients_count;
 
     std::thread thread;
     std::vector<std::thread> streamers;
+
+    std::queue<Request::client> clients_queue;
+    std::mutex clients_queue_lock;
+    std::condition_variable clients_queue_ready;
 };
 
 }

@@ -30,8 +30,8 @@ class Dispatcher {
     Dispatcher(int workers_count, int streamers_count);
     virtual ~Dispatcher();
 
-    void dispatch(int worker_id, Request::client client);
-    void next(Request::client client);
+    inline void dispatch(int worker_id, Request::client const &client);
+    void next(Request::client const &client);
 
   protected:
     virtual int next_worker_id() = 0;
@@ -39,7 +39,7 @@ class Dispatcher {
     int workers_count = 0;
     int streamers_count = 0;
     std::vector< std::shared_ptr<Worker> > workers;
-    std::vector< size_t > clients_count;
+    // std::vector< size_t > clients_count;
     // size_t* clients_count;
 };
 

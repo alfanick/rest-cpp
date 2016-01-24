@@ -9,10 +9,10 @@ namespace REST {
 
 int Worker::POOL_SIZE = 256;
 
-Worker::Worker(int i, int sc, size_t* cc) :
- id(i), streamers_count(sc), clients_count(cc) {
+Worker::Worker(int i, int sc) :
+ id(i), streamers_count(sc) {
   THREAD_NAME("rest-cpp - main thread");
-  *cc = 0;
+  clients_count.store(0);
   server_header = "rest-cpp, worker " + std::to_string(id);
   streamers.reserve(sc);
   run();
@@ -33,7 +33,7 @@ void Worker::run() {
         std::unique_lock<std::mutex> queue_lock(clients_queue_lock);
 
         // wait for new request
-        clients_queue_ready.wait(queue_lock, [this] { return !should_run || !clients_queue.empty(); });
+        clients_queue_ready.wait(queue_lock, [this] { return !clients_queue.empty() || !should_run; });
         client = clients_queue.front();
         clients_queue.pop();
       }
@@ -45,11 +45,9 @@ void Worker::run() {
       Request::shared request = Request::make(client);
 
       Response::shared response(new Response(request, &streamers));
-      response->headers["Server"] = server_header + ", waiting " + std::to_string(*clients_count);
+      response->headers["Server"] = server_header + ", waiting " + std::to_string(clients_count.load());
 
       try {
-        // std::cout << "Request '" << request->path << "' - worker #"<<id<<", handle #"<<request->handle<<"\n";
-
         make_action(request, response);
 
         response->send();
@@ -66,11 +64,10 @@ void Worker::run() {
         streamers.clear();
       }
 
-      if ((*clients_count) > 0)
-        (*clients_count)--;
+      clients_count--;
     }
 
-    std::cout << "Stopped worker #" << id << std::endl;
+    std::cout << "Stopped worker #" << id << " with " << clients_count << " clients" << std::endl;
   });
 }
 
