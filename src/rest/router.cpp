@@ -111,7 +111,7 @@ namespace REST {
     std::string &path = request->path;
     std::smatch matches;
 
-    for (auto& route : instance()->routes) {
+    for (const auto &route : instance()->routes) {
       std::regex_search(path, matches, std::get<0>(route).first);
 
       if (!matches.empty()) {
@@ -128,6 +128,7 @@ namespace REST {
 
     return nullptr;
   }
+
   void Router::match(std::string const& path, LambdaService::function lambda) {
     auto r = to_regex(path, false);
 
