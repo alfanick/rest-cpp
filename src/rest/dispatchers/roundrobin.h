@@ -13,13 +13,12 @@ namespace Dispatchers {
  */
 class RoundRobin final : public Dispatcher {
   public:
-    RoundRobin(int workers_count, int sc) : Dispatcher(workers_count, sc) {};
+    RoundRobin(int workers_count, int sc) : Dispatcher(workers_count, sc), last_worker_id(0) {};
 
   private:
     int next_worker_id();
 
-    int last_worker_id = -1;
-    std::mutex last_worker_id_lock;
+    std::atomic_uint last_worker_id;
 };
 
 }
