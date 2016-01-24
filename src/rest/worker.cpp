@@ -45,11 +45,12 @@ void Worker::run() {
       Request::shared request = Request::make(client);
 
       Response::shared response(new Response(request, &streamers));
-      response->headers["Server"] = server_header + ", waiting " + std::to_string(clients_count.load());
+      unsigned int waiting = clients_count;
 
       try {
         make_action(request, response);
 
+        response->headers["Server"] = server_header + ", waiting " + std::to_string(waiting) + " (" + std::to_string(clients_count.load()) + ")";
         response->send();
 
       } catch (HTTP::Error &e) {
