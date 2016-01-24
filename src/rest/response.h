@@ -32,7 +32,6 @@ class Response {
     std::string raw;
     std::unordered_map< std::string, std::string > headers;
 
-    void use_json();
     void stream(std::function<void(int)> streamer, bool async=false);
     void stream_async(std::function<void(int)> streamer);
 
@@ -48,7 +47,6 @@ class Response {
 
     std::vector<std::thread>* streamers;
     int handle;
-    bool is_json = false;
     bool is_streamed = false;
 };
 

@@ -8,7 +8,6 @@ void routes(REST::Router* r) {
   std::atomic_int a(0);
   // int a = 0;
   r->match("/foo", [&a](REST::LambdaService* s) {
-    s->response->use_json();
     // a++;
     s->response->data["counter"] = a++;
     // s->response->raw = std::to_string(a++);

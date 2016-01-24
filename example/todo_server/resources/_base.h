@@ -11,7 +11,6 @@
 class BaseResource : public REST::Resource,
   public REST::Features::Authorization {
   void before() {
-    response->use_json();
     ensure_authorization("Need to authorize", [this](std::string username, std::string password) {
       std::ifstream password_file("./data/" + username + "/.password");
       bool authorized = false;

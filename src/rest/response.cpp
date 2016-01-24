@@ -16,15 +16,9 @@ Response::Response(Request::shared request, std::vector<std::thread>* s) {
 Response::Response(Request::shared request, HTTP::Error &error) : Response(request, nullptr) {
   status = error.code();
   status_message = error.what();
-  use_json();
   data["status"] = "error";
   data["error"]["code"] = status;
   data["error"]["message"] = status_message;
-}
-
-void Response::use_json() {
-  headers["Content-Type"] = "application/json; charset=utf-8";
-  is_json = true;
 }
 
 void Response::stream_async(std::function<void(int)> streamer) {
@@ -72,7 +66,8 @@ size_t Response::send() {
 
   std::string payload;
 
-  if (is_json) {
+  if (!data.empty()) {
+    headers["Content-Type"] = "application/json; charset=utf-8";
     payload = data.dump();
   } else {
     payload = raw;
