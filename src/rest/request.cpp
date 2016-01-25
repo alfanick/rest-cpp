@@ -96,20 +96,20 @@ void Request::parse_header(std::string const &line) {
   if (line.find("GET") == 0) {
     method = Method::GET;
   } else
-  if (line.find("HEAD") == 0) {
-    method = Method::HEAD;
-  } else
   if (line.find("POST") == 0) {
     method = Method::POST;
   } else
   if (line.find("PUT") == 0) {
     method = Method::PUT;
   } else
-  if (line.find("PATCH") == 0) {
-    method = Method::PATCH;
-  } else
   if (line.find("DELETE") == 0) {
     method = Method::DELETE;
+  } else
+  if (line.find("HEAD") == 0) {
+    method = Method::HEAD;
+  } else
+  if (line.find("PATCH") == 0) {
+    method = Method::PATCH;
   } else
   if (line.find("TRACE") == 0) {
     method = Method::TRACE;
