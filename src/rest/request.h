@@ -4,9 +4,9 @@
 #include <chrono>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <cstring>
 #include <string>
 #include <memory>
-#include <unordered_map>
 #include <sstream>
 #include "utils.h"
 #include "json.hpp"
@@ -26,6 +26,12 @@ class Request {
   friend class Worker;
   friend class Response;
 
+  struct lowercase_comparator {
+    bool operator() (const std::string& lhs, const std::string& rhs) const {
+      return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
+    }
+  };
+
   public:
     typedef struct {
       struct sockaddr_storage address;
@@ -34,14 +40,13 @@ class Request {
     typedef std::shared_ptr<Request> shared;
     enum class Method { GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, PATCH, UNDEFINED };
 
-
-
     ~Request();
 
     Method method = Method::UNDEFINED;
     std::string path;
-    std::unordered_multimap< std::string, std::string > headers;
-    std::unordered_map< std::string, std::string > parameters;
+
+    std::map< std::string, std::string, lowercase_comparator > headers;
+    std::map< std::string, std::string > parameters;
 
     std::string raw;
     size_t length = 0;

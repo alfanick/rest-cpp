@@ -47,12 +47,8 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
     // assume proper content length
     size_t content_length = header("Content-Length", 0);
 
-    if (content_length == 0)
-      content_length = header("Content-length", 0);
-
-    raw.reserve(content_length);
-
     if (content_length > 0) {
+      raw.reserve(content_length);
       // read whats left in header
       length = std::min(content_length, (size_t)(BUFFER_SIZE - request_stream.tellg()));
       raw = std::string(buffer, BUFFER_SIZE).substr(request_stream.tellg(), length);
@@ -65,19 +61,12 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
         length += buffer_length;
       }
     }
-    //std::cout << "content o "<<content_length<<" == "<<length<<" == " <<raw.size()<<"\n";
   }
-
-  // delete [] buffer;
-
 
   // if has some content
   if (!raw.empty()) {
     // try to parse it
     auto ct = headers.find("Content-Type");
-
-    if (ct == headers.end())
-      ct = headers.find("Content-type");
 
     if (ct != headers.end()) {
       if (ct->second == "application/x-www-form-urlencoded") {

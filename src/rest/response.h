@@ -30,7 +30,7 @@ class Response {
     int status = 200;
     std::string status_message = "OK";
     std::string raw;
-    std::unordered_map< std::string, std::string > headers;
+    std::map< std::string, std::string > headers;
 
     void stream(std::function<void(int)> streamer, bool async=false);
     void stream_async(std::function<void(int)> streamer);
