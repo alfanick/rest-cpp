@@ -75,8 +75,8 @@ class Request {
       return instance;
     }
 
-    void parse_header(std::string line);
-    void parse_query_string(std::string query);
+    void parse_header(std::string const &line);
+    void parse_query_string(std::string &query);
     std::chrono::high_resolution_clock::time_point time;
 
     int handle;

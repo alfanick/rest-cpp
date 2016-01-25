@@ -13,6 +13,8 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
   // receive data from client
   recv(client, buffer, BUFFER_SIZE, 0);
 
+  time = std::chrono::high_resolution_clock::now();
+
   // parse each line
   std::istringstream request_stream(buffer);
   while (std::getline(request_stream, line)) {
@@ -38,7 +40,8 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
     std::string value = line.substr(colon+1);
     value.erase(0, value.find_first_not_of(" \n\r\t"));
 
-    headers.insert(std::make_pair(name, value));
+    // headers.insert(std::make_pair(name, value));
+    headers.emplace(name, value);
   }
 
   // if has content
@@ -69,7 +72,6 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
 
   // delete [] buffer;
 
-  time = std::chrono::high_resolution_clock::now();
 
   // if has some content
   if (!raw.empty()) {
@@ -90,7 +92,7 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
   }
 }
 
-void Request::parse_header(std::string line) {
+void Request::parse_header(std::string const &line) {
   if (line.find("GET") == 0) {
     method = Method::GET;
   } else
@@ -135,7 +137,7 @@ void Request::parse_header(std::string line) {
   }
 }
 
-void Request::parse_query_string(std::string query) {
+void Request::parse_query_string(std::string &query) {
   query.erase(query.find_last_not_of(" \n\r\t")+1);
   std::istringstream query_stream(query);
   std::string pair;
