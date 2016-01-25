@@ -5,10 +5,10 @@
 
 namespace REST {
 
-Response::Response(Request::shared request, std::vector<std::thread>* s) {
-  streamers = s;
-  handle = request->handle;
-  start_time = request->time;
+Response::Response(Request::shared request, std::vector<std::thread>* s) :
+  start_time(request->time),
+  streamers(s),
+  handle(request->handle) {
   headers["Content-Type"] = "text/plain; charset=utf-8";
   headers["Connection"] = "close";
 }
@@ -16,9 +16,13 @@ Response::Response(Request::shared request, std::vector<std::thread>* s) {
 Response::Response(Request::shared request, HTTP::Error &error) : Response(request, nullptr) {
   status = error.code();
   status_message = error.what();
-  data["status"] = "error";
-  data["error"]["code"] = status;
-  data["error"]["message"] = status_message;
+  data = {
+    { "status", "error" },
+    { "error", {
+      { "code", status },
+      { "message", status_message }
+    }}
+  };
 }
 
 void Response::stream_async(std::function<void(int)> streamer) {
@@ -29,7 +33,7 @@ void Response::stream(std::function<void(int)> streamer, bool async) {
   is_streamed = true;
 
   std::string content = "HTTP/1.1 " + std::to_string(status) + " " + status_message + "\r\n";
-  headers.insert(std::make_pair("Date", Utils::rfc1123_datetime(time(0))));
+  headers.emplace("Date", Utils::rfc1123_datetime(time(0)));
 
   // add headers
   for (auto header : headers)
@@ -77,9 +81,9 @@ size_t Response::send() {
   std::string content = "HTTP/1.1 " + std::to_string(status) + " " + status_message + "\r\n";
 
   // content size
-  headers["Content-Length"] = std::to_string(payload.size());
   headers["Server"] += ", took " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count() / 1000.0f) + "ms";
-  headers.insert(std::make_pair("Date", Utils::rfc1123_datetime(time(0))));
+  headers.emplace("Content-Length", std::to_string(payload.size()));
+  headers.emplace("Date", Utils::rfc1123_datetime(time(0)));
 
   // add headers
   for (auto header : headers)
