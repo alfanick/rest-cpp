@@ -44,7 +44,7 @@ void Response::stream(std::function<void(int)> streamer, bool async) {
   // send every byte
   ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 
-  if (async) {
+  if (async && streamers->capacity() > 0) {
     int h = handle;
     streamers->emplace_back([streamer, h]() {
       signal(SIGPIPE, SIG_IGN);
