@@ -6,11 +6,9 @@ void routes(REST::Router* r) {
   r->resource<List>("/");
 
   std::atomic_int a(0);
-  // int a = 0;
-  r->match("/foo", [&a](REST::LambdaService* s) {
-    // a++;
-    s->response->data["counter"] = a++;
-    // s->response->raw = std::to_string(a++);
+  r->match("/foo", [](REST::LambdaService* s) {
+    s->response->raw = "foo";
+    // s->response->data["counter"] = a++;
   });
   r->resource<List>("/:list_id");
   r->resources<Task>("/:list_id/task");

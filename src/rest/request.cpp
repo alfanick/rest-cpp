@@ -17,14 +17,13 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
 
   // parse each line
   std::istringstream request_stream(buffer);
-  while (std::getline(request_stream, line)) {
-    // if method is undefined, assumie its first line
-    if (method == Method::UNDEFINED) {
-      // so parse header
-      parse_header(line);
-      continue;
-    }
 
+  // first line is HTTP header
+  std::getline(request_stream, line);
+  parse_header(line);
+
+  // parse headers
+  while (std::getline(request_stream, line)) {
     // next lines are headers, strip them
     line.erase(line.find_last_not_of(" \n\r\t")+1);
 
@@ -40,7 +39,6 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
     std::string value = line.substr(colon+1);
     value.erase(0, value.find_first_not_of(" \n\r\t"));
 
-    // headers.insert(std::make_pair(name, value));
     headers.emplace(name, value);
   }
 
