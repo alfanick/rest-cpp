@@ -18,7 +18,7 @@ class RoundRobin final : public Dispatcher {
   private:
     int next_worker_id();
 
-    std::atomic_uint last_worker_id;
+    unsigned int last_worker_id;
 };
 
 }
