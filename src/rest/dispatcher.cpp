@@ -7,7 +7,7 @@ Dispatcher::Dispatcher(int wc, int sc) : workers_count(wc), streamers_count(sc) 
   workers.resize(workers_count);
 
   for (int i = 0; i < workers_count; i++) {
-    workers[i] = std::make_shared<Worker>(i, sc);
+    workers[i] = new Worker(i, sc);
   }
 }
 

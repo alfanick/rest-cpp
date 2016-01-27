@@ -22,8 +22,6 @@ class Response {
   friend class Worker;
 
   public:
-    typedef std::shared_ptr<Response> shared;
-    typedef std::unique_ptr<Response> unique;
     ~Response();
 
 
@@ -39,8 +37,8 @@ class Response {
 
 
   private:
-    Response(Request::shared request, std::vector<std::thread>* streamers);
-    Response(Request::shared request, HTTP::Error &error);
+    Response(Request* request, std::vector<std::thread>* streamers);
+    Response(Request* request, HTTP::Error &error);
     size_t send();
 
     std::chrono::high_resolution_clock::time_point start_time;

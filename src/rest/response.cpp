@@ -5,7 +5,7 @@
 
 namespace REST {
 
-Response::Response(Request::shared request, std::vector<std::thread>* s) :
+Response::Response(Request* request, std::vector<std::thread>* s) :
   start_time(request->time),
   streamers(s),
   handle(request->handle) {
@@ -13,7 +13,7 @@ Response::Response(Request::shared request, std::vector<std::thread>* s) :
   headers["Connection"] = "close";
 }
 
-Response::Response(Request::shared request, HTTP::Error &error) : Response(request, nullptr) {
+Response::Response(Request* request, HTTP::Error &error) : Response(request, nullptr) {
   status = error.code();
   status_message = error.what();
   data = {

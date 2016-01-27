@@ -25,15 +25,12 @@ class Service {
   friend class Router;
 
   public:
-    typedef std::unique_ptr<Service> unique;
-    typedef std::shared_ptr<Service> shared;
-
     Service();
     //! \private
     virtual ~Service() = 0;
 
-    Response::shared response;
-    Request::shared request;
+    Response* response;
+    Request* request;
 
   protected:
     std::vector< Feature* > features;

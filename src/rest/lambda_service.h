@@ -17,7 +17,6 @@ class LambdaService : public virtual Service,
     typedef std::function<void(LambdaService *)> function;
 
     LambdaService();
-    LambdaService(std::shared_ptr<LambdaService> const& ls);
     LambdaService(function);
   protected:
     void method(Request::Method m) final;

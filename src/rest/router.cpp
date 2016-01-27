@@ -22,10 +22,10 @@ namespace REST {
 
       auto service = std::get<2>(r)[0];
 
-      if (dynamic_cast< LambdaService* >(service.get()) != nullptr) {
+      if (dynamic_cast< LambdaService* >(service) != nullptr) {
         std::cout << " - lambda";
       } else
-      if (dynamic_cast< Resource* >(service.get()) != nullptr) {
+      if (dynamic_cast< Resource* >(service) != nullptr) {
         std::cout << " - resource";
       } else {
         std::cout << " - service";
@@ -102,7 +102,7 @@ namespace REST {
     return std::make_pair(std::regex(regex), params);
   }
 
-  Service::shared Router::find(Request::shared request, int worker_id) {
+  Service* Router::find(Request* request, int worker_id) {
     const std::string &path = request->path;
 
     for (const auto &route : instance()->routes) {
@@ -127,12 +127,12 @@ namespace REST {
   void Router::match(std::string const& path, LambdaService::function lambda) {
     auto r = to_regex(path, false);
 
-    std::vector<Service::shared> services;
+    std::vector<Service*> services;
     services.resize(Worker::POOL_SIZE);
     for (int i = 0; i < Worker::POOL_SIZE; i++)
-      services[i] = std::make_shared<LambdaService>(lambda);
+      services[i] = new LambdaService(lambda);
 
-    routes.push_back(std::make_tuple(r, path, services));
+    routes.emplace_back(r, path, services);
   }
 
 }

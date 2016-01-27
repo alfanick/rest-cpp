@@ -37,7 +37,6 @@ class Request {
       struct sockaddr_storage address;
       int handle;
     } client;
-    typedef std::shared_ptr<Request> shared;
     enum class Method { GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, PATCH, UNDEFINED };
 
     ~Request();
@@ -74,11 +73,6 @@ class Request {
     Request(int client, struct sockaddr_storage client_addr);
 
     const static size_t BUFFER_SIZE;
-
-    static Request::shared make(Request::client client) {
-      Request::shared instance(new Request(client.handle, client.address));
-      return instance;
-    }
 
     void parse_header(std::string const &line);
     void parse_query_string(std::string &query);

@@ -30,11 +30,9 @@ namespace REST {
 class Worker final {
   friend class Dispatcher;
   public:
-    typedef std::shared_ptr<Worker> shared;
-
     Worker(int id, int sc);
 
-    void make_action(Request::shared request, Response::shared response);
+    void make_action(Request* request, Response* response);
     void stop();
 
     std::atomic_uint clients_count;

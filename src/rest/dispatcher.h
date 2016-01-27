@@ -36,9 +36,7 @@ class Dispatcher {
 
     int workers_count = 0;
     int streamers_count = 0;
-    std::vector< std::shared_ptr<Worker> > workers;
-    // std::vector< size_t > clients_count;
-    // size_t* clients_count;
+    std::vector<Worker*> workers;
 };
 
 }

@@ -28,7 +28,7 @@ class Router {
       return &router;
     }
 
-    static Service::shared find(Request::shared, int);
+    static Service* find(Request*, int);
 
     void match(std::string const &, LambdaService::function);
 
@@ -36,12 +36,12 @@ class Router {
     void mount(std::string const& path, bool exact) {
       auto r = to_regex(path, exact);
 
-      std::vector<Service::shared> services;
+      std::vector<Service*> services;
       services.resize(Worker::POOL_SIZE);
       for (int i = 0; i < Worker::POOL_SIZE; i++)
-        services[i] = std::make_shared<R>();
+        services[i] = new R();
 
-      routes.push_back(std::make_tuple(r, path, services));
+      routes.emplace_back(r, path, services);
     }
 
     template <class R>
@@ -132,7 +132,7 @@ class Router {
 
     Router();
 
-    std::vector<std::tuple<std::pair<std::regex, std::vector<std::string>>, std::string, std::vector<Service::shared>>> routes;
+    std::vector<std::tuple<std::pair<std::regex, std::vector<std::string>>, std::string, std::vector<Service*>>> routes;
 
 };
 

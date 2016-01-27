@@ -35,12 +35,12 @@ void Worker::run() {
       clients_queue.wait_dequeue(client);
 
       // make request
-      Request::shared request = Request::make(client);
+      Request* request = new Request(client.handle, client.address);
 
       if (!should_run)
         break;
 
-      Response::shared response(new Response(request, &streamers));
+      Response* response = new Response(request, &streamers);
       response->headers["Server"] = server_header + ", waiting " + std::to_string(clients_count);
 
       try {
@@ -48,15 +48,19 @@ void Worker::run() {
 
         response->send();
       } catch (HTTP::Error &e) {
-        Response::unique error_response(new Response(request, e));
+        Response* error_response = new Response(request, e);
         error_response->headers.insert(response->headers.begin(), response->headers.end());
         error_response->send();
+        delete error_response;
       }
 
       clear_streamers();
 
       clients_count--;
       total_clients_count++;
+
+      delete response;
+      delete request;
     }
 
     std::cout << "Stopped worker #" << id << " with " << clients_count << " clients in queue (processed " << total_clients_count << ")" << std::endl;
@@ -72,8 +76,8 @@ void Worker::clear_streamers(bool force) {
 }
 
 
-void Worker::make_action(Request::shared request, Response::shared response) {
-  std::shared_ptr<Service> service = Router::find(request, id);
+void Worker::make_action(Request* request, Response* response) {
+  Service* service = Router::find(request, id);
 
   if (service == nullptr)
     throw HTTP::NotFound();
