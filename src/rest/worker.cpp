@@ -9,7 +9,7 @@ namespace REST {
 int Worker::POOL_SIZE = 256;
 
 Worker::Worker(int i, int sc) :
- id(i), streamers_count(sc) {
+ id(i), streamers_count(sc), clients_queue(1024) {
   THREAD_NAME("rest-cpp - main thread");
   clients_count.store(0);
   server_header = "rest-cpp, worker " + std::to_string(id);
@@ -17,28 +17,9 @@ Worker::Worker(int i, int sc) :
   run();
 }
 
-void Worker::enqueue(Request::client const &client) {
+void Worker::enqueue(Request::client const& client) {
+  clients_queue.enqueue(client);
   clients_count++;
-
-  std::unique_lock<std::mutex> lock(clients_queue_lock);
-
-  clients_queue.emplace(client);
-
-  lock.unlock();
-  clients_queue_ready.notify_one();
-}
-
-Request::client Worker::dequeue() {
-  Request::client client;
-
-  std::unique_lock<std::mutex> queue_lock(clients_queue_lock);
-
-  clients_queue_ready.wait(queue_lock, [this] { return !clients_queue.empty() || !should_run; });
-
-  client = clients_queue.front();
-  clients_queue.pop();
-
-  return client;
 }
 
 void Worker::run() {
@@ -49,8 +30,12 @@ void Worker::run() {
 
     // while worker is alive
     while (should_run) {
+      Request::client client;
+
+      clients_queue.wait_dequeue(client);
+
       // make request
-      Request::shared request = Request::make(dequeue());
+      Request::shared request = Request::make(client);
 
       if (!should_run)
         break;
@@ -102,7 +87,8 @@ void Worker::make_action(Request::shared request, Response::shared response) {
 void Worker::stop() {
   should_run = false;
   clear_streamers();
-  clients_queue_ready.notify_one();
+  Request::client c;
+  clients_queue.enqueue(c);
   thread.join();
 }
 

@@ -2,10 +2,10 @@
 #define REST_CPP_WORKER_H
 
 #include <queue>
-#include <mutex>
-#include <condition_variable>
 #include <thread>
 #include <atomic>
+
+#include "readerwriterqueue/readerwriterqueue.h"
 
 #include "exceptions.h"
 #include "response.h"
@@ -41,7 +41,6 @@ class Worker final {
     unsigned long long total_clients_count = 0;
 
     void enqueue(Request::client const &client);
-    Request::client dequeue();
 
     static int POOL_SIZE;
   private:
@@ -57,9 +56,7 @@ class Worker final {
     std::thread thread;
     std::vector<std::thread> streamers;
 
-    std::queue<Request::client> clients_queue;
-    std::mutex clients_queue_lock;
-    std::condition_variable clients_queue_ready;
+    moodycamel::BlockingReaderWriterQueue<Request::client> clients_queue;
 };
 
 }
