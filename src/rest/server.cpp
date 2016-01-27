@@ -71,9 +71,9 @@ void Server::run() {
   if (status == -1)
     throw ServerError();
 
-  Request::client client;
-  socklen_t addr_size = sizeof(client.address);
   while (is_running) {
+    Request::client client;
+    socklen_t addr_size = sizeof(client.address);
     client.handle = accept(handle, (struct sockaddr *)&(client.address), &addr_size);
 
     try {

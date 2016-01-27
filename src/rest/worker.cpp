@@ -18,7 +18,7 @@ Worker::Worker(int i, int sc) :
 }
 
 void Worker::enqueue(Request::client const& client) {
-  clients_queue.enqueue(client);
+  clients_queue.enqueue(std::move(client));
   clients_count++;
 }
 
