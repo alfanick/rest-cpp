@@ -38,6 +38,7 @@ class Worker final {
     void stop();
 
     std::atomic_uint clients_count;
+    unsigned long long total_clients_count = 0;
 
     void enqueue(Request::client const &client);
     Request::client dequeue();

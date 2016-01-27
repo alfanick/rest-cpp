@@ -71,9 +71,10 @@ void Worker::run() {
       clear_streamers();
 
       clients_count--;
+      total_clients_count++;
     }
 
-    std::cout << "Stopped worker #" << id << " with " << clients_count << " clients" << std::endl;
+    std::cout << "Stopped worker #" << id << " with " << clients_count << " clients in queue (processed " << total_clients_count << ")" << std::endl;
   });
 }
 
