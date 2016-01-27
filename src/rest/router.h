@@ -23,7 +23,11 @@ namespace REST {
  */
 class Router {
   public:
-    static Router* instance();
+    inline static Router* instance() {
+      static Router router;
+      return &router;
+    }
+
     static Service::shared find(Request::shared, int);
 
     void match(std::string const &, LambdaService::function);

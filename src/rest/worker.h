@@ -45,7 +45,7 @@ class Worker final {
     static int POOL_SIZE;
   private:
     void run();
-    void clear_streamers(bool force = false);
+    inline void clear_streamers(bool force = false);
     std::string server_header;
 
     int id;
