@@ -12,6 +12,8 @@ void routes(REST::Router* r) {
   });
   r->resource<List>("/:list_id");
   r->resources<Task>("/:list_id/task");
-  r->resource<Task>("/:type/*/:name.jpg");
+  r->match("/:type/*album/:name.jpg", [](REST::LambdaService* s) {
+    s->response->data = s->request->parameters;
+  });
 }
 

@@ -103,14 +103,14 @@ namespace REST {
   }
 
   Service::shared Router::find(Request::shared request, int worker_id) {
-    std::string &path = request->path;
-    std::smatch matches;
+    const std::string &path = request->path;
 
     for (const auto &route : instance()->routes) {
+      std::smatch matches;
       std::regex_match(path, matches, std::get<0>(route).first);
 
       if (!matches.empty()) {
-        auto &params = std::get<0>(route).second;
+        const auto &params = std::get<0>(route).second;
 
         for (size_t i = 1; i < matches.size(); i++) {
           request->parameters[params[i-1]] = matches[i];
