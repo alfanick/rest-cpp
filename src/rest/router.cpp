@@ -102,8 +102,8 @@ namespace REST {
     return std::make_pair(std::regex(regex), params);
   }
 
-  Service* Router::find(Request* request, int worker_id) {
-    const std::string &path = request->path;
+  Service* Router::find(Request &request, int worker_id) {
+    const std::string &path = request.path;
 
     for (const auto &route : instance()->routes) {
       std::smatch matches;
@@ -113,8 +113,8 @@ namespace REST {
         const auto &params = std::get<0>(route).second;
 
         for (size_t i = 1; i < matches.size(); i++) {
-          request->parameters[params[i-1]] = matches[i];
-          request->parameters[std::to_string(i)] = matches[i];
+          request.parameters[params[i-1]] = matches[i];
+          request.parameters[std::to_string(i)] = matches[i];
         }
 
         return std::get<2>(route)[worker_id];

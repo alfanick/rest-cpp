@@ -5,17 +5,18 @@
 
 namespace REST {
 
-Response::Response(Request* request, std::vector<std::thread>* s) :
-  start_time(request->time),
+Response::Response(Request const &request, std::vector<std::thread> &s) :
+  start_time(request.time),
   streamers(s),
-  handle(request->handle) {
+  handle(request.handle) {
   headers["Content-Type"] = "text/plain; charset=utf-8";
   headers["Connection"] = "close";
 }
 
-Response::Response(Request* request, HTTP::Error &error) : Response(request, nullptr) {
+void Response::error(HTTP::Error &error) {
   status = error.code();
   status_message = error.what();
+  raw.clear();
   data = {
     { "status", "error" },
     { "error", {
@@ -44,9 +45,9 @@ void Response::stream(std::function<void(int)> streamer, bool async) {
   // send every byte
   ::send(handle, content.c_str(), content.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 
-  if (async && streamers->capacity() > 0) {
+  if (async && streamers.capacity() > 0) {
     int h = handle;
-    streamers->emplace_back([streamer, h]() {
+    streamers.emplace_back([streamer, h]() {
       signal(SIGPIPE, SIG_IGN);
       try {
         // std::this_thread::yield();

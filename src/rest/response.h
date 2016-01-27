@@ -37,13 +37,14 @@ class Response {
 
 
   private:
-    Response(Request* request, std::vector<std::thread>* streamers);
-    Response(Request* request, HTTP::Error &error);
+    Response(Request const &request, std::vector<std::thread> &streamers);
+
+    void error(HTTP::Error &e);
     size_t send();
 
     std::chrono::high_resolution_clock::time_point start_time;
 
-    std::vector<std::thread>* streamers;
+    std::vector<std::thread> &streamers;
     int handle;
     bool is_streamed = false;
 };

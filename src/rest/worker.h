@@ -32,7 +32,7 @@ class Worker final {
   public:
     Worker(int id, int sc);
 
-    void make_action(Request* request, Response* response);
+    void make_action(Request &request, Response &response);
     void stop();
 
     std::atomic_uint clients_count;

@@ -28,7 +28,7 @@ class Router {
       return &router;
     }
 
-    static Service* find(Request*, int);
+    static Service* find(Request&, int);
 
     void match(std::string const &, LambdaService::function);
 
