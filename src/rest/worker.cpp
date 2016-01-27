@@ -2,7 +2,6 @@
 #include "service.h"
 #include "router.h"
 
-#include <csignal>
 #include <iostream>
 
 namespace REST {
@@ -47,8 +46,6 @@ void Worker::run() {
 
   thread = std::thread([this] () {
     THREAD_NAME(server_header.c_str());
-
-    signal(SIGPIPE, SIG_IGN);
 
     // while worker is alive
     while (should_run) {
