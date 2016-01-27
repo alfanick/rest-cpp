@@ -25,6 +25,7 @@ Server::Server(std::string path, Dispatcher* d) : dispatcher(d) {
 
 Server::Server(std::string address, int port, Dispatcher* d) : dispatcher(d) {
   srand(time(0));
+  signal(SIGPIPE, SIG_IGN);
   Router::instance();
   int status;
 
