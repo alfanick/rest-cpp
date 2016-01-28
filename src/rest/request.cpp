@@ -1,4 +1,5 @@
 #include "request.h"
+#include "exceptions.h"
 #include <cstring>
 
 namespace REST {
@@ -6,14 +7,29 @@ namespace REST {
 const size_t Request::BUFFER_SIZE = 4096;
 
 Request::Request(int client, struct sockaddr_storage client_addr) : handle(client), addr(client_addr) {
+  time = std::chrono::high_resolution_clock::now();
+}
+
+void Request::process() {
   std::string line;
   bool is_header = true;
   char buffer[BUFFER_SIZE];
+  ssize_t request_length;
+
+  struct timeval tv {
+    .tv_sec = 30,
+    .tv_usec = 0
+  };
+
+  // set timeout for reading
+  setsockopt(handle, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(struct timeval));
 
   // receive data from client
-  recv(client, buffer, BUFFER_SIZE, 0);
+  request_length = recv(handle, buffer, BUFFER_SIZE, 0);
 
-  time = std::chrono::high_resolution_clock::now();
+  // handle timeout
+  if (request_length <= 0)
+    throw HTTP::RequestTimeout();
 
   // parse each line
   std::istringstream request_stream(buffer);
@@ -47,6 +63,8 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
     // assume proper content length
     size_t content_length = header("Content-Length", 0);
 
+    // TODO: limit content length
+
     if (content_length > 0) {
       raw.reserve(content_length);
       // read whats left in header
@@ -56,7 +74,11 @@ Request::Request(int client, struct sockaddr_storage client_addr) : handle(clien
       // receive some more
       while (length < content_length) {
         memset(buffer, 0, BUFFER_SIZE);
-        size_t buffer_length = recv(client, buffer, BUFFER_SIZE, 0);
+        ssize_t buffer_length = recv(handle, buffer, BUFFER_SIZE, 0);
+
+        if (buffer_length <= 0)
+          throw HTTP::RequestTimeout();
+
         raw += std::string(buffer, buffer_length);
         length += buffer_length;
       }
@@ -112,6 +134,10 @@ void Request::parse_header(std::string const &line) {
   size_t path_end = line.rfind("HTTP/1.")-1;
 
   path = line.substr(path_start, path_end - path_start);
+
+  // TODO config
+  if (path.size() >= 2048)
+    throw HTTP::URITooLong();
 
   size_t path_query = path.find("?");
 

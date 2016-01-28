@@ -44,6 +44,8 @@ void Worker::run() {
       response.headers["Server"] = server_header + ", waiting " + std::to_string(clients_count);
 
       try {
+        request.process();
+
         make_action(request, response);
       } catch (HTTP::Error &e) {
         response.error(e);

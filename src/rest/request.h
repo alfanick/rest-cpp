@@ -71,6 +71,7 @@ class Request {
 
   private:
     Request(int client, struct sockaddr_storage client_addr);
+    void process();
 
     const static size_t BUFFER_SIZE;
 

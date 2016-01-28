@@ -23,6 +23,9 @@ namespace REST {
     ERROR(NotAuthorized, 401, "Not Authorized");
     ERROR(NotFound, 404, "Not Found");
     ERROR(MethodNotAllowed, 405, "Method Not Allowed");
+    ERROR(RequestTimeout, 408, "Request Timeout");
+    ERROR(PayloadTooLarge, 413, "Payload Too Large");
+    ERROR(URITooLong, 414, "URI Too Long");
     ERROR(InternalServerError, 500, "Internal Server Error");
     ERROR(NotImplemented, 501, "Not Implemented");
   }
