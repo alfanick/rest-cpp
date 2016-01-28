@@ -16,6 +16,7 @@ void Request::process() {
   char buffer[BUFFER_SIZE];
   ssize_t request_length;
 
+  // TODO config
   struct timeval tv {
     .tv_sec = 30,
     .tv_usec = 0
@@ -63,7 +64,9 @@ void Request::process() {
     // assume proper content length
     size_t content_length = header("Content-Length", 0);
 
-    // TODO: limit content length
+    // TODO: config
+    if (content_length > 1024 * 1024 * 128)
+      throw HTTP::PayloadTooLarge();
 
     if (content_length > 0) {
       raw.reserve(content_length);
