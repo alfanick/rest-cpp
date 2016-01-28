@@ -8,13 +8,6 @@ const size_t Request::BUFFER_SIZE = 4096;
 
 Request::Request(int client, struct sockaddr_storage client_addr) : handle(client), addr(client_addr) {
   time = std::chrono::high_resolution_clock::now();
-}
-
-void Request::process() {
-  std::string line;
-  bool is_header = true;
-  char buffer[BUFFER_SIZE];
-  ssize_t request_length;
 
   // TODO config
   struct timeval tv {
@@ -24,6 +17,13 @@ void Request::process() {
 
   // set timeout for reading
   setsockopt(handle, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(struct timeval));
+}
+
+void Request::process() {
+  std::string line;
+  bool is_header = true;
+  char buffer[BUFFER_SIZE];
+  ssize_t request_length;
 
   // receive data from client
   request_length = recv(handle, buffer, BUFFER_SIZE, 0);
