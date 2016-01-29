@@ -15,6 +15,7 @@ Dispatcher::Dispatcher(int wc, int sc) : workers_count(wc), streamers_count(sc) 
 Dispatcher::~Dispatcher() {
   for (int i = 0; i < workers_count; i++) {
     workers[i]->stop();
+    delete workers[i];
   }
 }
 

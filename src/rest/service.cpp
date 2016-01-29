@@ -25,7 +25,7 @@ namespace REST {
     after();
 
     for (auto feature = features.crbegin(); feature != features.crend(); ++feature) {
-        (*feature)->feature_pop();
+      (*feature)->feature_pop();
     }
   }
 }
