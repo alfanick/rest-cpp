@@ -50,6 +50,14 @@ class Request {
     std::string raw;
     size_t length = 0;
 
+    std::string header(std::string const& key, const char default_value[]) const {
+      auto h = headers.find(key);
+      if (h == headers.end())
+        return default_value;
+      else
+        return h->second;
+    }
+
     std::string header(std::string const& key, const std::string& default_value) const {
       auto h = headers.find(key);
       if (h == headers.end())
@@ -65,6 +73,14 @@ class Request {
         return default_value;
       else
         return Utils::parse_string<T>(h->second);
+    }
+
+    std::string parameter(std::string const& key, const char default_value[]) const {
+      auto p = parameters.find(key);
+      if (p == parameters.end())
+        return default_value;
+      else
+        return p->second;
     }
 
     std::string parameter(std::string const& key, const std::string& default_value) const {
