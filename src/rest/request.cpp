@@ -91,13 +91,13 @@ void Request::process() {
   // if has some content
   if (!raw.empty()) {
     // try to parse it
-    auto ct = headers.find("Content-Type");
+    std::string ct = header("Content-Type", "");
 
-    if (ct != headers.end()) {
-      if (ct->second == "application/x-www-form-urlencoded") {
+    if (!ct.empty()) {
+      if (ct == "application/x-www-form-urlencoded") {
         parse_query_string(raw);
       } else
-      if (ct->second == "application/json" || ct->second == "text/json") {
+      if (ct == "application/json" || ct == "text/json") {
         data = nlohmann::json::parse(raw);
       }
     }
