@@ -17,7 +17,7 @@ void Authorization::feature_push() {
 void Authorization::ensure_authorization(std::string const& realm, std::function<bool(std::string, std::string)> handler) {
   if (authorization.first.empty() || !handler(authorization.first, authorization.second)) {
     response->headers["WWW-Authenticate"] = "Basic realm=\"" + realm + "\"";
-    throw HTTP::NotAuthorized();
+    throw HTTP::Unauthorized();
   }
 }
 
