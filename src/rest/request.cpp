@@ -98,7 +98,16 @@ void Request::process() {
         parse_query_string(raw);
       } else
       if (ct == "application/json" || ct == "text/json") {
-        data = nlohmann::json::parse(raw);
+        try {
+          data = nlohmann::json::parse(raw);
+        } catch (...) {
+          std::cout << "whoops" << std::endl;
+          std::cout << "string size: " << raw.size() << std::endl;
+          std::cout << "length: " << length << std::endl;
+          std::cout << "content_length" << (size_t)header("Content-Length", 0) << std::endl;
+          std::cout << "raw" << "'" << raw << "'" << std::endl;
+          abort();
+        }
       }
     }
   }
