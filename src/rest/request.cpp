@@ -72,7 +72,7 @@ void Request::process() {
       raw.reserve(content_length);
       // read whats left in header
       length = std::min(content_length, (size_t)(BUFFER_SIZE - request_stream.tellg()));
-      raw = std::string(buffer, BUFFER_SIZE).substr(request_stream.tellg(), length);
+      raw += std::string(buffer + request_stream.tellg(), length);
 
       // receive some more
       while (length < content_length) {
