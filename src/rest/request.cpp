@@ -69,8 +69,6 @@ void Request::process() {
       throw HTTP::PayloadTooLarge();
 
     if (content_length > 0) {
-      std::cout << std::endl << std::endl << buffer << std::endl << std::endl;
-      raw.clear();
       raw.reserve(content_length);
       // read whats left in header
       length = std::min(content_length, (size_t)(request_length - request_stream.tellg()));
@@ -100,17 +98,7 @@ void Request::process() {
         parse_query_string(raw);
       } else
       if (ct == "application/json" || ct == "text/json") {
-          std::cout << "whoops" << std::endl;
-          std::cout << "string size: " << raw.size() << std::endl;
-          std::cout << "length: " << length << std::endl;
-          std::cout << "content_length: " << (size_t)header("Content-Length", 0) << std::endl;
-          std::cout << "request_length: " << request_length << std::endl;
-          std::cout << "raw" << "'" << raw << "'" << std::endl;
-        try {
-          data = nlohmann::json::parse(raw);
-        } catch (...) {
-          abort();
-        }
+        data = nlohmann::json::parse(raw);
       }
     }
   }
