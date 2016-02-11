@@ -69,6 +69,7 @@ void Request::process() {
       throw HTTP::PayloadTooLarge();
 
     if (content_length > 0) {
+      std::cout << std::endl << std::endl << buffer << std::endl << std::endl;
       raw.clear();
       raw.reserve(content_length);
       // read whats left in header
