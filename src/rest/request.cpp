@@ -107,6 +107,7 @@ void Request::process() {
           std::cout << "string size: " << raw.size() << std::endl;
           std::cout << "length: " << length << std::endl;
           std::cout << "content_length: " << (size_t)header("Content-Length", 0) << std::endl;
+          std::cout << "request_length: " << request_length << std::endl;
           std::cout << "raw" << "'" << raw << "'" << std::endl;
           abort();
         }
