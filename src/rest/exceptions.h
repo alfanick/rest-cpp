@@ -20,6 +20,7 @@ namespace REST {
   namespace HTTP {
     CREATE(Error, Exception, "Unknown HTTP protocol error");
 
+    ERROR(BadRequest, 400, "Bad Request");
     ERROR(Unauthorized, 401, "Unauthorized");
     ERROR(NotFound, 404, "Not Found");
     ERROR(MethodNotAllowed, 405, "Method Not Allowed");

@@ -98,7 +98,11 @@ void Request::process() {
         parse_query_string(raw);
       } else
       if (ct == "application/json" || ct == "text/json") {
-        data = nlohmann::json::parse(raw);
+        try {
+          data = nlohmann::json::parse(raw);
+        } catch (...) {
+          throw HTTP::BadRequest();
+        }
       }
     }
   }
