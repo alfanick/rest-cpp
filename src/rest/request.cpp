@@ -69,6 +69,7 @@ void Request::process() {
       throw HTTP::PayloadTooLarge();
 
     if (content_length > 0) {
+      raw.clear();
       raw.reserve(content_length);
       // read whats left in header
       length = std::min(content_length, (size_t)(BUFFER_SIZE - request_stream.tellg()));
@@ -104,7 +105,7 @@ void Request::process() {
           std::cout << "whoops" << std::endl;
           std::cout << "string size: " << raw.size() << std::endl;
           std::cout << "length: " << length << std::endl;
-          std::cout << "content_length" << (size_t)header("Content-Length", 0) << std::endl;
+          std::cout << "content_length: " << (size_t)header("Content-Length", 0) << std::endl;
           std::cout << "raw" << "'" << raw << "'" << std::endl;
           abort();
         }
