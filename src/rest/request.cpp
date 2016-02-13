@@ -59,6 +59,7 @@ void Request::process() {
     headers.emplace(name, value);
   }
 
+  // TODO: handle long headers (longer than buffer)
   // if has content
   if (!is_header) {
     // assume proper content length
