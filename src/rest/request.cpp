@@ -75,17 +75,28 @@ void Request::process() {
       length = std::min(content_length, (size_t)(request_length - request_stream.tellg()));
       raw += std::string(buffer + request_stream.tellg(), length);
 
-      // receive some more
-      while (length < content_length) {
-        memset(buffer, 0, BUFFER_SIZE);
-        ssize_t buffer_length = recv(handle, buffer, BUFFER_SIZE, 0);
+      char* large_buffer = new char[content_length - length];
+      ssize_t buffer_length = recv(handle, large_buffer, content_length - length, 0);
 
-        if (buffer_length <= 0)
-          throw HTTP::RequestTimeout();
+      if (buffer_length <= 0)
+        throw HTTP::RequestTimeout();
 
-        raw += std::string(buffer, buffer_length);
-        length += buffer_length;
-      }
+      raw += std::string(large_buffer, buffer_length);
+      length += buffer_length;
+
+      delete large_buffer;
+
+      // // receive some more
+      // while (length < content_length) {
+      //   memset(buffer, 0, BUFFER_SIZE);
+      //   ssize_t buffer_length = recv(handle, buffer, BUFFER_SIZE, 0);
+      //
+      //   if (buffer_length <= 0)
+      //     throw HTTP::RequestTimeout();
+      //
+      //   raw += std::string(buffer, buffer_length);
+      //   length += buffer_length;
+      // }
     }
   }
 
