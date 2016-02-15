@@ -73,19 +73,23 @@ void Request::process() {
       raw.reserve(content_length);
       // read whats left in header
       length = std::min(content_length, (size_t)(request_length - request_stream.tellg()));
-      raw += std::string(buffer + request_stream.tellg(), length);
+      raw.append(buffer + request_stream.tellg(), length);
+
+      char* large_buffer = new char[content_length];
 
       // receive some more
       while (length < content_length) {
-        memset(buffer, 0, BUFFER_SIZE);
-        ssize_t buffer_length = recv(handle, buffer, BUFFER_SIZE, 0);
+        memset(large_buffer, 0, content_length);
+        ssize_t buffer_length = recv(handle, large_buffer, content_length, 0);
 
         if (buffer_length <= 0)
           throw HTTP::RequestTimeout();
 
-        raw += std::string(buffer, buffer_length);
+        raw.append(large_buffer, buffer_length);
         length += buffer_length;
       }
+
+      delete large_buffer;
     }
   }
 
