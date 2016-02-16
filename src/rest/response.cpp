@@ -103,6 +103,15 @@ size_t Response::send() {
   return bytes_sent;
 }
 
+void Response::cache(unsigned long t) {
+  if (t > 0) {
+    headers["Cache-Control"] = "max-age=" + std::to_string(t) + ", public";
+    headers["Expires"] = REST::Utils::rfc1123_datetime(time(0) + t);
+  } else {
+    headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+  }
+}
+
 Response::~Response() {
 }
 

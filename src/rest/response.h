@@ -30,6 +30,7 @@ class Response {
     std::string raw;
     std::map< std::string, std::string > headers;
 
+    void cache(unsigned long t);
     void stream(std::function<void(int)> streamer, bool async=false);
     void stream_async(std::function<void(int)> streamer);
 
