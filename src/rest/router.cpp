@@ -49,7 +49,7 @@ namespace REST {
 
   std::pair<std::regex, std::vector<std::string>> Router::to_regex(std::string path, bool exact) {
     std::vector<std::string> params;
-    path += ((!path.empty()) && (path[0] != '/')) ? "/" + path : path;
+    path = ((!path.empty()) && (path[0] != '/')) ? "/" + path : path;
 
     std::string regex = "^";
     regex.reserve(path.size());
