@@ -30,10 +30,12 @@ class Router {
 
     static Service* find(Request&, int);
 
-    void match(std::string const &, LambdaService::function);
+    void match(std::string, LambdaService::function);
 
     template <class R>
-    void mount(std::string const& path, bool exact) {
+    void mount(std::string path, bool exact) {
+      path = nested_path(path);
+
       auto r = to_regex(path, exact);
 
       std::vector<Service*> services;
@@ -143,6 +145,14 @@ class Router {
 
     std::vector<std::tuple<std::pair<std::regex, std::vector<std::string>>, std::string, std::vector<Service*>>> routes;
     std::vector<std::string> nested_paths;
+
+    std::string nested_path(std::string const &path) {
+      std::string np;
+      for (auto& p : nested_paths)
+        np += p;
+
+      return np + path;
+    }
 
 };
 

@@ -47,15 +47,9 @@ namespace REST {
     }
   }
 
-  std::pair<std::regex, std::vector<std::string>> Router::to_regex(std::string original_path, bool exact) {
-    std::string path;
-
-    for (auto& p : nested_paths) {
-      path += p;
-    }
-
+  std::pair<std::regex, std::vector<std::string>> Router::to_regex(std::string path, bool exact) {
     std::vector<std::string> params;
-    path += ((!original_path.empty()) && (original_path[0] != '/')) ? "/" + original_path : original_path;
+    path += ((!path.empty()) && (path[0] != '/')) ? "/" + path : path;
 
     std::string regex = "^";
     regex.reserve(path.size());
@@ -130,13 +124,15 @@ namespace REST {
     return nullptr;
   }
 
-  void Router::match(std::string const& path, LambdaService::function lambda) {
+  void Router::match(std::string path, LambdaService::function lambda) {
     auto r = to_regex(path, false);
 
     std::vector<Service*> services;
     services.resize(Worker::POOL_SIZE);
     for (int i = 0; i < Worker::POOL_SIZE; i++)
       services[i] = new LambdaService(lambda);
+
+    path = nested_path(path);
 
     routes.emplace_back(r, path, services);
   }
