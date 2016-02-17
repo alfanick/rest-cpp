@@ -99,8 +99,6 @@ namespace REST {
       params.emplace_back("*");
     }
 
-    std::cout << path << " -> " << regex << std::endl;
-
     return std::make_pair(std::regex(regex), params);
   }
 

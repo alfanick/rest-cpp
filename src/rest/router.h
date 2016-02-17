@@ -146,7 +146,7 @@ class Router {
     std::vector<std::tuple<std::pair<std::regex, std::vector<std::string>>, std::string, std::vector<Service*>>> routes;
     std::vector<std::string> nested_paths;
 
-    std::string nested_path(std::string const &path) {
+    std::string nested_path(std::string path) {
       std::string np;
       for (auto& p : nested_paths)
         np += p;
