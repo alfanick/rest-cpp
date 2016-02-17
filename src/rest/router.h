@@ -55,6 +55,15 @@ class Router {
     }
 
     template <class R>
+    void resource(std::string const& path, std::function<void(Router*)> subroutes) {
+      nested_paths.push_back(path);
+      subroutes(this);
+      nested_paths.pop_back();
+
+      mount<R>(path, true);
+    }
+
+    template <class R>
     void resources(std::string const& path) {
       mount<R>(path);
     }
@@ -133,6 +142,7 @@ class Router {
     Router();
 
     std::vector<std::tuple<std::pair<std::regex, std::vector<std::string>>, std::string, std::vector<Service*>>> routes;
+    std::vector<std::string> nested_paths;
 
 };
 
