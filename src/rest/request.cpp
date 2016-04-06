@@ -90,7 +90,7 @@ void Request::process() {
           length += buffer_length;
         }
 
-        delete large_buffer;
+        delete[] large_buffer;
       }
     }
   }

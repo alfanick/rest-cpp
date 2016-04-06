@@ -1,6 +1,10 @@
 #ifndef REST_CPP_RESPONSE_H
 #define REST_CPP_RESPONSE_H
 
+#ifdef __APPLE__
+#define MSG_NOSIGNAL 0
+#endif
+
 #include "exceptions.h"
 #include "request.h"
 #include "json.hpp"
